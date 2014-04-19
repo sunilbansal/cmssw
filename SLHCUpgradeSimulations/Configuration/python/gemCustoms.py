@@ -11,13 +11,12 @@ def customise(process):
         process=customise_RawToDigi(process)
     if hasattr(process,'reconstruction'):
         process=customise_Reco(process)
-    if hasattr(process,'dqmoffline_step'):
-        process=customise_DQM(process)
-    if hasattr(process,'dqmHarvesting'):
-        process=customise_harvesting(process)
     if hasattr(process,'validation_step'):
         process=customise_Validation(process)
-
+    if hasattr(process,'dqmHarvesting'):
+        process=customise_harvesting(process)
+    if hasattr(process,'dqmoffline_step'):
+        process=customise_DQM(process)
     return process
 
 def customise_Digi(process):
@@ -63,9 +62,6 @@ def customise_Reco(process):
     process=outputCustoms(process)
     return process
 
-def customise_DQM(process):
-    return process
-
 def customise_Validation(process):
     process.load('Validation.Configuration.gemSimValid_cff')
     process.genvalid_all += process.gemSimValid
@@ -80,6 +76,13 @@ def customise_Validation(process):
 def customise_harvesting(process):
     process.load('Validation.Configuration.gemPostValidation_cff')
     process.genHarvesting += process.gemPostValidation
+    return process
+
+def customise_DQM(process):
+    process.load('DQM.GEMMonitorModule.gem_dqm_source_offline_cff')
+    process.load('DQM.GEMMonitorClient.gem_dqm_client_offline_cff')
+    process.DQMOfflinePreDPG += process.gemSources
+    DQMOffline_SecondStep_PreDPG += process.gemClients
     return process
 
 def outputCustoms(process):
