@@ -50,9 +50,13 @@ def customise_L1Emulator(process):
     return process
 
 def customise_DigiToRaw(process):
+    process.load('EventFilter.GEMRawToDigi.gemPacker_cfi')
+    process.digi2raw_step += process.gemPacker
     return process
 
 def customise_RawToDigi(process):
+    process.load('EventFilter.GEMRawToDigi.gemUnpacker_cfi')
+    process.raw2digi_step += process.gemUnpacker
     return process
 
 def customise_Reco(process):
