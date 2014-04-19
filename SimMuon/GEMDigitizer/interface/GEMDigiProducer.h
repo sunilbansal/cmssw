@@ -8,8 +8,10 @@
 #include "SimMuon/GEMDigitizer/interface/GEMDigiModel.h"
 #include "SimDataFormats/TrackerDigiSimLink/interface/StripDigiSimLink.h"
 #include "DataFormats/Common/interface/DetSetVector.h"
-
-#include "string"
+#include "CondFormats/GEMObjects/interface/GEMStripNoises.h"
+#include "CondFormats/DataRecord/interface/GEMStripNoisesRcd.h"
+#include "CondFormats/GEMObjects/interface/GEMClusterSize.h"
+#include "CondFormats/DataRecord/interface/GEMClusterSizeRcd.h"
 
 class GEMGeometry;
 

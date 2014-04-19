@@ -60,6 +60,12 @@ void GEMDigiProducer::produce(edm::Event& e, const edm::EventSetup& eventSetup)
   gemDigiModel_->setGeometry(&*hGeom);
   gemDigiModel_->setup();
 
+  edm::ESHandle<GEMStripNoises> noiseRcd;
+  eventSetup.get<GEMStripNoisesRcd>().get(noiseRcd);
+
+  edm::ESHandle<GEMClusterSize> clsRcd;
+  eventSetup.get<GEMClusterSizeRcd>().get(clsRcd);
+
   edm::Handle<CrossingFrame<PSimHit> > cf;
   e.getByLabel("mix", collectionXF_, cf);
 
