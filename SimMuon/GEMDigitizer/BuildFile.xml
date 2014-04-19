@@ -5,6 +5,7 @@
 <use   name="CondCore/MetaDataService"/>
 <use   name="CondCore/PopCon"/>
 <use   name="CondFormats/DataRecord"/>
+<use   name="CondFormats/GEMObjects"/>
 <use   name="CoralBase"/>
 <use   name="DataFormats/MuonDetId"/>
 <use   name="DataFormats/Provenance"/>
