@@ -1020,7 +1020,7 @@ CSCMotherboardME21GEM::createGEMRollEtaLUT(bool isLong)
     const LocalPoint lp_bottom(0., -half_striplength, 0.);
     const GlobalPoint gp_top(roll->toGlobal(lp_top));
     const GlobalPoint gp_bottom(roll->toGlobal(lp_bottom));
-    result[i] = std::make_pair(gp_top.eta(), gp_bottom.eta());
+    result[i] = std::make_pair(floorf(gp_top.eta() * 100) / 100, ceilf(gp_bottom.eta() * 100) / 100);
   }
   return result;
 }
