@@ -438,6 +438,7 @@ cscTriggerPrimitiveDigisPostLS3 = cms.EDProducer("CSCTriggerPrimitivesProducer",
         ## matching to pads in case LowQ CLCT
         maxDeltaBXPad = cms.int32(1),
         maxDeltaPadPad = cms.int32(2),
+        maxDeltaWg = cms.int32(1),
 
         ## matching to pads in case absent CLCT
         maxDeltaBXCoPad = cms.int32(0),
@@ -461,6 +462,7 @@ cscTriggerPrimitiveDigisPostLS3 = cms.EDProducer("CSCTriggerPrimitivesProducer",
         gemMatchDeltaPhiOdd = cms.double(1),
         gemMatchDeltaPhiEven = cms.double(1),
         gemMatchMinEta = cms.double(1.5),
+        gemMatchMaxEta = cms.double(2.45),
         gemClearNomatchLCTs = cms.bool(False),
 
         firstTwoLCTsInChamber = cms.bool(True),
@@ -495,6 +497,7 @@ cscTriggerPrimitiveDigisPostLS3 = cms.EDProducer("CSCTriggerPrimitivesProducer",
         ## matching to digis in case LowQ CLCT
         maxDeltaBXRPC = cms.int32(0),
         maxDeltaStripRPC = cms.int32(3),
+        maxDeltaWg = cms.int32(1),
 
         ## efficiency recovery switches
         dropLowQualityCLCTsNoRPCs = cms.bool(True),
