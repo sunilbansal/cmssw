@@ -1043,9 +1043,11 @@ void CSCMotherboardME21GEM::buildCoincidencePads(const GEMCSCPadDigiCollection* 
       }
     }
 
-    auto temp_copad = (out_co_pads).get(id);
-    for (auto c = temp_copad.first; c != temp_copad.second; ++c)
-     std::cout<<"copad built:" << *c << std::endl;    
+    if (debug_gem_matching){ 
+      auto temp_copad = (out_co_pads).get(id);
+      for (auto c = temp_copad.first; c != temp_copad.second; ++c)
+	std::cout<<"copad built:" << *c << std::endl;    
+    }
   }
 }
 
