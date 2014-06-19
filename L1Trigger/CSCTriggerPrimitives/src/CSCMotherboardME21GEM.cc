@@ -1179,7 +1179,7 @@ CSCMotherboardME21GEM::matchingGEMPads(const CSCALCTDigi& alct, const GEMPadsBX&
   if ((unsigned int)(Wg+maxDeltaWg_)<cscWgToGemRollLong_.size() && cscWgToGemRollLong_[Wg] != cscWgToGemRollLong_[Wg+maxDeltaWg_])
       Rolls.push_back(cscWgToGemRollLong_[Wg+maxDeltaWg_]);
 
-  const bool debug(true);
+  const bool debug(false);
   if (debug) std::cout << "ALCT keyWG " << alct.getKeyWG() << std::endl;
   for (auto alctRoll : Rolls)
   {
