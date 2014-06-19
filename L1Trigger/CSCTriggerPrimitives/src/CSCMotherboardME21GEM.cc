@@ -1147,7 +1147,7 @@ CSCMotherboardME21GEM::matchingGEMPads(const CSCCLCTDigi& clct, const GEMPadsBX&
   int clct_bx = clct.getBX();
   const int lowPad(cscHsToGemPad_[clct.getKeyStrip()].first);
   const int highPad(cscHsToGemPad_[clct.getKeyStrip()].second);
-  const bool debug(true);
+  const bool debug(false);
   if (debug) std::cout << "lowpad " << lowPad << " highpad " << highPad << " delta pad " << deltaPad <<std::endl;
   for (auto p: pads){
     if (debug) std::cout<<"DetId"<<GEMDetId(p.first)<<"   "<< *(p.second)<<std::endl;
