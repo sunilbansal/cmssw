@@ -302,7 +302,7 @@ CSCMotherboardME21GEM::run(const CSCWireDigiCollection* wiredc,
     // build coincidence pads
     //std::auto_ptr<GEMCSCPadDigiCollection> pCoPads(new GEMCSCPadDigiCollection());
     GEMCSCPadDigiCollection *GEMCoPad(new GEMCSCPadDigiCollection());
-    buildCoincidencePads(gemPads, *GEMCoPad);
+    buildCoincidencePads(gemPads, *GEMCoPad, csc_id);
     
     // retrieve pads and copads in a certain BX window for this CSC 
     //padsShort_ = retrieveGEMPads(gemPads, gem_id_short);
@@ -995,7 +995,9 @@ unsigned int CSCMotherboardME21GEM::findQualityGEM(const CSCALCTDigi& aLCT, cons
 }
 
 
-void CSCMotherboardME21GEM::buildCoincidencePads(const GEMCSCPadDigiCollection* out_pads, GEMCSCPadDigiCollection& out_co_pads)
+void CSCMotherboardME21GEM::buildCoincidencePads(const GEMCSCPadDigiCollection* out_pads, 
+	                                         GEMCSCPadDigiCollection& out_co_pads,
+						 CSCDetId csc_id)
 {
   gemCoPadV.clear();
 
@@ -1003,6 +1005,10 @@ void CSCMotherboardME21GEM::buildCoincidencePads(const GEMCSCPadDigiCollection* 
   for (auto det_range = out_pads->begin(); det_range != out_pads->end(); ++det_range) {
     const GEMDetId& id = (*det_range).first;
     //std::cout<<"GEMDet Id " << id << std::endl;
+
+    // same chamber
+    if (id.region() != csc_id.zendcap() or 
+	id.ring() != csc_id.ring() or id.chamber() != csc_id.chamber()) continue;
     // build coincidences only in station 2
     if (id.station() != 2 and id.station() != 3) continue;
     
@@ -1080,7 +1086,7 @@ CSCMotherboardME21GEM::retrieveGEMPads(const GEMCSCPadDigiCollection* gemPads, u
 {
   int deltaBX(iscopad ? maxDeltaBXCoPad_ : maxDeltaBXPad_);
   GEMPads result;
-
+  
   auto superChamber(gem_g->superChamber(id));
   for (auto ch : superChamber->chambers()) {
     for (auto roll : ch->etaPartitions()) {
