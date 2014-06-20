@@ -590,7 +590,8 @@ std::map<int,std::pair<double,double> > CSCMotherboardME3141RPC::createRPCRollLU
     const LocalPoint lp_bottom(0., -half_striplength, 0.);
     const GlobalPoint gp_top(roll->toGlobal(lp_top));
     const GlobalPoint gp_bottom(roll->toGlobal(lp_bottom));
-    result[i] = std::make_pair(floorf(gp_top.eta() * 100) / 100, ceilf(gp_bottom.eta() * 100) / 100);
+    //result[i] = std::make_pair(floorf(gp_top.eta() * 100) / 100, ceilf(gp_bottom.eta() * 100) / 100);
+    result[i] = std::make_pair(std::abs(gp_top.eta()), std::abs(gp_bottom.eta()));
   }
   return result;
 }
