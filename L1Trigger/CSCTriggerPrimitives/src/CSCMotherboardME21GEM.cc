@@ -1049,9 +1049,11 @@ void CSCMotherboardME21GEM::buildCoincidencePads(const GEMCSCPadDigiCollection* 
       }
     }
 
-    auto temp_copad = (out_co_pads).get(id);
-    for (auto c = temp_copad.first; c != temp_copad.second; ++c)
-     std::cout<<"copad built:" << *c << std::endl;    
+    if (debug_gem_matching){ 
+      auto temp_copad = (out_co_pads).get(id);
+      for (auto c = temp_copad.first; c != temp_copad.second; ++c)
+	std::cout<<"copad built:" << *c << std::endl;    
+    }
   }
 }
 
@@ -1074,6 +1076,7 @@ CSCMotherboardME21GEM::createGEMRollEtaLUT(bool isLong)
     const LocalPoint lp_bottom(0., -half_striplength, 0.);
     const GlobalPoint gp_top(roll->toGlobal(lp_top));
     const GlobalPoint gp_bottom(roll->toGlobal(lp_bottom));
+    //result[i] = std::make_pair(floorf(gp_top.eta() * 100) / 100, ceilf(gp_bottom.eta() * 100) / 100);
     result[i] = std::make_pair(gp_top.eta(), gp_bottom.eta());
   }
   return result;
@@ -1151,7 +1154,7 @@ CSCMotherboardME21GEM::matchingGEMPads(const CSCCLCTDigi& clct, const GEMPadsBX&
   int clct_bx = clct.getBX();
   const int lowPad(cscHsToGemPad_[clct.getKeyStrip()].first);
   const int highPad(cscHsToGemPad_[clct.getKeyStrip()].second);
-  const bool debug(true);
+  const bool debug(false);
   if (debug) std::cout << "lowpad " << lowPad << " highpad " << highPad << " delta pad " << deltaPad <<std::endl;
   for (auto p: pads){
     if (debug) std::cout<<"DetId"<<GEMDetId(p.first)<<"   "<< *(p.second)<<std::endl;
@@ -1183,7 +1186,7 @@ CSCMotherboardME21GEM::matchingGEMPads(const CSCALCTDigi& alct, const GEMPadsBX&
   if ((unsigned int)(Wg+maxDeltaWg_)<cscWgToGemRollLong_.size() && cscWgToGemRollLong_[Wg] != cscWgToGemRollLong_[Wg+maxDeltaWg_])
       Rolls.push_back(cscWgToGemRollLong_[Wg+maxDeltaWg_]);
 
-  const bool debug(true);
+  const bool debug(false);
   if (debug) std::cout << "ALCT keyWG " << alct.getKeyWG() << std::endl;
   for (auto alctRoll : Rolls)
   {
