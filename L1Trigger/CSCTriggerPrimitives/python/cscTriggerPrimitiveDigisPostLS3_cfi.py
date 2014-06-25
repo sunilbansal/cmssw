@@ -439,7 +439,7 @@ cscTriggerPrimitiveDigisPostLS3 = cms.EDProducer("CSCTriggerPrimitivesProducer",
         maxDeltaBXPad = cms.int32(1),
         maxDeltaPadPadOdd = cms.int32(4),
         maxDeltaPadPadEven = cms.int32(3),
-        maxDeltaWg = cms.int32(1),
+        maxDeltaWg = cms.int32(2),
 
         ## matching to pads in case absent CLCT
         maxDeltaBXCoPad = cms.int32(1),
@@ -499,7 +499,7 @@ cscTriggerPrimitiveDigisPostLS3 = cms.EDProducer("CSCTriggerPrimitivesProducer",
         maxDeltaBXRPC = cms.int32(0),
         maxDeltaStripRPCOdd = cms.int32(6),
         maxDeltaStripRPCEven = cms.int32(4),
-        maxDeltaWg = cms.int32(1),
+        maxDeltaWg = cms.int32(2),
 
         ## efficiency recovery switches
         dropLowQualityCLCTsNoRPCs = cms.bool(True),
