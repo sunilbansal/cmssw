@@ -1,4 +1,4 @@
-#include "Geometry/GEMGeometry/interface/GEMEtaPartitionSpecs.h"
+#include "Geometry/GEMGeometry/interface/ME0EtaPartitionSpecs.h"
 #include "Geometry/CommonTopologies/interface/RectangularStripTopology.h"
 #include "Geometry/CommonTopologies/interface/TrapezoidalStripTopology.h"
 
@@ -6,10 +6,10 @@
 using namespace GeomDetEnumerators;
 
 
-GEMEtaPartitionSpecs::GEMEtaPartitionSpecs(SubDetector rss, const std::string& name, const GEMSpecs& pars)
+ME0EtaPartitionSpecs::ME0EtaPartitionSpecs(SubDetector rss, const std::string& name, const ME0Specs& pars)
   :  GeomDetType(name, rss), _p(pars), _n(name)
 {
-  if (rss == GEM )
+  if (rss == ME0 )
   {
     float b = _p[0];
     float B = _p[1];
@@ -32,7 +32,7 @@ GEMEtaPartitionSpecs::GEMEtaPartitionSpecs(SubDetector rss, const std::string& n
 }
 
 
-GEMEtaPartitionSpecs::~GEMEtaPartitionSpecs()
+ME0EtaPartitionSpecs::~ME0EtaPartitionSpecs()
 {
   if (_top) delete _top;
   if (_top_pad) delete _top_pad;
@@ -40,40 +40,40 @@ GEMEtaPartitionSpecs::~GEMEtaPartitionSpecs()
 
 
 const Topology& 
-GEMEtaPartitionSpecs::topology() const
+ME0EtaPartitionSpecs::topology() const
 {
   return *_top;
 }
 
 const StripTopology& 
-GEMEtaPartitionSpecs::specificTopology() const
+ME0EtaPartitionSpecs::specificTopology() const
 {
   return *_top;
 }
 
 
 const Topology& 
-GEMEtaPartitionSpecs::padTopology() const
+ME0EtaPartitionSpecs::padTopology() const
 {
   return *_top_pad;
 }
 
 const StripTopology& 
-GEMEtaPartitionSpecs::specificPadTopology() const
+ME0EtaPartitionSpecs::specificPadTopology() const
 {
   return *_top_pad;
 }
 
 
 const std::string&
-GEMEtaPartitionSpecs::detName() const
+ME0EtaPartitionSpecs::detName() const
 {
   return _n;
 }
 
 
 const std::vector<float>&
-GEMEtaPartitionSpecs::parameters() const
+ME0EtaPartitionSpecs::parameters() const
 {
   return _p;
 }

@@ -1,140 +1,140 @@
-#include "Geometry/GEMGeometry/interface/GEMEtaPartition.h"
-#include "Geometry/GEMGeometry/interface/GEMEtaPartitionSpecs.h"
+#include "Geometry/GEMGeometry/interface/ME0EtaPartition.h"
+#include "Geometry/GEMGeometry/interface/ME0EtaPartitionSpecs.h"
 #include "Geometry/CommonTopologies/interface/TrapezoidalStripTopology.h"
 
 
-GEMEtaPartition::GEMEtaPartition(GEMDetId id, BoundPlane::BoundPlanePointer bp, GEMEtaPartitionSpecs* rrs) :
+ME0EtaPartition::ME0EtaPartition(ME0DetId id, BoundPlane::BoundPlanePointer bp, ME0EtaPartitionSpecs* rrs) :
   GeomDetUnit(bp), id_(id),specs_(rrs)
 {
   setDetId(id);
 }
 
-GEMEtaPartition::~GEMEtaPartition()
+ME0EtaPartition::~ME0EtaPartition()
 {
   delete specs_; //Assume the roll owns it specs (specs are not shared)
 }
 
 const Topology&
-GEMEtaPartition::topology() const
+ME0EtaPartition::topology() const
 {
   return specs_->topology();
 }
 
 const StripTopology&
-GEMEtaPartition::specificTopology() const
+ME0EtaPartition::specificTopology() const
 {
   return specs_->specificTopology();
 }
 
 const Topology&
-GEMEtaPartition::padTopology() const
+ME0EtaPartition::padTopology() const
 {
   return specs_->padTopology();
 }
 
 const StripTopology&
-GEMEtaPartition::specificPadTopology() const
+ME0EtaPartition::specificPadTopology() const
 {
   return specs_->specificPadTopology();
 }
 
 const GeomDetType& 
-GEMEtaPartition::type() const
+ME0EtaPartition::type() const
 {
   return (*specs_);
 }
 
 int 
-GEMEtaPartition::nstrips() const
+ME0EtaPartition::nstrips() const
 {
   return this->specificTopology().nstrips();
 }
 
 LocalPoint
-GEMEtaPartition::centreOfStrip(int strip) const
+ME0EtaPartition::centreOfStrip(int strip) const
 {
   float s = static_cast<float>(strip) - 0.5;
   return this->specificTopology().localPosition(s);
 }
 
 LocalPoint
-GEMEtaPartition::centreOfStrip(float strip) const
+ME0EtaPartition::centreOfStrip(float strip) const
 {
   return this->specificTopology().localPosition(strip);
 }
 
 LocalError
-GEMEtaPartition::localError(float strip, float cluster_size) const
+ME0EtaPartition::localError(float strip) const
 {
-  return this->specificTopology().localError(strip, cluster_size*cluster_size/12.);
+  return this->specificTopology().localError(strip, 1./sqrt(12.));
 }
 
 float
-GEMEtaPartition::strip(const LocalPoint& lp) const
+ME0EtaPartition::strip(const LocalPoint& lp) const
 { 
   return this->specificTopology().strip(lp);
 }
 
 float
-GEMEtaPartition::localPitch(const LocalPoint& lp) const
+ME0EtaPartition::localPitch(const LocalPoint& lp) const
 { 
   return this->specificTopology().localPitch(lp);
 }
 
 float
-GEMEtaPartition::pitch() const
+ME0EtaPartition::pitch() const
 { 
   return this->specificTopology().pitch();
 }
 
 
 int 
-GEMEtaPartition::npads() const
+ME0EtaPartition::npads() const
 {
   return specificPadTopology().nstrips();
 }
 
 LocalPoint
-GEMEtaPartition::centreOfPad(int pad) const
+ME0EtaPartition::centreOfPad(int pad) const
 {
   float p = static_cast<float>(pad) - 0.5;
   return specificPadTopology().localPosition(p);
 }
 
 LocalPoint
-GEMEtaPartition::centreOfPad(float pad) const
+ME0EtaPartition::centreOfPad(float pad) const
 {
   return specificPadTopology().localPosition(pad);
 }
 
 float
-GEMEtaPartition::pad(const LocalPoint& lp) const
+ME0EtaPartition::pad(const LocalPoint& lp) const
 { 
   return specificPadTopology().strip(lp);
 }
 
 float
-GEMEtaPartition::localPadPitch(const LocalPoint& lp) const
+ME0EtaPartition::localPadPitch(const LocalPoint& lp) const
 { 
   return specificPadTopology().localPitch(lp);
 }
 
 float
-GEMEtaPartition::padPitch() const
+ME0EtaPartition::padPitch() const
 { 
   return specificPadTopology().pitch();
 }
 
 
 float
-GEMEtaPartition::padOfStrip(int strip) const
+ME0EtaPartition::padOfStrip(int strip) const
 {
   LocalPoint c_o_s = centreOfStrip(strip);
   return pad(c_o_s);
 }
 
 int
-GEMEtaPartition::firstStripInPad(int pad) const
+ME0EtaPartition::firstStripInPad(int pad) const
 {
   float p = static_cast<float>(pad) - 0.9999;
   LocalPoint lp = specificPadTopology().localPosition(p);
@@ -142,7 +142,7 @@ GEMEtaPartition::firstStripInPad(int pad) const
 }
 
 int
-GEMEtaPartition::lastStripInPad(int pad) const
+ME0EtaPartition::lastStripInPad(int pad) const
 {
   float p = static_cast<float>(pad) - 0.0001;
   LocalPoint lp = specificPadTopology().localPosition(p);

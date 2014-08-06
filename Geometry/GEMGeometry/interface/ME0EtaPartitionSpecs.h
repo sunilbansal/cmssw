@@ -1,8 +1,8 @@
-#ifndef Geometry_GEMGeometry_GEMEtaPartitionSpecs_H
-#define Geometry_GEMGeometry_GEMEtaPartitionSpecs_H
+#ifndef Geometry_ME0Geometry_ME0EtaPartitionSpecs_H
+#define Geometry_ME0Geometry_ME0EtaPartitionSpecs_H
 
-/** \class GEMEtaPartitionSpecs
- *  Storage of the parameters of the GEM Chamber
+/** \class ME0EtaPartitionSpecs
+ *  Storage of the parameters of the ME0 Chamber
  *  using standard topologies
  *
  * \author M. Maggi - INFN Bari
@@ -16,15 +16,15 @@ class StripTopology;
 #include "Geometry/CommonDetUnit/interface/GeomDetType.h"
 
 
-class GEMEtaPartitionSpecs : public GeomDetType
+class ME0EtaPartitionSpecs : public GeomDetType
 {
 public:
 
-  typedef std::vector<float> GEMSpecs;
+  typedef std::vector<float> ME0Specs;
 
-  GEMEtaPartitionSpecs( SubDetector rss, const std::string& name, const GEMSpecs& pars);
+  ME0EtaPartitionSpecs( SubDetector rss, const std::string& name, const ME0Specs& pars);
 
-  ~GEMEtaPartitionSpecs();
+  ~ME0EtaPartitionSpecs();
 
   const Topology& topology() const;
 
@@ -36,7 +36,7 @@ public:
 
   const std::string& detName() const;
 
-  const GEMSpecs& parameters() const;
+  const ME0Specs& parameters() const;
 
 private:
   

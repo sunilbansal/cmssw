@@ -1,23 +1,24 @@
-#ifndef Geometry_GEMGeometry_GEMEtaPartition_H
-#define Geometry_GEMGeometry_GEMEtaPartition_H
+#ifndef Geometry_ME0Geometry_ME0EtaPartition_H
+#define Geometry_ME0Geometry_ME0EtaPartition_H
 
 #include "Geometry/CommonDetUnit/interface/GeomDetUnit.h"
 #include "Geometry/CommonDetUnit/interface/GeomDetType.h"
-#include "DataFormats/MuonDetId/interface/GEMDetId.h"
+#include "DataFormats/MuonDetId/interface/ME0DetId.h"
 #include "DataFormats/GeometryVector/interface/GlobalPoint.h"
 
 class StripTopology;
-class GEMEtaPartitionSpecs;
+class ME0EtaPartitionSpecs;
+//class ME0Chamber;
 
-class GEMEtaPartition : public GeomDetUnit
+class ME0EtaPartition : public GeomDetUnit
 {
 public:
   
-  GEMEtaPartition(GEMDetId id, BoundPlane::BoundPlanePointer bp, GEMEtaPartitionSpecs* rrs);
-  ~GEMEtaPartition();
+  ME0EtaPartition(ME0DetId id, BoundPlane::BoundPlanePointer bp, ME0EtaPartitionSpecs* rrs);
+  ~ME0EtaPartition();
 
-  const GEMEtaPartitionSpecs* specs() const { return specs_; }
-  GEMDetId id() const { return id_; }
+  const ME0EtaPartitionSpecs* specs() const { return specs_; }
+  ME0DetId id() const { return id_; }
 
   const Topology& topology() const;
   const StripTopology& specificTopology() const;
@@ -26,6 +27,9 @@ public:
   const StripTopology& specificPadTopology() const;
 
   const GeomDetType& type() const; 
+ 
+  /// Return the chamber this roll belongs to 
+  //const ME0Chamber* chamber() const;
  
   // strip-related methods:
 
@@ -39,7 +43,7 @@ public:
   /// returns center of strip position for FRACTIONAL strip number
   /// that has a value range of [0., nstrip]
   LocalPoint  centreOfStrip(float strip) const;
-  LocalError  localError(float strip, float cluster_size = 1.) const;
+  LocalError  localError(float strip) const;
 
   /// returns fractional strip number [0..nstrips] for a LocalPoint
   /// E.g., if local point hit strip #2, the fractional strip number would be
@@ -50,9 +54,9 @@ public:
   float localPitch(const LocalPoint& lp) const;
  
 
-  // GEM-CSC pad-related methods:
+  // ME0-CSC pad-related methods:
   
-  /// number of GEM-CSC trigger readout pads in partition
+  /// number of ME0-CSC trigger readout pads in partition
   int npads() const;
 
   /// returns center of pad position for INTEGER pad number
@@ -85,8 +89,8 @@ public:
 
 private:
 
-  GEMDetId id_;
-  GEMEtaPartitionSpecs* specs_;
+  ME0DetId id_;
+  ME0EtaPartitionSpecs* specs_;
 };
 
 #endif
