@@ -1,10 +1,10 @@
-/** Implementation of the GEM Geometry Builder from DDD stored in CondDB
+/** Implementation of the ME0 Geometry Builder from DDD stored in CondDB
  *
  *  \author M. Maggi - INFN Bari
  */
-#include "Geometry/GEMGeometryBuilder/src/GEMGeometryBuilderFromCondDB.h"
-#include "Geometry/GEMGeometry/interface/GEMGeometry.h"
-#include "Geometry/GEMGeometry/interface/GEMEtaPartitionSpecs.h"
+#include "Geometry/GEMGeometryBuilder/src/ME0GeometryBuilderFromCondDB.h"
+#include "Geometry/GEMGeometry/interface/ME0Geometry.h"
+#include "Geometry/GEMGeometry/interface/ME0EtaPartitionSpecs.h"
 
 #include <DetectorDescription/Core/interface/DDFilter.h>
 #include <DetectorDescription/Core/interface/DDFilteredView.h>
@@ -12,7 +12,7 @@
 
 #include "Geometry/MuonNumbering/interface/MuonDDDNumbering.h"
 #include "Geometry/MuonNumbering/interface/MuonBaseNumber.h"
-#include "Geometry/MuonNumbering/interface/GEMNumberingScheme.h"
+#include "Geometry/MuonNumbering/interface/ME0NumberingScheme.h"
 
 #include "DataFormats/GeometrySurface/interface/RectangularPlaneBounds.h"
 #include "DataFormats/GeometrySurface/interface/TrapezoidalPlaneBounds.h"
@@ -24,16 +24,16 @@
 #include <iostream>
 #include <algorithm>
 
-GEMGeometryBuilderFromCondDB::GEMGeometryBuilderFromCondDB() 
+ME0GeometryBuilderFromCondDB::ME0GeometryBuilderFromCondDB() 
 { }
 
-GEMGeometryBuilderFromCondDB::~GEMGeometryBuilderFromCondDB() 
+ME0GeometryBuilderFromCondDB::~ME0GeometryBuilderFromCondDB() 
 { }
 
-GEMGeometry* GEMGeometryBuilderFromCondDB::build(const RecoIdealGeometry& rgeo)
+ME0Geometry* ME0GeometryBuilderFromCondDB::build(const RecoIdealGeometry& rgeo)
 {
   const std::vector<DetId>& detids(rgeo.detIds());
-  GEMGeometry* geometry = new GEMGeometry();
+  ME0Geometry* geometry = new ME0Geometry();
   
   std::string name;
   std::vector<double>::const_iterator tranStart;
@@ -43,9 +43,7 @@ GEMGeometry* GEMGeometryBuilderFromCondDB::build(const RecoIdealGeometry& rgeo)
   
   for (unsigned int id = 0; id < detids.size(); ++id)
   {  
-    GEMDetId gemid(detids[id]);
-    //    GEMDetId chid(gemid.region(),gemid.ring(),gemid.station(),
-    //		  gemid.sector(),gemid.layer(),gemid.subsector(),0);
+    ME0DetId me0id( detids[id]);
     
     tranStart = rgeo.tranStart(id);
     shapeStart = rgeo.shapeStart(id);
@@ -64,8 +62,8 @@ GEMGeometry* GEMGeometryBuilderFromCondDB::build(const RecoIdealGeometry& rgeo)
     float te = *(shapeStart+1)/cm;
     float ap = *(shapeStart+2)/cm;
     float ti = *(shapeStart+3)/cm;
-    float nstrip = *(shapeStart+4);
-    float npad = *(shapeStart+5);
+    //    float nstrip = *(shapeStart+4);
+    //float npad = *(shapeStart+5);
     //  TrapezoidalPlaneBounds* 
     bounds = new TrapezoidalPlaneBounds(be, te, ap, ti);
 
@@ -73,10 +71,12 @@ GEMGeometry* GEMGeometryBuilderFromCondDB::build(const RecoIdealGeometry& rgeo)
     pars.push_back(be); //b/2;
     pars.push_back(te); //B/2;
     pars.push_back(ap); //h/2;
+    float nstrip = -999.;
+    float npad = -999.;
     pars.push_back(nstrip);
     pars.push_back(npad);
     
-    GEMEtaPartitionSpecs* e_p_specs = new GEMEtaPartitionSpecs(GeomDetEnumerators::GEM, name, pars);
+    ME0EtaPartitionSpecs* e_p_specs = new ME0EtaPartitionSpecs(GeomDetEnumerators::ME0, name, pars);
       
       //Change of axes for the forward
     Basic3DVector<float> newX(1.,0.,0.);
@@ -89,32 +89,32 @@ GEMGeometry* GEMGeometryBuilderFromCondDB::build(const RecoIdealGeometry& rgeo)
     
     BoundPlane* bp = new BoundPlane(pos, rot, bounds);
     ReferenceCountingPointer<BoundPlane> surf(bp);
-    GEMEtaPartition* gep=new GEMEtaPartition(gemid, surf, e_p_specs);
-    geometry->add(gep);
+    ME0EtaPartition* mep=new ME0EtaPartition(me0id, surf, e_p_specs);
+    geometry->add(mep);
     
     
-    std::list<GEMEtaPartition *> gepls;
+    //    std::list<ME0EtaPartition *> gepls;
     /*
     if (chids.find(chid)!=chids.end()){
       gepls = chids[chid];
     }
     */
-    gepls.push_back(gep);
+    //    gepls.push_back(gep);
     //chids[chid]=gepls;
     
   }
   /*
-  // Create the GEMChambers and store them on the Geometry 
+  // Create the ME0Chambers and store them on the Geometry 
 
-  for( std::map<GEMDetId, std::list<GEMEtaPartition *> >::iterator ich=chids.begin();
+  for( std::map<ME0DetId, std::list<ME0EtaPartition *> >::iterator ich=chids.begin();
        ich != chids.end(); ich++){
-    GEMDetId chid = ich->first;
-    std::list<GEMEtaPartition * > gepls = ich->second;
+    ME0DetId chid = ich->first;
+    std::list<ME0EtaPartition * > gepls = ich->second;
 
     // compute the overall boundplane. At the moment we use just the last
     // surface
     BoundPlane* bp=0;
-    for(std::list<GEMEtaPartition *>::iterator gepl=gepls.begin();
+    for(std::list<ME0EtaPartition *>::iterator gepl=gepls.begin();
     gepl!=gepls.end(); gepl++){
     const BoundPlane& bps = (*gepl)->surface();
       bp = const_cast<BoundPlane *>(&bps);
@@ -122,9 +122,9 @@ GEMGeometry* GEMGeometryBuilderFromCondDB::build(const RecoIdealGeometry& rgeo)
 
     ReferenceCountingPointer<BoundPlane> surf(bp);
     // Create the chamber 
-    GEMChamber* ch = new GEMChamber (chid, surf); 
+    ME0Chamber* ch = new ME0Chamber (chid, surf); 
     // Add the etaps to rhe chamber
-    for(std::list<GEMEtaPartition *>::iterator gepl=gepls.begin();
+    for(std::list<ME0EtaPartition *>::iterator gepl=gepls.begin();
     gepl!=gepls.end(); gepl++){
       ch->add(*gepl);
     }
