@@ -18,8 +18,7 @@ process.source = cms.Source("EmptySource")
 
 process.MessageLogger = cms.Service("MessageLogger")
 
-process.test2 = cms.EDAnalyzer("GEMGeometryAnalyzer")
+process.test = cms.EDAnalyzer("GEMGeometryAnalyzer")
 
-#process.p = cms.Path(process.test1+process.test2)
-process.p = cms.Path(process.test2)
+process.p = cms.Path(process.test)
 
