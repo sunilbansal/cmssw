@@ -101,7 +101,13 @@ class L1TkFastVertexProducer : public edm::EDProducer {
 	int nStubsmin ;		// minimum number of stubs 
 	int nStubsPSmin ;	// minimum number of stubs in PS modules 
 
+        int nBinning;   // number of bins used in the temp histogram
+
+        bool MonteCarloVertex;   //
         //const StackedTrackerGeometry*                   theStackedGeometry;
+
+	bool doPtComp ;
+	bool doTightChi2 ;
 
 	TH1F* htmp;
 	TH1F* htmp_weight;
@@ -145,6 +151,11 @@ L1TkFastVertexProducer::L1TkFastVertexProducer(const edm::ParameterSet& iConfig)
 
   nStubsmin = iConfig.getParameter<int>("nStubsmin");
   nStubsPSmin = iConfig.getParameter<int>("nStubsPSmin");
+  nBinning = iConfig.getParameter<int>("nBinning");
+
+  MonteCarloVertex = iConfig.getParameter<bool>("MonteCarloVertex");
+  doPtComp = iConfig.getParameter<bool>("doPtComp");
+  doTightChi2 = iConfig.getParameter<bool>("doTightChi2");
 
 
  //int nbins = 300;
@@ -155,9 +166,10 @@ L1TkFastVertexProducer::L1TkFastVertexProducer(const edm::ParameterSet& iConfig)
  //float xmin = -15;
  //float xmax = +15;
 
- int nbins = 600;
- float xmin = -30 + 0.05/2.;
- float xmax = +30 + 0.05/2.;
+ //int nbins = 600;
+ int nbins = nBinning ; // should be odd
+ float xmin = -30 ;
+ float xmax = +30 ;
 
   htmp = new TH1F("htmp",";z (cm); Tracks",nbins,xmin,xmax);
   htmp_weight = new TH1F("htmp_weight",";z (cm); Tracks",nbins,xmin,xmax);
@@ -185,6 +197,7 @@ void
 L1TkFastVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
    using namespace edm;
+   using namespace std;
  
  std::auto_ptr<L1TkPrimaryVertexCollection> result(new L1TkPrimaryVertexCollection);
 
@@ -206,16 +219,23 @@ L1TkFastVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
     // ----------------------------------------------------------------------
 
-/*
+ if (MonteCarloVertex) {
+
         // MC info  ... retrieve the zvertex            
   edm::Handle<edm::HepMCProduct> HepMCEvt;
   iEvent.getByLabel("generator",HepMCEvt);
   
-     const HepMC::GenEvent* MCEvt = HepMCEvt->GetEvent();
-     const double mm=0.1;
+  edm::Handle< vector<reco::GenParticle> > GenParticleHandle;
+  iEvent.getByLabel("genParticles","",GenParticleHandle);
 
+     const double mm=0.1;
      float zvtx_gen = -999;
+
  
+     if ( HepMCEvt.isValid() ) {
+                // using HepMCEvt
+
+     const HepMC::GenEvent* MCEvt = HepMCEvt->GetEvent();
      for ( HepMC::GenEvent::vertex_const_iterator ivertex = MCEvt->vertices_begin(); ivertex != MCEvt->vertices_end(); ++ivertex )
          {
              bool hasParentVertex = false;
@@ -239,9 +259,32 @@ L1TkFastVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
              zvtx_gen = pos.z()*mm;
              break;  // there should be one single primary vertex
           }  // end loop over gen vertices
-*/
+
+	}
+     else if (GenParticleHandle.isValid() ) {
+        vector<reco::GenParticle>::const_iterator genpartIter ;
+        for (genpartIter = GenParticleHandle->begin(); genpartIter != GenParticleHandle->end(); ++genpartIter) {
+           int status = genpartIter -> status() ;
+	   if (status != 3) continue;
+	   if ( genpartIter -> numberOfMothers() == 0) continue;   // the incoming hadrons
+	   float part_zvertex = genpartIter -> vz() ;
+	   zvtx_gen = part_zvertex ;
+	   break;	// 
+	}
+     }
+     else {
+	edm::LogError("L1TkFastVertexProducer")
+ 	  << "\nerror: try to retrieve the MC vertex (MonteCarloVertex = True) "
+          << "\nbut the input file contains neither edm::HepMCProduct>  nor vector<reco::GenParticle>. Exit"
+          << std::endl;
+     }
 
 
+     L1TkPrimaryVertex genvtx( zvtx_gen, -999.); 
+     result -> push_back( genvtx );
+     iEvent.put( result);
+     return;
+ }
 
  edm::Handle<L1TkTrackCollectionType> L1TkTrackHandle;
  iEvent.getByLabel(L1TrackInputTag, L1TkTrackHandle);   
@@ -264,6 +307,8 @@ L1TkFastVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     float z  = trackIter->getPOCA().z();
     float chi2 = trackIter->getChi2();
     float pt = trackIter->getMomentum().perp();
+    float eta  = trackIter ->getMomentum().eta();
+
 
     if (fabs(z) > ZMAX ) continue;
     if (chi2 > CHI2MAX) continue;
@@ -299,6 +344,26 @@ L1TkFastVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
        } // end loop over stubs
         if (nstubs < nStubsmin) continue;
         if (nPS < nStubsPSmin) continue;
+
+
+
+	// quality cuts from Louise S, based on the pt-stub compatibility (June 20, 2014)
+    int trk_nstub  = (int) trackIter ->getStubRefs().size();
+    float chi2dof = chi2 / (2*trk_nstub-4);
+
+     if (doPtComp) {
+      float trk_consistency = trackIter ->getStubPtConsistency();
+      //if (trk_nstub < 4) continue;	// done earlier
+      //if (chi2 > 100.0) continue;	// done earlier
+      if (trk_nstub == 4) {
+    	if (fabs(eta)<2.2 && trk_consistency>10) continue;
+    	else if (fabs(eta)>2.2 && chi2dof>5.0) continue;
+      }
+    }
+    if (doTightChi2) {
+          if (pt>10.0 && chi2dof>5.0) continue;
+    }
+
      htmp -> Fill( z );
      htmp_weight -> Fill( z, pt ); 
    
