@@ -170,10 +170,22 @@ lct_type_(kClctRpc)
   rpc_.strip_ = rpc.strip();
   rpc_.bx_ = rpc.bx();
 }
+
+CSCLCTDigiComponents& CSCLCTDigiComponents::operator=(const CSCLCTDigiComponents& rhs) 
+{
+  this->lct_type_=rhc.lct_type_;
+  return *this;
+}
+
+bool CSCLCTDigiComponents::operator == (const CSCLCTDigiComponents&) const
+{
+  return false;
+}
+
 /*
 CSCLCTDigiComponents& CSCLCTDigiComponents::operator=(const CSCLCTDigiComponents& c)
 {
-  this->lct_type_=c.lct_type_
+
   this->
   this->
   this->

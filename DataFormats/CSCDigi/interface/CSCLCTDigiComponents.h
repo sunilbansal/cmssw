@@ -10,6 +10,7 @@
 
 #include "DataFormats/CSCDigi/interface/CSCALCTDigi.h"
 #include "DataFormats/CSCDigi/interface/CSCCLCTDigi.h"
+#include "DataFormats/CSCDigi/interface/CSCCorrelatedLCTDigi.h"
 #include "DataFormats/GEMDigi/interface/GEMCSCCoPadDigi.h"
 #include "DataFormats/RPCDigi/interface/RPCDigi.h"
 
@@ -106,10 +107,10 @@ class CSCLCTDigiComponents
 
   const lct_type type() const { return lct_type_; }
 
-  const ALCTData getALCTData()  const { return alct_;  }
-  const CLCTData getCLCTData()  const { return clct_;  }
-  const GEMData getGEMData()  const { return gem_;  }
-  const RPCData getRPCData()  const { return rpc_;  }
+  const ALCTData& getALCTData()  const { return alct_;  }
+  const CLCTData& getCLCTData()  const { return clct_;  }
+  const GEMData& getGEMData()  const { return gem_;  }
+  const RPCData& getRPCData()  const { return rpc_;  }
 
   /// Print content of LCT digi components
   void print() const;

@@ -12,6 +12,8 @@
 #include <DataFormats/CSCDigi/interface/CSCALCTDigiCollection.h>
 #include <DataFormats/CSCDigi/interface/CSCCorrelatedLCTDigi.h>
 #include <DataFormats/CSCDigi/interface/CSCCorrelatedLCTDigiCollection.h>
+#include <DataFormats/CSCDigi/interface/CSCLCTDigiComponents.h>
+#include <DataFormats/CSCDigi/interface/CSCLCTDigiComponentsCollection.h>
 #include <DataFormats/CSCDigi/interface/CSCCFEBStatusDigi.h>
 #include <DataFormats/CSCDigi/interface/CSCCFEBStatusDigiCollection.h>
 #include <DataFormats/CSCDigi/interface/CSCDMBStatusDigi.h>
@@ -44,6 +46,7 @@ namespace{
   CSCCLCTDigi cCLCTD_;
   CSCALCTDigi cALCTD_;
   CSCCorrelatedLCTDigi cCorLCTD_;
+  CSCLCTDigiComponents cLCTComp_;
   CSCCFEBStatusDigi cCSD_;
   CSCTMBStatusDigi cTMBSD_;
   CSCDCCFormatStatusDigi cDFSD_;
@@ -61,6 +64,7 @@ namespace{
   std::vector<CSCCLCTDigi> vCLCTD_;
   std::vector<CSCALCTDigi> vALCTD_;
   std::vector<CSCCorrelatedLCTDigi> vCorLCTD_;
+  std::vector<CSCLCTDigiComponents> vLCTComp_;
   std::vector<CSCCFEBStatusDigi>  vCSD_;
   std::vector<CSCTMBStatusDigi>  vTMBSD_;
   std::vector<CSCDCCFormatStatusDigi>  vDFSD_;
@@ -77,6 +81,7 @@ namespace{
   std::vector<std::vector<CSCCLCTDigi> > vvCLCTD_;
   std::vector<std::vector<CSCALCTDigi> > vvALCTD_;
   std::vector<std::vector<CSCCorrelatedLCTDigi> > vvCorLCTD_;
+  std::vector<std::vector<CSCLCTDigiComponents> > vvLCTComp_;
   std::vector<std::vector<CSCCFEBStatusDigi> >  vvCSD_;
   std::vector<std::vector<CSCTMBStatusDigi> >  vvTMBSD_;
   std::vector<std::vector<CSCDMBStatusDigi> >  vvDMBSD_;
@@ -93,6 +98,7 @@ namespace{
   CSCCLCTDigiCollection clCLCTD_;
   CSCALCTDigiCollection clALCTD_;
   CSCCorrelatedLCTDigiCollection clCorLCTD_;
+  CSCLCTDigiComponentsCollection clLCTComp_;
   CSCCFEBStatusDigiCollection clCSD_;
   CSCTMBStatusDigiCollection clTMBSD_;
   CSCDCCFormatStatusDigiCollection clDFSD_;
@@ -109,6 +115,7 @@ namespace{
   edm::Wrapper<CSCCLCTDigiCollection> wCLCTD_;
   edm::Wrapper<CSCALCTDigiCollection> wALCTD_;
   edm::Wrapper<CSCCorrelatedLCTDigiCollection> wCorLCTD_;
+  edm::Wrapper<CSCLCTDigiComponentsCollection> wLCTComp_;
   edm::Wrapper<CSCCFEBStatusDigiCollection> wCSD_;
   edm::Wrapper<CSCTMBStatusDigiCollection> wTMBSD_;
   edm::Wrapper<CSCDCCFormatStatusDigiCollection> wDFSD_;
