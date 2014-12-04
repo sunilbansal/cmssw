@@ -19,6 +19,7 @@
 #include <DataFormats/CSCDigi/interface/CSCALCTDigiCollection.h>
 #include <DataFormats/CSCDigi/interface/CSCCLCTDigiCollection.h>
 #include <DataFormats/CSCDigi/interface/CSCCorrelatedLCTDigiCollection.h>
+#include <DataFormats/CSCDigi/interface/CSCLCTDigiComponentsCollection.h>
 #include <DataFormats/CSCDigi/interface/CSCCLCTPreTriggerCollection.h>
 #include <DataFormats/GEMDigi/interface/GEMCSCPadDigiCollection.h>
 #include "DataFormats/GEMDigi/interface/GEMCSCCoPadDigiCollection.h"
@@ -71,11 +72,13 @@ class CSCTriggerPrimitivesBuilder
 	     const CSCComparatorDigiCollection* compdc,
 	     const GEMCSCPadDigiCollection* gemPads,
 	     const RPCDigiCollection* rpcDigis,
-	     CSCALCTDigiCollection& oc_alct, CSCCLCTDigiCollection& oc_clct,
+	     CSCALCTDigiCollection& oc_alct, 
+	     CSCCLCTDigiCollection& oc_clct,
              CSCCLCTPreTriggerCollection & oc_pretrig,
 	     CSCCorrelatedLCTDigiCollection& oc_lct,
 	     CSCCorrelatedLCTDigiCollection& oc_sorted_lct,
-	     GEMCSCCoPadDigiCollection& oc_gemcopad);
+	     GEMCSCCoPadDigiCollection& oc_gemcopad,
+	     CSCLCTDigiComponentsCollection& oc_lctcomp);
 
   /** Max values of trigger labels for all CSCs; used to construct TMB
    *  processors. */

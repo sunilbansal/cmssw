@@ -2291,12 +2291,6 @@ CSCMotherboardME11GEM::matchingGEMPads(const CSCCLCTDigi& clct, const CSCALCTDig
 }
 
 
-std::vector<GEMCSCCoPadDigi> CSCMotherboardME11GEM::readoutCoPads()
-{
-  return gemCoPadV;
-}
-
-
 int CSCMotherboardME11GEM::getRandomWGForGEMRoll(int roll)
 {
   boost::container::flat_set<int> wgs;

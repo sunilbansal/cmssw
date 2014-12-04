@@ -30,6 +30,7 @@
 #include "DataFormats/CSCDigi/interface/CSCALCTDigiCollection.h"
 #include "DataFormats/CSCDigi/interface/CSCCLCTDigiCollection.h"
 #include "DataFormats/CSCDigi/interface/CSCCorrelatedLCTDigiCollection.h"
+#include "DataFormats/CSCDigi/interface/CSCLCTDigiComponentsCollection.h"
 
 #include "DataFormats/GEMDigi/interface/GEMCSCPadDigiCollection.h"
 #include "DataFormats/GEMDigi/interface/GEMCSCCoPadDigiCollection.h"
@@ -69,6 +70,7 @@ CSCTriggerPrimitivesProducer::CSCTriggerPrimitivesProducer(const edm::ParameterS
   produces<CSCCorrelatedLCTDigiCollection>();
   produces<CSCCorrelatedLCTDigiCollection>("MPCSORTED");
   produces<GEMCSCCoPadDigiCollection>();
+  produces<CSCLCTDigiComponentsCollection>();
 }
 
 CSCTriggerPrimitivesProducer::~CSCTriggerPrimitivesProducer() {
@@ -159,6 +161,7 @@ void CSCTriggerPrimitivesProducer::produce(edm::Event& ev,
   std::auto_ptr<CSCCorrelatedLCTDigiCollection> oc_lct(new CSCCorrelatedLCTDigiCollection);
   std::auto_ptr<CSCCorrelatedLCTDigiCollection> oc_sorted_lct(new CSCCorrelatedLCTDigiCollection);
   std::auto_ptr<GEMCSCCoPadDigiCollection> oc_gemcopad(new GEMCSCCoPadDigiCollection);
+  std::auto_ptr<CSCLCTDigiComponentsCollection> oc_lctcomp(new CSCLCTDigiComponentsCollection);
 
   if (!wireDigis.isValid()) {
     edm::LogWarning("L1CSCTPEmulatorNoInputCollection")
@@ -181,7 +184,7 @@ void CSCTriggerPrimitivesProducer::produce(edm::Event& ev,
                                                 std::make_shared<const CSCBadChambers>());
     lctBuilder_->build(temp.get(),
                        wireDigis.product(), compDigis.product(), gemPads, rpcDigis,
-                       *oc_alct, *oc_clct, *oc_pretrig, *oc_lct, *oc_sorted_lct, *oc_gemcopad);
+                       *oc_alct, *oc_clct, *oc_pretrig, *oc_lct, *oc_sorted_lct, *oc_gemcopad, *oc_lctcomp);
   }
 
   // Put collections in event.
@@ -191,4 +194,5 @@ void CSCTriggerPrimitivesProducer::produce(edm::Event& ev,
   ev.put(oc_lct);
   ev.put(oc_sorted_lct,"MPCSORTED");
   ev.put(oc_gemcopad);
+  ev.put(oc_lctcomp);
 }

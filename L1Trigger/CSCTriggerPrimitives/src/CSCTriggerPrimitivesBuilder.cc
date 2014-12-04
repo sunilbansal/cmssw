@@ -188,7 +188,8 @@ void CSCTriggerPrimitivesBuilder::build(const CSCBadChambers* badChambers,
                                         CSCCLCTPreTriggerCollection & oc_pretrig,
 					CSCCorrelatedLCTDigiCollection& oc_lct,
 					CSCCorrelatedLCTDigiCollection& oc_sorted_lct,
-					GEMCSCCoPadDigiCollection& oc_gemcopad)
+					GEMCSCCoPadDigiCollection& oc_gemcopad,
+					CSCLCTDigiComponentsCollection& oc_lctcomp)
 {
   // CSC geometry.
   CSCTriggerGeomManager* theGeom = CSCTriggerGeometry::get();
@@ -368,6 +369,7 @@ void CSCTriggerPrimitivesBuilder::build(const CSCBadChambers* badChambers,
               std::vector<int> preTriggerBXs1a = tmb11GEM->clct1a->preTriggerBXs();
 
               std::vector<GEMCSCCoPadDigi> copads = tmb11GEM->readoutCoPads();
+	      std::vector<CSCLCTDigiComponents> lctcomps = tmb11GEM->readoutLCTDigiComponents();
 
               // perform simple separation of ALCTs into 1/a and 1/b
               // for 'smart' case. Some duplication occurs for WG [10,15]
@@ -431,6 +433,14 @@ void CSCTriggerPrimitivesBuilder::build(const CSCBadChambers* badChambers,
                 oc_gemcopad.put(std::make_pair(copads.begin(),copads.end()), gemId);
               }
  
+              // LCT components
+              if (!lctcomps.empty()) {
+                LogTrace("L1CSCTrigger")
+                  << "Put " << copads.size() << " LCT components"
+                  << ((lctcomps.size() > 1) ? "s " : " ") << "in collection\n";
+                oc_lctcomp.put(std::make_pair(lctcomps.begin(),lctcomps.end()), detid);
+              }
+
               // ME1/a
 
               if (disableME1a) continue;
