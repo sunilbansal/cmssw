@@ -1,10 +1,3 @@
-/**\class CSCLCTDigiComponents
- *
- * Digi for LCT trigger primitive components
- *
- * \author S. Dildick, TAMU
- */
-
 #include "DataFormats/CSCDigi/interface/CSCLCTDigiComponents.h"
 #include <iostream>
 
@@ -14,166 +7,95 @@ namespace {
     "CLCT-GEMCoPad", "ALCT-CLCT-RPC", "ALCT-RPC", "CLCT-RPC"};
 }
 
-CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, const CSCCLCTDigi& clct) : 
+CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, 
+					   const CSCCLCTDigi& clct, 
+					   const CSCCorrelatedLCTDigi& lct) : 
   lct_type_(kAlctClct)
+  // alct_(alct),
+  // clct_(clct),
+  // lct_(lct)
 {
-  alct_.valid_ = alct.isValid();      
-  alct_.quality_ = alct.getQuality();    
-  alct_.accel_ = alct.getAccelerator();      
-  alct_.keywire_ = alct.getKeyWG();   
-  alct_.bx_ = alct.getBX();   
-  alct_.trknmb_ = alct.getTrknmb();
-  alct_.fullbx_ = alct.getFullBX();
-  clct_.valid_ = clct.isValid();
-  clct_.quality_ = clct.getQuality();
-  clct_.pattern_ = clct.getPattern();
-  clct_.bend_ = clct.getBend();
-  clct_.strip_ = clct.getStripType();
-  clct_.cfeb_ = clct.getCFEB();
-  clct_.bx_ = clct.getBX();
-  clct_.trknmb_ = clct.getTrknmb();
-  clct_.fullbx_ = clct.getFullBX();
 }
 
-
-CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, const CSCCLCTDigi& clct, const GEMCSCPadDigi& gem) : 
-  lct_type_(kAlctClctGem)
+CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, 
+					   const CSCCLCTDigi& clct, 
+					   const CSCCorrelatedLCTDigi& lct, 
+					   const GEMCSCPadDigi& gem) : 
+  lct_type_(kAlctClctGem),
+  alct_(alct),
+  clct_(clct),
+  lct_(lct),
+  pad_(gem)
 {
-  alct_.valid_ = alct.isValid();      
-  alct_.quality_ = alct.getQuality();    
-  alct_.accel_ = alct.getAccelerator();      
-  alct_.keywire_ = alct.getKeyWG();   
-  alct_.bx_ = alct.getBX();   
-  alct_.trknmb_ = alct.getTrknmb();
-  alct_.fullbx_ = alct.getFullBX();
-  clct_.valid_ = clct.isValid();
-  clct_.quality_ = clct.getQuality();
-  clct_.pattern_ = clct.getPattern();
-  clct_.bend_ = clct.getBend();
-  clct_.strip_ = clct.getStripType();
-  clct_.cfeb_ = clct.getCFEB();
-  clct_.bx_ = clct.getBX();
-  clct_.trknmb_ = clct.getTrknmb();
-  clct_.fullbx_ = clct.getFullBX();
-  gem_.pad1_ = gem.pad();
-  gem_.bx1_ = gem.bx();
 }
 
-CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, const CSCCLCTDigi& clct, const GEMCSCCoPadDigi& gem) : 
-  lct_type_(kAlctClct2Gem)
+CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, 
+					   const CSCCLCTDigi& clct, 
+					   const CSCCorrelatedLCTDigi& lct, 
+					   const GEMCSCCoPadDigi& gem) : 
+  lct_type_(kAlctClct2Gem),
+  alct_(alct),
+  clct_(clct),
+  lct_(lct),
+  copad_(gem)
 {
-  alct_.valid_ = alct.isValid();      
-  alct_.quality_ = alct.getQuality();    
-  alct_.accel_ = alct.getAccelerator();      
-  alct_.keywire_ = alct.getKeyWG();   
-  alct_.bx_ = alct.getBX();   
-  alct_.trknmb_ = alct.getTrknmb();
-  alct_.fullbx_ = alct.getFullBX();
-  clct_.valid_ = clct.isValid();
-  clct_.quality_ = clct.getQuality();
-  clct_.pattern_ = clct.getPattern();
-  clct_.bend_ = clct.getBend();
-  clct_.strip_ = clct.getStripType();
-  clct_.cfeb_ = clct.getCFEB();
-  clct_.bx_ = clct.getBX();
-  clct_.trknmb_ = clct.getTrknmb();
-  clct_.fullbx_ = clct.getFullBX();
-  gem_.pad1_ = gem.pad(1);
-  gem_.bx1_ = gem.bx(1);
-  gem_.pad2_ = gem.pad(2);
-  gem_.bx2_ = gem.bx(2);
 }
 
-CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, const GEMCSCCoPadDigi& gem) : 
-  lct_type_(kAlct2Gem)
+CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, 
+					   const CSCCorrelatedLCTDigi& lct, 
+					   const GEMCSCCoPadDigi& gem) : 
+  lct_type_(kAlct2Gem),
+  alct_(alct),
+  lct_(lct),
+  copad_(gem)
 {
-  alct_.valid_ = alct.isValid();      
-  alct_.quality_ = alct.getQuality();    
-  alct_.accel_ = alct.getAccelerator();      
-  alct_.keywire_ = alct.getKeyWG();   
-  alct_.bx_ = alct.getBX();   
-  alct_.trknmb_ = alct.getTrknmb();
-  alct_.fullbx_ = alct.getFullBX();
-  gem_.pad1_ = gem.pad(1);
-  gem_.bx1_ = gem.bx(1);
-  gem_.pad2_ = gem.pad(2);
-  gem_.bx2_ = gem.bx(2);
 }
 
-CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCCLCTDigi& clct, const GEMCSCCoPadDigi& gem) : 
-  lct_type_(kClct2Gem)
+CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCCLCTDigi& clct, 
+					   const CSCCorrelatedLCTDigi& lct, 
+					   const GEMCSCCoPadDigi& gem) : 
+  lct_type_(kClct2Gem),
+  clct_(clct),
+  lct_(lct),
+  copad_(gem)
 {
-  clct_.valid_ = clct.isValid();
-  clct_.quality_ = clct.getQuality();
-  clct_.pattern_ = clct.getPattern();
-  clct_.bend_ = clct.getBend();
-  clct_.strip_ = clct.getStripType();
-  clct_.cfeb_ = clct.getCFEB();
-  clct_.bx_ = clct.getBX();
-  clct_.trknmb_ = clct.getTrknmb();
-  clct_.fullbx_ = clct.getFullBX();
-  gem_.pad1_ = gem.pad(1);
-  gem_.bx1_ = gem.bx(1);
-  gem_.pad2_ = gem.pad(2);
-  gem_.bx2_ = gem.bx(2);
 }
 
-CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, const CSCCLCTDigi& clct, const RPCDigi& rpc) : 
-  lct_type_(kAlctClctRpc)
+CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, 
+					   const CSCCLCTDigi& clct, 
+					   const CSCCorrelatedLCTDigi& lct, 
+					   const RPCDigi& rpc) : 
+  lct_type_(kAlctClctRpc),
+  alct_(alct),
+  clct_(clct),
+  lct_(lct),
+  rpc_(rpc)
 {
-  alct_.valid_ = alct.isValid();      
-  alct_.quality_ = alct.getQuality();    
-  alct_.accel_ = alct.getAccelerator();      
-  alct_.keywire_ = alct.getKeyWG();   
-  alct_.bx_ = alct.getBX();   
-  alct_.trknmb_ = alct.getTrknmb();
-  alct_.fullbx_ = alct.getFullBX();
-  clct_.valid_ = clct.isValid();
-  clct_.quality_ = clct.getQuality();
-  clct_.pattern_ = clct.getPattern();
-  clct_.bend_ = clct.getBend();
-  clct_.strip_ = clct.getStripType();
-  clct_.cfeb_ = clct.getCFEB();
-  clct_.bx_ = clct.getBX();
-  clct_.trknmb_ = clct.getTrknmb();
-  clct_.fullbx_ = clct.getFullBX();
-  rpc_.strip_ = rpc.strip();
-  rpc_.bx_ = rpc.bx();
 }
 
-CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, const RPCDigi& rpc) : 
-  lct_type_(kAlctRpc)
+CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, 
+					   const CSCCorrelatedLCTDigi& lct, 
+					   const RPCDigi& rpc) : 
+  lct_type_(kAlctRpc),
+  alct_(alct),
+  lct_(lct),
+  rpc_(rpc)
 {
-  alct_.valid_ = alct.isValid();      
-  alct_.quality_ = alct.getQuality();    
-  alct_.accel_ = alct.getAccelerator();      
-  alct_.keywire_ = alct.getKeyWG();   
-  alct_.bx_ = alct.getBX();   
-  alct_.trknmb_ = alct.getTrknmb();
-  alct_.fullbx_ = alct.getFullBX();
-  rpc_.strip_ = rpc.strip();
-  rpc_.bx_ = rpc.bx();
 }
 
-CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCCLCTDigi& clct, const RPCDigi& rpc) : 
-lct_type_(kClctRpc)
+CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCCLCTDigi& clct, 
+					   const CSCCorrelatedLCTDigi& lct, 
+					   const RPCDigi& rpc) : 
+  lct_type_(kClctRpc),
+  clct_(clct),
+  lct_(lct),
+  rpc_(rpc)
 {
-  clct_.valid_ = clct.isValid();
-  clct_.quality_ = clct.getQuality();
-  clct_.pattern_ = clct.getPattern();
-  clct_.bend_ = clct.getBend();
-  clct_.strip_ = clct.getStripType();
-  clct_.cfeb_ = clct.getCFEB();
-  clct_.bx_ = clct.getBX();
-  clct_.trknmb_ = clct.getTrknmb();
-  clct_.fullbx_ = clct.getFullBX();
-  rpc_.strip_ = rpc.strip();
-  rpc_.bx_ = rpc.bx();
 }
 
 CSCLCTDigiComponents& CSCLCTDigiComponents::operator=(const CSCLCTDigiComponents& rhs) 
 {
-  this->lct_type_=rhc.lct_type_;
+  this->lct_type_=rhs.lct_type_;
   return *this;
 }
 
