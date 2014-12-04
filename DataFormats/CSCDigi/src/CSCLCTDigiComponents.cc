@@ -10,10 +10,10 @@ namespace {
 CSCLCTDigiComponents::CSCLCTDigiComponents(const CSCALCTDigi& alct, 
 					   const CSCCLCTDigi& clct, 
 					   const CSCCorrelatedLCTDigi& lct) : 
-  lct_type_(kAlctClct)
-  // alct_(alct),
-  // clct_(clct),
-  // lct_(lct)
+  lct_type_(kAlctClct),
+  alct_(alct),
+  clct_(clct),
+  lct_(lct)
 {
 }
 
@@ -104,8 +104,11 @@ bool CSCLCTDigiComponents::operator == (const CSCLCTDigiComponents&) const
   return false;
 }
 
+void CSCLCTDigiComponents::print() const
+{}
+
 /*
-CSCLCTDigiComponents& CSCLCTDigiComponents::operator=(const CSCLCTDigiComponents& c)
+& CSCLCTDigiComponents::operator=(const CSCLCTDigiComponents& c)
 {
 
   this->
@@ -126,8 +129,7 @@ CSCLCTDigiComponents& CSCLCTDigiComponents::operator=(const CSCLCTDigiComponents
   bool operator != (const CSCLCTDigiComponents &rhs) const
     { return !(this->operator==(rhs)); }
 
-  /// Print content of LCT digi components
-  void print() const;
+  /// Print content of LCT digi components 
 
 std::ostream & operator<<(std::ostream & o, const CSCLCTDigiComponents& digi);
 */

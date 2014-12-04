@@ -14,8 +14,8 @@
    <class name="CSCCorrelatedLCTDigi" ClassVersion="12">
     <version ClassVersion="12" checksum="81142555"/>
    </class>
-   <class name="CSCLCTDigiComponents" ClassVersion="12">
-    <version ClassVersion="12" checksum="81142555"/>
+   <class name="CSCLCTDigiComponents" ClassVersion="13">
+    <version ClassVersion="13" checksum="1923536419"/>
    </class>
    <class name="CSCCLCTDigi" ClassVersion="10">
     <version ClassVersion="10" checksum="3910057547"/>
