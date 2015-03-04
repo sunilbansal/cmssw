@@ -1,5 +1,5 @@
-#ifndef RecoParticleFlow_PFClusterProducer_PFArborLinker_h_
-#define RecoParticleFlow_PFClusterProducer_PFArborLinker_h_
+#ifndef RecoParticleFlow_PFClusterProducer_PFClusterTimeSelector_h_
+#define RecoParticleFlow_PFClusterProducer_PFClusterTimeSelector_h_
 
 // system include files
 #include <memory>
@@ -12,16 +12,13 @@
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
-#include "DataFormats/ParticleFlowReco/interface/PFRecHit.h"
-#include "DataFormats/ParticleFlowReco/interface/PFRecHitFwd.h"
 #include "DataFormats/ParticleFlowReco/interface/PFCluster.h"
 #include "DataFormats/ParticleFlowReco/interface/PFClusterFwd.h"
-#include "RecoParticleFlow/PFClusterProducer/interface/Arbor.hh"
 
-class PFArborLinker : public edm::EDProducer {
+class PFClusterTimeSelector : public edm::EDProducer {
  public:
-  explicit PFArborLinker(const edm::ParameterSet&);
-  ~PFArborLinker();
+  explicit PFClusterTimeSelector(const edm::ParameterSet&);
+  ~PFClusterTimeSelector();
 
   virtual void beginRun(const edm::Run& run, const edm::EventSetup & es);
   
@@ -29,14 +26,25 @@ class PFArborLinker : public edm::EDProducer {
 	       const edm::EventSetup& iSetup);
 
 
-
  protected:
+
+  struct CutInfo {
+    double depth;
+    double minE;
+    double maxE;
+    double minTime;
+    double maxTime;
+    bool endcap;
+
+  };
+
   // ----------access to event data
-  edm::EDGetTokenT<reco::PFRecHitCollection> hits_;
+  edm::EDGetTokenT<reco::PFClusterCollection> clusters_;
+  std::vector<CutInfo> cutInfo_;
 
 };
 
 #include "FWCore/Framework/interface/MakerMacros.h"
-DEFINE_FWK_MODULE(PFArborLinker);
+DEFINE_FWK_MODULE(PFClusterTimeSelector);
 
 #endif
