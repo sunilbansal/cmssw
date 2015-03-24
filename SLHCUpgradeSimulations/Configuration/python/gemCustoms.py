@@ -25,6 +25,8 @@ def customise2023(process):
     process = customise2019(process)
     if hasattr(process,'L1simulation_step'):
         process=customise_L1Emulator2023(process,'pt0')
+    if hasattr(process,'HLTSchedule'):
+        process.hltL3TrajSeedOIState.TkSeedGenerator.option = cms.uint32( 4 )
     return process
 
 def customise_Digi(process):
@@ -119,5 +121,5 @@ def outputCustoms(process):
 def customise_gem_hlt(process):
     process.hltL2OfflineMuonSeeds.EnableGEMMeasurement = cms.bool( True )
     process.hltL2Muons.L2TrajBuilderParameters.EnableGEMMeasurement = cms.bool( True )
-    process.hltL2Muons.BWFilterParameters.EnableGEMMeasurement = cms.bool( True )
+    #process.hltL2Muons.BWFilterParameters.EnableGEMMeasurement = cms.bool( True )
     return process
