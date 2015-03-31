@@ -27,6 +27,7 @@ def customise2023(process):
         process=customise_L1Emulator2023(process,'pt0')
     if hasattr(process,'HLTSchedule'):
         process.hltL3TrajSeedOIState.TkSeedGenerator.option = cms.uint32( 4 )
+        
     return process
 
 def customise_Digi(process):
@@ -119,7 +120,15 @@ def outputCustoms(process):
 
     
 def customise_gem_hlt(process):
+    process.load('RecoLocalMuon.GEMRecHit.gemRecHits_cfi')
+    process.HLTMuonLocalRecoSequence += process.gemRecHits
     process.hltL2OfflineMuonSeeds.EnableGEMMeasurement = cms.bool( True )
     process.hltL2Muons.L2TrajBuilderParameters.EnableGEMMeasurement = cms.bool( True )
-    #process.hltL2Muons.BWFilterParameters.EnableGEMMeasurement = cms.bool( True )
+    process.hltL2Muons.L2TrajBuilderParameters.FilterParameters.EnableGEMMeasurement = cms.bool( True )
+    process.hltL2Muons.L2TrajBuilderParameters.BWFilterParameters.EnableGEMMeasurement = cms.bool( True )
+    process.hltL2Muons.ServiceParameters.GEMLayers = cms.untracked.bool(True)
+    process.hltL2MuonSeeds.ServiceParameters.GEMLayers = cms.untracked.bool(True)
+    process.hltL3MuonsOIState.ServiceParameters.GEMLayers = cms.untracked.bool(True)
+    process.hltL3MuonsOIHit.ServiceParameters.GEMLayers = cms.untracked.bool(True)
+    process.hltL3MuonsIOHit.ServiceParameters.GEMLayers = cms.untracked.bool(True)
     return process
