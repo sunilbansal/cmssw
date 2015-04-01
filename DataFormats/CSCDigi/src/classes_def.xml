@@ -11,8 +11,11 @@
    <class name="CSCComparatorDigi" ClassVersion="10">
     <version ClassVersion="10" checksum="656608282"/>
    </class>
-   <class name="CSCCorrelatedLCTDigi" ClassVersion="10">
-    <version ClassVersion="10" checksum="1301481852"/>
+   <class name="CSCCorrelatedLCTDigi" ClassVersion="11">
+    <version ClassVersion="11" checksum="124364984"/>
+   </class>
+   <class name="GEMCorrelatedLCTDigi" ClassVersion="11">
+    <version ClassVersion="11" checksum="1534278789"/>
    </class>
    <class name="CSCCLCTDigi" ClassVersion="10">
     <version ClassVersion="10" checksum="3910057547"/>
@@ -47,6 +50,7 @@
    <class name="std::vector<CSCStripDigi>"/>
    <class name="std::vector<CSCComparatorDigi>"/>
    <class name="std::vector<CSCCorrelatedLCTDigi>"/>
+   <class name="std::vector<GEMCorrelatedLCTDigi>"/>
    <class name="std::vector<CSCCLCTDigi>"/>
    <class name="std::vector<CSCALCTDigi>"/>
    <class name="std::vector<CSCCFEBStatusDigi>"/>
@@ -62,6 +66,7 @@
    <class name="std::map<CSCDetId,std::vector<CSCStripDigi> >"/>
    <class name="std::map<CSCDetId,std::vector<CSCComparatorDigi> >"/>
    <class name="std::map<CSCDetId,std::vector<CSCCorrelatedLCTDigi> >"/>
+   <class name="std::map<CSCDetId,std::vector<GEMCorrelatedLCTDigi> >"/>
    <class name="std::map<CSCDetId,std::vector<CSCCLCTDigi> >"/>
    <class name="std::map<CSCDetId,std::vector<CSCALCTDigi> >"/>
    <class name="std::map<CSCDetId,std::vector<CSCCFEBStatusDigi> >"/>
@@ -78,6 +83,7 @@
    <class name="std::pair<CSCDetId,std::vector<CSCStripDigi> >"/>
    <class name="std::pair<CSCDetId,std::vector<CSCComparatorDigi> >"/>
    <class name="std::pair<CSCDetId,std::vector<CSCCorrelatedLCTDigi> >"/>
+   <class name="std::pair<CSCDetId,std::vector<GEMCorrelatedLCTDigi> >"/>
    <class name="std::pair<CSCDetId,std::vector<CSCCLCTDigi> >"/>
    <class name="std::pair<CSCDetId,std::vector<CSCALCTDigi> >"/>
    <class name="std::pair<CSCDetId,std::vector<CSCCFEBStatusDigi> >"/>

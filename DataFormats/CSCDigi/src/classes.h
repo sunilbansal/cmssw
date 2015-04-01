@@ -12,6 +12,7 @@
 #include <DataFormats/CSCDigi/interface/CSCALCTDigiCollection.h>
 #include <DataFormats/CSCDigi/interface/CSCCorrelatedLCTDigi.h>
 #include <DataFormats/CSCDigi/interface/CSCCorrelatedLCTDigiCollection.h>
+#include <DataFormats/CSCDigi/interface/GEMCorrelatedLCTDigi.h>
 #include <DataFormats/CSCDigi/interface/CSCCFEBStatusDigi.h>
 #include <DataFormats/CSCDigi/interface/CSCCFEBStatusDigiCollection.h>
 #include <DataFormats/CSCDigi/interface/CSCDMBStatusDigi.h>
@@ -44,6 +45,7 @@ namespace DataFormats_CSCDigi {
   CSCCLCTDigi cCLCTD_;
   CSCALCTDigi cALCTD_;
   CSCCorrelatedLCTDigi cCorLCTD_;
+  GEMCorrelatedLCTDigi gCorLCTD_;
   CSCCFEBStatusDigi cCSD_;
   CSCTMBStatusDigi cTMBSD_;
   CSCDCCFormatStatusDigi cDFSD_;
@@ -61,6 +63,7 @@ namespace DataFormats_CSCDigi {
   std::vector<CSCCLCTDigi> vCLCTD_;
   std::vector<CSCALCTDigi> vALCTD_;
   std::vector<CSCCorrelatedLCTDigi> vCorLCTD_;
+  std::vector<GEMCorrelatedLCTDigi> vgCorLCTD_;
   std::vector<CSCCFEBStatusDigi>  vCSD_;
   std::vector<CSCTMBStatusDigi>  vTMBSD_;
   std::vector<CSCDCCFormatStatusDigi>  vDFSD_;
@@ -77,6 +80,7 @@ namespace DataFormats_CSCDigi {
   std::vector<std::vector<CSCCLCTDigi> > vvCLCTD_;
   std::vector<std::vector<CSCALCTDigi> > vvALCTD_;
   std::vector<std::vector<CSCCorrelatedLCTDigi> > vvCorLCTD_;
+  std::vector<std::vector<GEMCorrelatedLCTDigi> > vvgCorLCTD_;
   std::vector<std::vector<CSCCFEBStatusDigi> >  vvCSD_;
   std::vector<std::vector<CSCTMBStatusDigi> >  vvTMBSD_;
   std::vector<std::vector<CSCDMBStatusDigi> >  vvDMBSD_;

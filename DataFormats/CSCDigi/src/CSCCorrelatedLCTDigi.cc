@@ -4,6 +4,7 @@
  *
  *
  * \author L.Gray, UF
+ * \author Sven Dildick (TAMU)
  */
 
 #include "DataFormats/CSCDigi/interface/CSCCorrelatedLCTDigi.h"
@@ -20,18 +21,11 @@ CSCCorrelatedLCTDigi::CSCCorrelatedLCTDigi(const int itrknmb, const int ivalid,
 					   const uint16_t ibx0,
 					   const uint16_t isyncErr, 
 					   const uint16_t icscID):
-  trknmb(itrknmb),
+  BaseCorrelatedLCTDigi(itrknmb, ikeywire, istrip, ibx, impclink, ibx0, isyncErr, icscID),
   valid(ivalid),
   quality(iquality),
-  keywire(ikeywire),
-  strip(istrip),
   pattern(ipattern),
-  bend(ibend),
-  bx(ibx),
-  mpclink(impclink),
-  bx0(ibx0),
-  syncErr(isyncErr),
-  cscID(icscID)
+  bend(ibend)
 {}
 
 /// Default
@@ -41,50 +35,42 @@ CSCCorrelatedLCTDigi::CSCCorrelatedLCTDigi() {
 
 /// Clears this LCT.
 void CSCCorrelatedLCTDigi::clear() {
-  trknmb  = 0;
+  BaseCorrelatedLCTDigi::clear();
   valid   = 0;
   quality = 0;
-  keywire = 0;
-  strip   = 0;
   pattern = 0;
   bend    = 0;
-  bx      = 0;
-  mpclink = 0;
-  bx0     = 0; 
-  syncErr = 0;
-  cscID   = 0;
 }
 
 /// Comparison
 bool CSCCorrelatedLCTDigi::operator==(const CSCCorrelatedLCTDigi &rhs) const {
-  return ((trknmb == rhs.trknmb)   && (quality == rhs.quality) &&
-	  (keywire == rhs.keywire) && (strip == rhs.strip)     &&
-	  (pattern == rhs.pattern) && (bend == rhs.bend)       &&
-	  (bx == rhs.bx)           && (valid == rhs.valid) && (mpclink == rhs.mpclink) );
+  return ((getTrknmb() == rhs.getTrknmb()) && (quality == rhs.quality) &&
+	  (getKeyWG() == rhs.getKeyWG()) && (getStrip() == rhs.getStrip())     &&
+	  (pattern == rhs.pattern) && (bend == rhs.bend) &&
+	  (getBX() == rhs.getBX()) && (valid == rhs.valid) && (getMPCLink() == rhs.getMPCLink()));
 }
 
 /// Debug
 void CSCCorrelatedLCTDigi::print() const {
   if (isValid()) {
-    edm::LogVerbatim("CSCDigi")
-              << "CSC LCT #"        << getTrknmb() 
-	      << ": Valid = "       << isValid()
-	      << " Quality = "      << getQuality()
-	      << " Key Wire = "     << getKeyWG()
-	      << " Strip = "        << getStrip()
-              << " Pattern = "      << getPattern()
-	      << " Bend = "         << ( (getBend() == 0) ? 'L' : 'R' )
-	      << " BX = "           << getBX() 
-	      << " MPC Link = "     << getMPCLink();
+    edm::LogVerbatim("CSCCorrelatedLCTDigi")
+      << "CSC LCT #"        << getTrknmb() 
+      << ": Valid = "       << isValid()
+      << " Quality = "      << getQuality()
+      << " Key Wire = "     << getKeyWG()
+      << " Strip = "        << getStrip()
+      << " Pattern = "      << getPattern()
+      << " Bend = "         << ( (getBend() == 0) ? 'L' : 'R' )
+      << " BX = "           << getBX() 
+      << " MPC Link = "     << getMPCLink();
   }
   else {
-    edm::LogVerbatim("CSCDigi") << "Not a valid correlated LCT.";
+    edm::LogVerbatim("CSCCorrelatedLCTDigi") << "Not a valid correlated CSC LCT.";
   }
 }
 
-std::ostream & operator<<(std::ostream & o,
-			  const CSCCorrelatedLCTDigi& digi) {
-  return o << "CSC LCT #"   << digi.getTrknmb()
+std::ostream & operator<<(std::ostream & o, const CSCCorrelatedLCTDigi& digi) {
+  return o << "CSCCorrelatedLCTDigi #"   << digi.getTrknmb()
            << ": Valid = "  << digi.isValid()
            << " Quality = " << digi.getQuality()
            << " MPC Link = " << digi.getMPCLink()
