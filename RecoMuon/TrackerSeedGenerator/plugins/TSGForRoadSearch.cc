@@ -202,7 +202,7 @@ void TSGForRoadSearch::makeSeeds_3(const reco::Track & muon, std::vector<Traject
   TrajectoryStateOnSurface outer = onBounds(cIPFTS);
 
   if ( !outer.isValid() ) {LogDebug(theCategory) <<"outer state is not valid. no seed."; return;}
-  
+
   //rescale the error
   if (!notAtIPtsos(outer)) return;
 
@@ -215,6 +215,8 @@ void TSGForRoadSearch::makeSeeds_3(const reco::Track & muon, std::vector<Traject
 
   unsigned int layerShift=0;
   const DetLayer *inLayer = 0;
+
+  if (ptecc.size() || ntecc.size()){
   if (fabs(z) < ptecc.front()->surface().position().z()  ){
     inLayer = *(blc.rbegin()+layerShift);
     LogTrace(theCategory)<<"choosing TOB layer with shift: "<<layerShift;
@@ -233,6 +235,9 @@ void TSGForRoadSearch::makeSeeds_3(const reco::Track & muon, std::vector<Traject
       LogTrace(theCategory)<<"choosing last TEC layer with z: "<<inLayer->surface().position().z();
     }
   }
+  }
+  
+  if (!inLayer) return;
 
   //find out at least one compatible detector reached
   std::vector< DetLayer::DetWithState > compatible;
