@@ -25,6 +25,8 @@ def customise2023(process):
     process = customise2019(process)
     if hasattr(process,'L1simulation_step'):
         process=customise_L1Emulator2023(process,'pt0')
+
+    #temp for now since default doesnt work
     if hasattr(process,'HLTSchedule'):
         process.hltL3TrajSeedOIState.TkSeedGenerator.option = cms.uint32( 4 )
         
