@@ -31125,10 +31125,10 @@ hltSiPixelDigisReg = cms.EDProducer( "SiPixelRawToDigi",
     InputLabel = cms.InputTag( "rawDataCollector" ),
     ErrorList = cms.vint32(  ),
     Regions = cms.PSet( 
-      inputs = cms.VInputTag( 'hltL2TausForPixelIsolation' ),
-      deltaPhi = cms.vdouble( 0.5 ),
-      maxZ = cms.vdouble( 24.0 ),
-      beamSpot = cms.InputTag( "hltOnlineBeamSpot" )
+#      inputs = cms.VInputTag( 'hltL2TausForPixelIsolation' ),
+#      deltaPhi = cms.vdouble( 0.5 ),
+#      maxZ = cms.vdouble( 24.0 ),
+#      beamSpot = cms.InputTag( "hltOnlineBeamSpot" )
     ),
     Timing = cms.untracked.bool( False ),
     UserErrorList = cms.vint32(  )
