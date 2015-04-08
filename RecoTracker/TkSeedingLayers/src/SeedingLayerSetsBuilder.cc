@@ -179,6 +179,7 @@ SeedingLayerSets SeedingLayerSetsBuilder::layers(const edm::EventSetup& es) cons
 
   edm::ESHandle<GeometricSearchTracker> tracker;
   es.get<TrackerRecoGeometryRecord>().get( tracker );
+
   std::vector<BarrelDetLayer*>  bpx  = tracker->barrelLayers();
   std::vector<BarrelDetLayer*>  tib  = tracker->tibLayers();
   std::vector<BarrelDetLayer*>  tob  = tracker->tobLayers();
@@ -230,7 +231,7 @@ SeedingLayerSets SeedingLayerSetsBuilder::layers(const edm::EventSetup& es) cons
       //
       // TIB
       //
-      else if (name.substr(0,3) == "TIB" && tib.size()) {
+      else if (name.substr(0,3) == "TIB") {
         idLayer = atoi(name.substr(3,1).c_str());
         side=SeedingLayer::Barrel;
         detLayer=tib[idLayer-1];
@@ -259,22 +260,15 @@ SeedingLayerSets SeedingLayerSetsBuilder::layers(const edm::EventSetup& es) cons
       //
       // TEC
       //
-      else if (name.substr(0,3) == "TEC" ) {
+      else if (name.substr(0,3) == "TEC") {
         idLayer = atoi(name.substr(3,1).c_str());
-        if ( name.find("pos") != string::npos && tec_pos.size()) {
+        if ( name.find("pos") != string::npos ) {
           side = SeedingLayer::PosEndcap;
           detLayer = tec_pos[idLayer-1];
-        }
-	else if (tec_neg.size())
-	  {
+        } else {
           side = SeedingLayer::NegEndcap;
           detLayer = tec_neg[idLayer-1];
         }
-	      else {
-        nameOK = false;
-        setOK = false;
-      }
-
       }
       else {
         nameOK = false;
@@ -308,7 +302,7 @@ SeedingLayerSets SeedingLayerSetsBuilder::layers(const edm::EventSetup& es) cons
         es.get<TransientRecHitRecord>().get(layer.hitBuilder, builder);
 
         if (layer.useErrorsFromParam) {
-         set.push_back( SeedingLayer( name, detLayer, builder.product(), 
+          set.push_back( SeedingLayer( name, detLayer, builder.product(), 
                                        extractor, true, layer.hitErrorRPhi,layer.hitErrorRZ));
         } else {
           set.push_back( SeedingLayer( name, detLayer, builder.product(), extractor));
