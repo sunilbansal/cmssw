@@ -310,5 +310,4 @@ def customise_csc_hlt(process):
 
     ## remove hltGetConditions for mc
     process.HLTriggerFirstPath.remove(process.hltGetConditions)
-
     return process
