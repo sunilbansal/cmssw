@@ -36,6 +36,8 @@ def customise_Digi(process):
     process.mix.mixObjects.mixSH.crossingFrames.append('MuonGEMHits')
     process.mix.mixObjects.mixSH.input.append(cms.InputTag("g4SimHits","MuonGEMHits"))
     process.mix.mixObjects.mixSH.subdets.append('MuonGEMHits')
+    
+    process.mix.digitizers.mergedtruth.simHitCollections.muon.append(cms.InputTag("g4SimHits","MuonGEMHits"))
 
     process.load('SimMuon.GEMDigitizer.muonGEMDigi_cff')
     process.muonDigi += process.muonGEMDigi
@@ -81,8 +83,10 @@ def customise_Reco(process):
     process.load('RecoLocalMuon.GEMRecHit.gemRecHits_cfi')
     process.muonlocalreco += process.gemRecHits
     process.standAloneMuons.STATrajBuilderParameters.EnableGEMMeasurement = cms.bool(True)
+    #process.standAloneMuons.STATrajBuilderParameters.FilterParameters.EnableGEMMeasurement = cms.bool(True)
     process.standAloneMuons.STATrajBuilderParameters.BWFilterParameters.EnableGEMMeasurement = cms.bool(True)
     process.refittedStandAloneMuons.STATrajBuilderParameters.EnableGEMMeasurement = cms.bool(True)
+    #process.refittedStandAloneMuons.STATrajBuilderParameters.FilterParameters.EnableGEMMeasurement = cms.bool(True)
     process.refittedStandAloneMuons.STATrajBuilderParameters.BWFilterParameters.EnableGEMMeasurement = cms.bool(True)
     process=outputCustoms(process)
     return process
