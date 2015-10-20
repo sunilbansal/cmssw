@@ -12,9 +12,12 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 #include "Geometry/GEMGeometry/interface/GEMGeometry.h"
+#include "Geometry/CSCGeometry/interface/CSCGeometry.h"
 #include "Geometry/Records/interface/MuonGeometryRecord.h"
 #include "Geometry/GEMGeometry/interface/GEMEtaPartitionSpecs.h"
 #include "Geometry/CommonTopologies/interface/StripTopology.h"
+
+#include "L1Trigger/CSCCommonTrigger/interface/CSCTriggerGeometry.h"
 
 #include "DataFormats/Math/interface/deltaPhi.h"
 
@@ -65,8 +68,12 @@ GEMCSCStripMapping::~GEMCSCStripMapping()
 void
 GEMCSCStripMapping::analyze( const edm::Event& /*iEvent*/, const edm::EventSetup& iSetup )
 {
-  edm::ESHandle<GEMGeometry> pDD;
-  iSetup.get<MuonGeometryRecord>().get(pDD);     
+  edm::ESHandle<GEMGeometry> gemGeo;
+  iSetup.get<MuonGeometryRecord>().get(gemGeo);     
+
+  edm::ESHandle<CSCGeometry> cscGeo;
+  iSetup.get<MuonGeometryRecord>().get(cscGeo);
+  CSCTriggerGeometry::setGeometry(cscGeo);
   
   ofos << myName() << ": Analyzer..." << std::endl;
   ofos << "start " << dashedLine_ << std::endl;
