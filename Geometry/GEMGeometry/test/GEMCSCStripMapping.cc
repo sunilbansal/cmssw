@@ -79,6 +79,7 @@ GEMCSCStripMapping::analyze( const edm::Event& /*iEvent*/, const edm::EventSetup
   ofos << "start " << dashedLine_ << std::endl;
 
   ofos << dashedLine_ << " end" << std::endl;
+  cout << "End of analyze" << endl;
 }
 
 //define this as a plug-in

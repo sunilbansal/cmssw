@@ -4,10 +4,11 @@ process = cms.Process("Demo")
 process.load('Configuration.Geometry.GeometryExtended2019_cff')
 process.load('Configuration.Geometry.GeometryExtended2019Reco_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+#process.load("Alignment.CommonAlignmentProducer.FakeAlignmentSource_cfi")
 process.load('FWCore.MessageLogger.MessageLogger_cfi')
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:upgradePLS3', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
 
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(1)
