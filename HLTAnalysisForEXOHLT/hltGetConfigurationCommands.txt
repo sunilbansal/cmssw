@@ -19,6 +19,27 @@ TSG request to run on
 - 4518 589 bunches , PU: 17 ~ 15, run 259626
 - 4467 1596 bunches, PU: 15 ~ 9 , run 258425
 
+Golden JSON
+https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt
+
+Datasets: 
+https://cmsweb.cern.ch/das/request?view=list&limit=150&instance=prod%2Fglobal&input=dataset%3D%2F*HLTPhysics*%2FRun2015D*%2FRAW
+
+Dataset: /HLTPhysics1/Run2015D-v1/RAW
+Creation time: 2015-09-18 16:26:25, Physics group: NoGroup, Status: VALID, Type: mc
+Release, Blocks, Files, Runs, Configs, Parents, Children, Sites, Physics Groups, py , Subscribe to PhEDEx Sources: dbs3 show 
+Dataset: /HLTPhysics2/Run2015D-v1/RAW
+Creation time: 2015-09-18 16:26:22, Physics group: NoGroup, Status: VALID, Type: mc
+Release, Blocks, Files, Runs, Configs, Parents, Children, Sites, Physics Groups, py , Subscribe to PhEDEx Sources: dbs3 show 
+Dataset: /HLTPhysics3/Run2015D-v1/RAW
+Creation time: 2015-09-18 16:26:19, Physics group: NoGroup, Status: VALID, Type: data
+Release, Blocks, Files, Runs, Configs, Parents, Children, Sites, Physics Groups, py , Subscribe to PhEDEx Sources: dbs3 show 
+Dataset: /HLTPhysics4/Run2015D-v1/RAW
+Creation time: 2015-09-18 16:26:28, Physics group: NoGroup, Status: VALID, Type: data
+Release, Blocks, Files, Runs, Configs, Parents, Children, Sites, Physics Groups, py , Subscribe to PhEDEx Sources: dbs3 show 
+
+Why is the type of /HLTPhysics2/Run2015D-v1/RAW and /HLTPhysics1/Run2015D-v1/RAW "mc"?
+Asked Bing on March 8th - He suggested to run on 3 and 4 only until we haven't figured out why the type is "mc"
 
 ###########################
 ##        command        ##
@@ -27,9 +48,28 @@ TSG request to run on
 hltGetConfiguration \
 /frozen/2015/25ns14e33/v4.4/HLT/V3 \
 --globaltag 76X_dataRun2_HLT_frozen_v11 \
+--unprescale \
 --l1-emulator 'stage1,gt' \
 --l1Xml L1Menu_Collisions2015_25nsStage1_v5_L1TScales_20141121 \
---input root://xrootd.ba.infn.it//store/mc/RunIIFall15DR76/QCD_Pt_15to30_TuneCUETP8M1_13TeV_pythia8/GEN-SIM-RAW/25nsFlat10to50NzshcalRaw_76X_mcRun2_asymptotic_v12-v1/00000/000AB15C-AAAB-E511-9988-0025904A891A.root \
+--input root://cmsxrootd-site.fnal.gov//store/data/Run2015D/HLTPhysics4/RAW/v1/000/260/627/00000/F6A9A0D4-7182-E511-AE1A-02163E0138FD.root \
 --max-events 100 \
 --full --offline --data --process TEST --no-output \
 > hlt_76X_dataRun2_HLT_frozen_v11_L1Menu_Collisions2015_25nsStage1_v5_L1TScales_20141121.py
+
+###########################
+##     test input        ##
+###########################
+
+https://cmsweb.cern.ch/das/request?input=run%20file%3D/store/data/Run2015D/HLTPhysics4/RAW/v1/000/260/627/00000/F6A9A0D4-7182-E511-AE1A-02163E0138FD.root&instance=prod/global&idx=0&limit=10
+run file=/store/data/Run2015D/HLTPhysics4/RAW/v1/000/260/627/00000/F6A9A0D4-7182-E511-AE1A-02163E0138FD.root
+
+from run 260627
+
+root://cmsxrootd-site.fnal.gov//store/data/Run2015D/HLTPhysics4/RAW/v1/000/260/627/00000/F6A9A0D4-7182-E511-AE1A-02163E0138FD.root
+###########################
+##   post-command        ##
+###########################
+
+https://twiki.cern.ch/twiki/bin/view/Sandbox/HLTNtupleProductionSTEAM#Add_the_Ntuplizer_lines
+https://twiki.cern.ch/twiki/bin/view/Sandbox/HLTNtupleProductionSTEAM#Additional_changes
+https://twiki.cern.ch/twiki/bin/view/Sandbox/HLTNtupleProductionSTEAM#Local_test
