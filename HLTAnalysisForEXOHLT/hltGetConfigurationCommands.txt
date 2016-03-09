@@ -1,0 +1,35 @@
+COMMANDS FOR HLT RATE ESTIMATES ON 2015 DATA!!!
+
+https://indico.cern.ch/event/485713/session/1/contribution/23/attachments/1230142/1802949/STEAM_TriggerWorkshop_Milano170216.pdf
+https://twiki.cern.ch/twiki/bin/view/Sandbox/HLTNtupleProductionSTEAM
+o HLT configuration used for studies on data:
+- HLT Menu : /frozen/2015/25ns14e33/v4.4/HLT/V3
+- CMSSW release : 7_6_3
+- Global tag :76X_dataRun2_HLT_frozen_v11
+- L1 menu : L1Menu_Collisions2015_25nsStage1_v5_L1TScales_20141121.xml
+- Golden JSON applied.
+o Datasets: HLTPhysics(1-4)_Run2015D_Raw
+
+https://twiki.cern.ch/twiki/bin/view/CMS/PdmV2015Analysis
+Data 2015D has runs 256630 - 260627
+
+TSG request to run on 
+- 4569 2232 bunches, PU: 17 ~ 13 , run 260627
+- 4525 517 bunches (8b4e) , PU: 22 ~ 20, run 259721
+- 4518 589 bunches , PU: 17 ~ 15, run 259626
+- 4467 1596 bunches, PU: 15 ~ 9 , run 258425
+
+
+###########################
+##        command        ##
+###########################
+
+hltGetConfiguration \
+/frozen/2015/25ns14e33/v4.4/HLT/V3 \
+--globaltag 76X_dataRun2_HLT_frozen_v11 \
+--l1-emulator 'stage1,gt' \
+--l1Xml L1Menu_Collisions2015_25nsStage1_v5_L1TScales_20141121 \
+--input root://xrootd.ba.infn.it//store/mc/RunIIFall15DR76/QCD_Pt_15to30_TuneCUETP8M1_13TeV_pythia8/GEN-SIM-RAW/25nsFlat10to50NzshcalRaw_76X_mcRun2_asymptotic_v12-v1/00000/000AB15C-AAAB-E511-9988-0025904A891A.root \
+--max-events 100 \
+--full --offline --data --process TEST --no-output \
+> hlt_76X_dataRun2_HLT_frozen_v11_L1Menu_Collisions2015_25nsStage1_v5_L1TScales_20141121.py
