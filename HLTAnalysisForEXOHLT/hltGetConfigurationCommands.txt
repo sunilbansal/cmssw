@@ -50,8 +50,8 @@ hltGetConfiguration \
 --globaltag 76X_dataRun2_HLT_frozen_v11 \
 --unprescale \
 --l1-emulator 'stage1,gt' \
---l1Xml L1Menu_Collisions2015_25nsStage1_v5_L1TScales_20141121 \
---input root://cmsxrootd-site.fnal.gov//store/data/Run2015D/HLTPhysics4/RAW/v1/000/260/627/00000/F6A9A0D4-7182-E511-AE1A-02163E0138FD.root \
+--l1Xml L1Menu_Collisions2015_25nsStage1_v5_L1T_Scales_20141121.xml \
+--input file:F6A9A0D4-7182-E511-AE1A-02163E0138FD.root \
 --max-events 100 \
 --full --offline --data --process TEST --no-output \
 > hlt_76X_dataRun2_HLT_frozen_v11_L1Menu_Collisions2015_25nsStage1_v5_L1TScales_20141121.py
@@ -66,6 +66,11 @@ run file=/store/data/Run2015D/HLTPhysics4/RAW/v1/000/260/627/00000/F6A9A0D4-7182
 from run 260627
 
 root://cmsxrootd-site.fnal.gov//store/data/Run2015D/HLTPhysics4/RAW/v1/000/260/627/00000/F6A9A0D4-7182-E511-AE1A-02163E0138FD.root
+
+Download the file
+
+xrdcp root://xrootd.unl.edu//store/data/Run2015D/HLTPhysics4/RAW/v1/000/260/627/00000/F6A9A0D4-7182-E511-AE1A-02163E0138FD.root .
+
 ###########################
 ##   post-command        ##
 ###########################
