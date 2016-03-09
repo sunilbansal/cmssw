@@ -5,7 +5,6 @@
 #include "TH2.h"
 #include "TFile.h"
 #include "TNamed.h"
-#include <memory>
 #include <vector>
 #include <map>
 #include "TROOT.h"
@@ -56,8 +55,10 @@
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerObjectMap.h"
 //#include "DataFormats/L1GlobalTrigger/interface/L1GtLogicParser.h"
 
-#include "HLTrigger/HLTcore/interface/HLTPrescaleProvider.h"
+//#include "HLTrigger/HLTcore/interface/HLTConfigProvider.h"
+//#include "L1Trigger/GlobalTriggerAnalyzer/interface/L1GtUtils.h"
 
+#include "HLTrigger/HLTcore/interface/HLTPrescaleProvider.h"
 namespace edm {
   class ConsumesCollector;
   class ParameterSet;
@@ -73,17 +74,18 @@ typedef std::vector<std::string> MyStrings;
   */
 class HLTInfo {
 public:
+  //HLTInfo();
 
   template <typename T>
-  HLTInfo(edm::ParameterSet const& pset,
-          edm::ConsumesCollector&& iC,
-          T& module);
-
+    HLTInfo(edm::ParameterSet const& pset,
+	    edm::ConsumesCollector&& iC,
+	    T& module);
+  
   template <typename T>
-  HLTInfo(edm::ParameterSet const& pset,
-          edm::ConsumesCollector& iC,
-          T& module);
-
+    HLTInfo(edm::ParameterSet const& pset,
+	    edm::ConsumesCollector& iC,
+	    T& module);  
+  
   void setup(const edm::ParameterSet& pSet, TTree* tree);
   void beginRun(const edm::Run& , const edm::EventSetup& );
 
@@ -135,6 +137,8 @@ private:
   TString * techBitToName;
   std::vector<std::string> dummyBranches_;
 
+  //HLTConfigProvider hltConfig_; 
+  //L1GtUtils m_l1GtUtils;
   std::unique_ptr<HLTPrescaleProvider> hltPrescaleProvider_;
   std::string processName_;
 
@@ -147,15 +151,15 @@ private:
 
 template <typename T>
 HLTInfo::HLTInfo(edm::ParameterSet const& pset,
-                 edm::ConsumesCollector&& iC,
-                 T& module) :
-  HLTInfo(pset, iC, module) {
+		 edm::ConsumesCollector&& iC,
+		 T& module) :
+    HLTInfo(pset, iC, module) {
 }
-
+ 
 template <typename T>
 HLTInfo::HLTInfo(edm::ParameterSet const& pset,
-                 edm::ConsumesCollector& iC,
-                 T& module) :
+		 edm::ConsumesCollector& iC,
+		 T& module) :
     HLTInfo() {
     hltPrescaleProvider_.reset(new HLTPrescaleProvider(pset, iC, module));
 }

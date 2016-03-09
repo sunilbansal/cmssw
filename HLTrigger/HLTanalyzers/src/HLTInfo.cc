@@ -21,6 +21,9 @@
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutSetup.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
 
+//static const bool useL1EventSetup(true);
+//static const bool useL1GtTriggerMenuLite(false);
+
 HLTInfo::HLTInfo() {
 
   //set parameter defaults 
@@ -241,10 +244,10 @@ void HLTInfo::analyze(const edm::Handle<edm::TriggerResults>                 & h
       HltEvtCnt++;
     }
     // ...Fill the corresponding accepts in branch-variables
-    //HLTConfigProvider const&  hltConfig = hltPrescaleProvider_->hltConfigProvider();
-    //std::cout << "Number of prescale sets: " << hltConfig.prescaleSize() << std::endl;
-    //std::cout << "Number of HLT paths: " << hltConfig.size() << std::endl;
-    //int presclSet = hltPrescaleProvider_->prescaleSet(iEvent, eventSetup);
+
+    //std::cout << "Number of prescale sets: " << hltConfig_.prescaleSize() << std::endl;
+    //std::cout << "Number of HLT paths: " << hltConfig_.size() << std::endl;
+    //int presclSet = hltConfig_.prescaleSet(iEvent, eventSetup);
     //std::cout<<"\tPrescale set number: "<< presclSet <<std::endl; 
 
     for (int itrig = 0; itrig != ntrigs; ++itrig){
@@ -252,6 +255,7 @@ void HLTInfo::analyze(const edm::Handle<edm::TriggerResults>                 & h
       std::string trigName=triggerNames.triggerName(itrig);
       bool accept = hltresults->accept(itrig);
 
+      //trigPrescl[itrig] = hltConfig_.prescaleValue(iEvent, eventSetup, trigName);
       trigPrescl[itrig] = hltPrescaleProvider_->prescaleValue(iEvent, eventSetup, trigName);
 
 
@@ -488,6 +492,8 @@ void HLTInfo::analyze(const edm::Handle<edm::TriggerResults>                 & h
   // L1 Triggers from Menu
   L1GtUtils const& l1GtUtils = hltPrescaleProvider_->l1GtUtils();
 
+  //  m_l1GtUtils.retrieveL1EventSetup(eventSetup);
+  //m_l1GtUtils.getL1GtRunCache(iEvent,eventSetup,useL1EventSetup,useL1GtTriggerMenuLite);
   edm::ESHandle<L1GtTriggerMenu> menuRcd;
   eventSetup.get<L1GtTriggerMenuRcd>().get(menuRcd) ;
   const L1GtTriggerMenu* menu = menuRcd.product();
