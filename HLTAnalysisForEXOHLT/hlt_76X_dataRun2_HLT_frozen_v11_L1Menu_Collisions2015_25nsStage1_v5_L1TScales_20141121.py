@@ -56939,6 +56939,18 @@ process.source = cms.Source( "PoolSource",
     )
 )
 
+## To add the Ntuplizer, please edit hlt.py and add the following lines just after the "process.source" module
+process.load("HLTrigger.HLTanalyzers.HLTBitAnalyser_cfi") 
+process.hltbitanalysis.hltresults = cms.InputTag( 'TriggerResults','',process.name_())
+process.hltbitanalysis.HLTProcessName = cms.string(process.name_() )
+process.hltbitanalysis.RunParameters.HistogramFile = cms.untracked.string('hltbits.root')
+## IF you run on Data you need to add: process.hltbitanalysis.RunParameters.isData = cms.untracked.bool(True)
+process.hltbitanalysis.l1GtReadoutRecord = cms.InputTag('hltGtDigis','',process.name_())
+process.hltbitanalysis.l1GctHFBitCounts = cms.InputTag('hltGctDigis','',process.name_())
+process.hltbitanalysis.l1GctHFRingSums = cms.InputTag('hltGctDigis','',process.name_())
+process.Ntupleoutput = cms.EndPath ( process.hltbitanalysis )
+
+
 # adapt HLT modules to the correct process name
 if 'hltTrigReport' in process.__dict__:
     process.hltTrigReport.HLTriggerResults                    = cms.InputTag( 'TriggerResults', '', 'TEST' )
