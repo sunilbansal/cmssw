@@ -57028,6 +57028,9 @@ import L1Trigger.Configuration.L1Trigger_custom
 import L1Trigger.L1TCalorimeter.L1TCaloStage1_customForHLT
 process = L1Trigger.L1TCalorimeter.L1TCaloStage1_customForHLT.customiseL1EmulatorFromRaw( process )
 
+#- IF you still use Stage1 L1 : edit hlt.py and add the following right after ## 2015 Run2 emulator:
+process.load("L1Trigger.L1TCalorimeter.caloConfigStage1PP_cfi")
+
 #
 process = L1Trigger.Configuration.L1Trigger_custom.customiseResetPrescalesAndMasks( process )
 # customize the HLT to use the emulated results
@@ -57049,7 +57052,8 @@ process.dqmOutput = cms.OutputModule("DQMRootOutputModule",
     fileName = cms.untracked.string("DQMIO.root")
 )
 
-process.DQMOutput = cms.EndPath( process.dqmOutput )
+## - remove/comment "process.DQMOutput" module
+## process.DQMOutput = cms.EndPath( process.dqmOutput )
 
 # add specific customizations
 _customInfo = {}
