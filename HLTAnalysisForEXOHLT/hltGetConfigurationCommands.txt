@@ -78,3 +78,48 @@ xrdcp root://xrootd.unl.edu//store/data/Run2015D/HLTPhysics4/RAW/v1/000/260/627/
 https://twiki.cern.ch/twiki/bin/view/Sandbox/HLTNtupleProductionSTEAM#Add_the_Ntuplizer_lines
 https://twiki.cern.ch/twiki/bin/view/Sandbox/HLTNtupleProductionSTEAM#Additional_changes
 https://twiki.cern.ch/twiki/bin/view/Sandbox/HLTNtupleProductionSTEAM#Local_test
+
+
+###########################
+##   ntuples with 763    ##
+###########################
+
+Apparently HLT ntuples were already produced by STEAM a while ago. Below are the details of the production:
+
+Datasets: HLTPhysics(1-4)_Run2015D_Raw
+CMSSW: 763
+Menu: frozen/2015/25ns14e33/v4.4/HLT/V3
+Globaltag: 76X_dataRun2_HLT_frozen_v11
+l1Xml: L1Menu_Collisions2015_25nsStage1_v5_L1T_Scales_20141121.xml
+JSON: Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt
+
+They can be found on EOS here: /store/group/dpg_trigger/comm_trigger/TriggerStudiesGroup/STEAM/Run2015D/test/HLT_unpre/test_HLTPhysics_unpre
+
+
+
+###########################
+## Performance with 800  ##
+###########################
+
+** However, for the 2016 data taking campaign, the performance of the HLT paths must be evaluated with CMSSW 800. This requires the stage-2 L1 emulator. See below for more information (by Nadir Daci)
+
+
+However the latest recipe implies to run a "L1 repacker" step. We added a section about that at [1], but we are still testing this step, as it is something very recent (it's not even mentioned on the official HLT SW twiki). The idea is to process RAW samples to convert L1 objects from Stage1 to Stage2 classes, produce modified RAW files, and process the modified ones with the HLT software converted to the use of Stage2 objects. 
+
+Meanwhile, the L1 menu is still the 2015 one. So for now, L1 and HLT studies must be performed separately, as long as the HLT software does not include an option to re-run the L1 emulator, and as long as the draft L1 menu is not available in a usable format. This could come in a ~week timescale, with big uncertainties.
+
+Therefore, as a first step it could ease your life to start with a 76X setup, but an update with 80X will be needed anyway at some point.
+
+[1] https://twiki.cern.ch/twiki/bin/view/CMS/ExoTriggers#Run_the_repacker
+
+Meanwhile, more details appeared on the official twiki [*] about this extra repacking step.
+
+You could also use 8_0_0_pre5, which is the last release before they started migrating the HLT software to the Stage2 objects. In that case, there is no need for the extra specific repacking step.
+
+Thus, for HLT studies, I'd recommend to go for an 8_0_0_pre5 setup, using paths from the GRun table up to V8, or the HLT table up to V16, until there is no need to do this repacking step anymore. For L1 studies you can run the L1 emulator independently from any HLT work.
+
+I'm updating our twiki accordingly, with mentions of the two recipes (pre-migration, migrated).
+
+[*]
+" Please note that you first have to process an old real-data RAW file through a cmsDriver-based L1REPACK:Full cmsRun job to make a new RAW file for input to the HLT cmsRun job. In case of MC, you need to use a GEN-SIM file and run a cmsDriver-based DIGI,L1,DIGI2RAW cmsRun job to make the RAW file. Currently it is not possible to run the full stage-2 L1T directly within the HLT in one go - the corresponding hltGetConfiguration options are not (yet) working for L1T stage-2. "
+
