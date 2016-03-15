@@ -121,7 +121,7 @@ def load_ME0_digitizers(process):
     return process
 
 
-# customize the full digitization sequence pdigi by adding GEMs
+# customize the full digitization sequence pdigi_valid by adding GEMs
 def customize_digi_addGEM(process):
     process = load_GEM_digitizers(process)
     process = customize_random_GEMDigi(process)
@@ -137,7 +137,7 @@ def customize_digi_addGEM(process):
         process.calDigi +
         process.muonDigi
     )
-    process.pdigi = cms.Sequence(
+    process.pdigi_valid = cms.Sequence(
         cms.SequencePlaceholder("randomEngineStateProducer")*
         cms.SequencePlaceholder("mix")*
         process.doAllDigi*
@@ -147,7 +147,7 @@ def customize_digi_addGEM(process):
     return process
 
 
-# customize the digitization sequence pdigi to only digitize DT+CSC+RPC+GEM
+# customize the digitization sequence pdigi_valid to only digitize DT+CSC+RPC+GEM
 def customize_digi_addGEM_muon_only(process):
     process = load_GEM_digitizers(process)
     process = customize_random_GEMDigi(process)
@@ -159,7 +159,7 @@ def customize_digi_addGEM_muon_only(process):
         process.simMuonGEMDigis +
         process.simMuonGEMCSCPadDigis
     )
-    process.pdigi = cms.Sequence(
+    process.pdigi_valid = cms.Sequence(
         cms.SequencePlaceholder("randomEngineStateProducer")*
         cms.SequencePlaceholder("mix")*
         process.muonDigi
@@ -168,12 +168,12 @@ def customize_digi_addGEM_muon_only(process):
     return process
 
 
-# customize the digitization sequence pdigi to only digitize GEM
+# customize the digitization sequence pdigi_valid to only digitize GEM
 def customize_digi_addGEM_gem_only(process):
     process = load_GEM_digitizers(process)
     process = customize_random_GEMDigi(process)
     process = customize_mix_addGEM_muon_only(process)
-    process.pdigi = cms.Sequence(
+    process.pdigi_valid = cms.Sequence(
         cms.SequencePlaceholder("randomEngineStateProducer")*
         cms.SequencePlaceholder("mix")*
         process.simMuonGEMDigis*
@@ -183,7 +183,7 @@ def customize_digi_addGEM_gem_only(process):
     return process
 
     
-# customize the full digitization sequence pdigi by adding GEMs
+# customize the full digitization sequence pdigi_valid by adding GEMs
 def customize_digi_addGEM_addME0(process):
     process = load_GEM_digitizers(process)
     process = load_ME0_digitizers(process)
@@ -203,7 +203,7 @@ def customize_digi_addGEM_addME0(process):
         process.calDigi +
         process.muonDigi
     )
-    process.pdigi = cms.Sequence(
+    process.pdigi_valid = cms.Sequence(
         cms.SequencePlaceholder("randomEngineStateProducer")*
         cms.SequencePlaceholder("mix")*
         process.doAllDigi*
@@ -213,7 +213,7 @@ def customize_digi_addGEM_addME0(process):
     return process
 
 
-# customize the digitization sequence pdigi to only digitize DT+CSC+RPC+GEM
+# customize the digitization sequence pdigi_valid to only digitize DT+CSC+RPC+GEM
 def customize_digi_addGEM_addME0_muon_only(process):
     process = load_GEM_digitizers(process)
     process = load_ME0_digitizers(process)
@@ -228,7 +228,7 @@ def customize_digi_addGEM_addME0_muon_only(process):
         process.simMuonGEMCSCPadDigis +
         process.simMuonME0Digis
     )
-    process.pdigi = cms.Sequence(
+    process.pdigi_valid = cms.Sequence(
         cms.SequencePlaceholder("randomEngineStateProducer")*
         cms.SequencePlaceholder("mix")*
         process.muonDigi
@@ -237,14 +237,14 @@ def customize_digi_addGEM_addME0_muon_only(process):
     return process
 
 
-# customize the digitization sequence pdigi to only digitize GEM
+# customize the digitization sequence pdigi_valid to only digitize GEM
 def customize_digi_addGEM_addME0_gem_only(process):
     process = load_GEM_digitizers(process)
     process = load_ME0_digitizers(process)
     process = customize_random_GEMDigi(process)
     process = customize_random_ME0Digi(process)
     process = customize_mix_addGEM_addME0_muon_only(process)
-    process.pdigi = cms.Sequence(
+    process.pdigi_valid = cms.Sequence(
         cms.SequencePlaceholder("randomEngineStateProducer")*
         cms.SequencePlaceholder("mix")*
         process.simMuonGEMDigis*

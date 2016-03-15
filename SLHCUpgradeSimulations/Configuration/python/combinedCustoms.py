@@ -525,16 +525,16 @@ def cust_2023HGCalPandoraMuonNoExtPix(process):
 
 def cust_2023HGCal_common(process):
     process=customisePostLS1(process)
-    process=customiseBE5DPixel10D(process)
-    process=customise_HcalPhase2(process)
+#    process=customiseBE5DPixel10D(process)
+#    process=customise_HcalPhase2(process)
     process=customise_ev_BE5DPixel10D(process)
     process=customise_gem2023(process)
     process=customise_rpc(process)
     process=customise_HGCalElectronHOverE(process)
     process=jetCustoms.customise_jets(process)
-    if hasattr(process,'L1simulation_step'):
+    if hasattr(process,'L1simulation_step') and False:
     	process.simEcalTriggerPrimitiveDigis.BarrelOnly = cms.bool(True)
-    if hasattr(process,'digitisation_step'):
+    if hasattr(process,'digitisation_step') and False:
     	process.mix.digitizers.ecal.accumulatorType = cms.string('EcalPhaseIIDigiProducer')
         process.load('SimGeneral.MixingModule.hgcalDigitizer_cfi')
         process.mix.digitizers.hgceeDigitizer=process.hgceeDigitizer

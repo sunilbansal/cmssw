@@ -6,12 +6,14 @@ process.load('Configuration.StandardSequences.Services_cff')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('Configuration.Geometry.GeometryExtended2023MuonReco_cff')
-process.load('Configuration.Geometry.GeometryExtended2023Muon_cff')
+process.load('Configuration.Geometry.GeometryExtended2023HGCalMuonReco_cff')
+process.load('Configuration.Geometry.GeometryExtended2023HGCalMuon_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
 process.load('Configuration.StandardSequences.SimIdeal_cff')
 process.load('Configuration.StandardSequences.Generator_cff')
 process.load('Configuration.StandardSequences.Digi_cff')
+process.load('Configuration.StandardSequences.SimL1Emulator_cff')
+process.load('Configuration.StandardSequences.Reconstruction_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
@@ -28,10 +30,12 @@ process.options = cms.untracked.PSet(
 # customization of the process.pdigi sequence to add the GEM digitizer
 from SimMuon.GEMDigitizer.customizeGEMDigi import customize_digi_addGEM_muon_only
 process = customize_digi_addGEM_muon_only(process)
+from SLHCUpgradeSimulations.Configuration.muonCustoms import customise_csc_PostLS1
+process = customise_csc_PostLS1(process)
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:out_sim.root'
+        'file:/eos/uscms/store/user/lpcgem/SingleMuFwdPt2-50_v1/SingleMuFwdPt2-50_v1/160311_213422/0000/out_sim_1.root'
     )
 )
 
@@ -64,7 +68,19 @@ process.output = cms.OutputModule("PoolOutputModule",
     )
 )
 
-process.digi_step    = cms.Path(process.pdigi)
+process.load('RecoLocalMuon.GEMRecHit.gemRecHits_cfi')
+process.muonlocalreco += process.gemRecHits
+process.standAloneMuons.STATrajBuilderParameters.EnableGEMMeasurement = cms.bool(True)
+process.standAloneMuons.STATrajBuilderParameters.BWFilterParameters.EnableGEMMeasurement = cms.bool(True)
+process.refittedStandAloneMuons.STATrajBuilderParameters.EnableGEMMeasurement = cms.bool(True)
+process.refittedStandAloneMuons.STATrajBuilderParameters.BWFilterParameters.EnableGEMMeasurement = cms.bool(True)
+process.dt1DRecHits.dtDigiLabel = cms.InputTag("simMuonDTDigis")
+process.csc2DRecHits.stripDigiTag = cms.InputTag("simMuonCSCDigis","MuonCSCStripDigi")
+process.csc2DRecHits.wireDigiTag = cms.InputTag("simMuonCSCDigis","MuonCSCWireDigi")
+process.rpcRecHits.rpcDigiLabel = cms.InputTag("simMuonRPCDigis")
+
+
+process.digi_step    = cms.Path(process.pdigi+process.simCscTriggerPrimitiveDigis+process.dt1DRecHits+process.dt4DSegments+process.csc2DRecHits+process.cscSegments+process.rpcRecHits+process.gemRecHits) 
 process.endjob_step  = cms.Path(process.endOfProcess)
 process.out_step     = cms.EndPath(process.output)
 
