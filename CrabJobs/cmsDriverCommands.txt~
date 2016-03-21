@@ -1,0 +1,14 @@
+cmsDriver.py DisplacedMuJet_Run2_Spring_2016_cfi \
+-s DIGI,L1,DIGI2RAW \
+--mc \
+--datatier GEN-SIM-DIGI-RAW \
+--geometry=Extended2016,Extended2016Reco \
+--conditions auto:run2_mc \
+--magField 38T_PostLS1 \
+--eventcontent FEVTDEBUG \ 
+--pileup 2016_25ns_SpringMC_PUScenarioV1_PoissonOOTPU \
+--customise=MuJetAnalysis/GenProduction/addPileup.addPileup \
+--era=Run2_25ns \
+--fileout out_raw.root \
+-n 10 \
+--no_exec
