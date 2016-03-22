@@ -1,0 +1,110 @@
+Timing
+Basic Setup.
+ Hide content...
+To perform timing studies on your paths, you need to use either of the dedicated TSG machines: vocms003 and vocms004. You need to subscribe to this e-group: cms-tsg-operations to get access to the machines.
+Once you have the access and log onto the machine, do the following commands:
+source /data/release/cmssw/cmsset_default.sh
+scram list -a CMSSW
+It allows you to access the CMSSW releases.
+Then you could create your own directory:
+mkdir /data/user/$USER
+cd /data/user/$USER
+You should finish your studies on the scratch area made above. The space on the machine is limited so please transfer important files to your own AFS area or any other safe locations.
+Prepare a Menu for Timing Studies.
+ Hide content...
+You need a menu which has all the existing official paths and your new paths to perform timing studies. To do so, just simply import all the paths from a most resent GRun menu into your own menu. Make sure your own paths come after all the official paths so that you can locate your paths much easier.
+Run Timing Jobs
+ Hide content...
+After finishing the steps above, you need to checkout a most up-to-date release.
+cd CMSSW_8_0_2/src
+cmsenv
+hltGetConfiguration  /users/user_name/menu/version --full --mc --offline --timing --no-output --prescale 7e33 --globaltag ??? > hlt_timing.py 
+Before launching the job, please modify hlt_timing.py, adding the following lines after FastTimerServiceClient is defined:
+# FastTimerServiceClient                                                                                                                                                                                          
+process.fastTimerServiceClient = cms.EDAnalyzer( "FastTimerServiceClient",
+    dqmPath = cms.untracked.string( "HLT/TimerService" )
+)
+
+# DQM file saver                                                                                                                                                                                                  
+process.dqmFileSaver = cms.EDAnalyzer( "DQMFileSaver",
+    convention        = cms.untracked.string( "Offline" ),
+    workflow          = cms.untracked.string( "/HLT/FastTimerService/All" ),
+    dirName           = cms.untracked.string( "." ),
+    saveByRun         = cms.untracked.int32(1),
+    saveByLumiSection = cms.untracked.int32(-1),
+    saveByEvent       = cms.untracked.int32(-1),
+    saveByTime        = cms.untracked.int32(-1),
+    saveByMinute      = cms.untracked.int32(-1),
+    saveAtJobEnd      = cms.untracked.bool(False),
+    forceRunNumber    = cms.untracked.int32(-1),
+)
+
+process.TimingOutput = cms.EndPath( process.fastTimerServiceClient + process.dqmFileSaver )
+Also you have to do the following again:
+hltConfigFromDB --cff --configName /dev/CMSSW_8_0_0/GRun --nopaths --services PrescaleService,EvFDaqDirector,FastMonitoringService > setup_cff.py
+Add the following line after the process is defined in hlt_timing.py:
+process.load("setup_cff")
+You need to run over ~50K events to have meaningful results. Please notice there are files saved locally:
+You can either run on these data files:
+pileup 63 local: run 198609, ls 50, 76k events, prescale index #0, skimmed to emulate prescales between "7e33" and "6e33" - no out-of-time pileup
+pileup 57 local: run 198609, ls 107..111, 53k events, prescale index #2, skimmed to emulate prescales between "7e33" and "6e33" - no out-of-time pileup
+pileup 44 local: run 198603, ls 34..37, 53k events, prescale index #0, skimmed to emulate prescales between "7e33" and "6e33" - no out-of-time pileup
+pileup 33 local: run 207515, ls 81..116, 51k events, prescale index #3, corresponding to "7e33" - 50 ns bunch spacing
+pileup 30 local: run 207515, ls 183..218, 50k events, prescale index #3, corresponding to "7e33" - 50 ns bunch spacing
+pileup 25 local: run 207515, ls 429..468, 50k events, prescale index #4, corresponding to "6e33" - 50 ns bunch spacing
+pileup 20 local: run 207515, ls 789..841, 50k events, prescale index #4, corresponding to "6e33" - 50 ns bunch spacing
+pileup 15 local: run 207518, ls 23..83, 50k events, prescale index #5, corresponding to "4e33" - 50 ns bunch spacing
+But you are recommended to use L1Skims:
+First add these lines into your configuration file at the bottom:
+For 25ns studies:
+# Customize the menu to use information from new L1 emulator in the L1 skim files                                                                                                                                  
+process.hltL2MuonSeeds.GMTReadoutCollection = cms.InputTag("gmtReEmulDigis::L1SKIM" )
+process.hltL1extraParticles.muonSource = cms.InputTag("gmtReEmulDigis::L1SKIM" )
+for module in process.__dict__.itervalues():
+  if isinstance(module, cms._Module):
+    for parameter in module.__dict__.itervalues():
+      if isinstance(parameter, cms.InputTag):
+        if parameter.moduleLabel == 'hltGtDigis':
+          parameter.moduleLabel = "gtDigisFromSkim"
+        elif parameter.moduleLabel == 'hltL1GtObjectMap':
+          parameter.moduleLabel = "gtDigisFromSkim"
+        elif parameter.moduleLabel == 'hltGctDigis':
+          parameter.moduleLabel ="simCaloStage1LegacyFormatDigis"
+        elif parameter.moduleLabel == 'hltCaloStage1LegacyFormatDigis':
+          parameter.moduleLabel ="simCaloStage1LegacyFormatDigis"
+The input files to use are located here: /data/samples/Neutrino_Pt-2to20_gun_PU40bx25_Stage1v4Menu/ .
+For 50ns studies:
+for module in process.__dict__.itervalues():
+    if isinstance(module, cms._Module):
+        for parameter in module.__dict__.itervalues():
+            if isinstance(parameter, cms.InputTag):
+                if parameter.moduleLabel == 'hltGtDigis':
+                    parameter.moduleLabel = "gtDigisFromSkim"
+                elif parameter.moduleLabel == 'hltL1GtObjectMap':
+                    parameter.moduleLabel = "gtDigisFromSkim"
+                elif parameter.moduleLabel == 'hltGctDigis':
+                    parameter.moduleLabel = "simGctDigis"
+
+for module in process.__dict__.itervalues():
+    if isinstance(module, cms._Module):
+        if module._TypedParameterizable__type =='L1ExtraParticlesProd' or module._TypedParameterizable__type =='L2MuonSeedGenerator':
+            for parameter in module.__dict__.itervalues():
+                if isinstance(parameter, cms.InputTag):
+                    if parameter.moduleLabel == 'gtDigisFromSkim':
+                        parameter.moduleLabel = 'hltGtDigis'
+The input files to use are located here: /data/samples/Neutrino_Pt-2to20_gun_PU30bx50_L1_2015_50nsCollisionsMenu/ . (Only use files with "L1TripleJetPrescalBy10" in the name.)
+The last thing is to make sure you are using the correct L1 menu. Currently you should use "L1Menu_Collisions2015_25nsStage1_v5"
+Add the following lines if it is not in your globalTag:
+    process.GlobalTag.snapshotTime = cms.string('9999-12-31 23:59:59.000')
+    process.GlobalTag.toGet = cms.VPSet(cms.PSet(
+        connect = cms.untracked.string('frontier://FrontierProd/CMS_CONDITIONS'),
+        record = cms.string('L1GtTriggerMenuRcd'),
+        tag = cms.string('L1Menu_Collisions2015_25nsStage1_v5')
+    ))
+You should try to run over ~5 events to see whether it works first. If the job finishes successfully, you should have a file named as:
+DQM_V0001_R000RunNumber__HLT__FastTimerService__All.root
+Open that file and go to
+/DQMData/Run ******/HLT/Run summary/Timer Service/Running process/process HLTX/
+Check these two histograms paths_active_time and paths_total_time and get the corresponding numbers for the paths you want to test.
+If you can get the numbers in the histograms from your trial, change the number of events to 30K and launch the job. It is time consuming please do make sure it works fine before launching.
+One more notice: Do not run parallel jobs on vocms003 or vocms004.
