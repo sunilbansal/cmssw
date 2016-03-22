@@ -1,0 +1,3 @@
+March 22
+
+hltGetConfiguration /dev/CMSSW_8_0_0/GRun --full --mc --offline --timing --no-output --prescale 7e33 --globaltag auto:run2_mc_GRun > hlt_timing.py 
