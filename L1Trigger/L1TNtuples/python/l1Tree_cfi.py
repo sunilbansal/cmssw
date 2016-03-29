@@ -4,7 +4,7 @@ l1Tree = cms.EDAnalyzer("L1NtupleProducer",
     verbose              = cms.untracked.bool(False),
     physVal              = cms.bool(True),
 
-    generatorSource      = cms.InputTag("none"),
+    generatorSource      = cms.InputTag("genParticles"),
     simulationSource     = cms.InputTag("none"),
     hltSource            = cms.InputTag("TriggerResults::HLT"),
     gmtSource            = cms.InputTag("gtDigis"),

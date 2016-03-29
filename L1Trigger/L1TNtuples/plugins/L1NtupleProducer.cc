@@ -243,7 +243,7 @@ void L1NtupleProducer::analyzeGenerator(const edm::Event& e) {
 
   if(!generatorSource_.isUninitialized()) {
     pL1generator->Reset();
-    //    pL1generator->Set(e);
+    pL1generator->Set(e);
   }  
 
 }
