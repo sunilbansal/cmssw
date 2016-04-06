@@ -16,6 +16,7 @@
 <use name="L1Trigger/CSCCommonTrigger"/>
 
 <use name="Geometry/RPCGeometry"/>  
+<use name="Geometry/GEMGeometry"/>  
 <use name="FWCore/PluginManager"/>
 <use name="rootrflx"/>
 <use name="PhysicsTools/UtilAlgos"/>

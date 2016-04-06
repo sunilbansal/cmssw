@@ -39,6 +39,10 @@ class CSCDetId;
 class RPCDigiL1Link;
 class RPCDetId;
 
+// GEM digi types
+class GEMPadDigi;
+class GEMDetId;
+
 #include "MuonTriggerPrimitiveFwd.h"
 
 namespace L1TMuon {
@@ -46,7 +50,7 @@ namespace L1TMuon {
   class TriggerPrimitive {
   public:
     // define the subsystems that we have available
-    enum subsystem_type{kDT,kCSC,kRPC,kNSubsystems};
+    enum subsystem_type{kDT,kCSC,kRPC,kGEM,kNSubsystems};
 
     // define the data we save locally from each subsystem type
     // variables in these structs keep their colloquial meaning
@@ -104,6 +108,13 @@ namespace L1TMuon {
       int theta_quality;
     };
 
+    struct GEMData {
+      GEMData() : pad(0), layer(0), bx(0) {}
+      unsigned pad;
+      unsigned layer;
+      uint16_t bx;
+    };
+
     //Persistency
     TriggerPrimitive(): _subsystem(kNSubsystems) {}
 
@@ -124,6 +135,11 @@ namespace L1TMuon {
     //RPC
     TriggerPrimitive(const RPCDetId& detid,
 		     const unsigned strip,
+		     const unsigned layer,
+		     const uint16_t bx);
+    //GEM
+    TriggerPrimitive(const GEMDetId& detid,
+		     const unsigned pad,
 		     const unsigned layer,
 		     const uint16_t bx);
 
@@ -160,6 +176,7 @@ namespace L1TMuon {
     const DTData  getDTData()  const { return _dt;  }
     const CSCData getCSCData() const { return _csc; }
     const RPCData getRPCData() const { return _rpc; }
+    const GEMData getGEMData() const { return _gem; }
 
     // consistent accessors to common information
     const int getBX() const;
@@ -186,10 +203,14 @@ namespace L1TMuon {
     void calculateRPCGlobalSector(const RPCDetId& chid,
 				  unsigned& global_sector,
 				  unsigned& subsector );
+    void calculateGEMGlobalSector(const GEMDetId& chid,
+				  unsigned& global_sector,
+				  unsigned& subsector );
 
     DTData  _dt;
     CSCData _csc;
     RPCData _rpc;
+    GEMData _gem;
 
     DetId _id;
 

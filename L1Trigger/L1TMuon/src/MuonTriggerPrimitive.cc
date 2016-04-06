@@ -5,16 +5,18 @@
 #include "DataFormats/L1DTTrackFinder/interface/L1MuDTChambPhDigi.h"
 #include "DataFormats/L1DTTrackFinder/interface/L1MuDTChambThDigi.h"
 #include "DataFormats/RPCDigi/interface/RPCDigiL1Link.h"
+#include "DataFormats/GEMDigi/interface/GEMPadDigi.h"
 
 // detector ID types
 #include "DataFormats/MuonDetId/interface/DTChamberId.h"
 #include "DataFormats/MuonDetId/interface/CSCDetId.h"
 #include "DataFormats/MuonDetId/interface/RPCDetId.h"
+#include "DataFormats/MuonDetId/interface/GEMDetId.h"
 
 using namespace L1TMuon;
 
 namespace {
-  const char subsystem_names[][4] = {"DT","CSC","RPC"};
+  const char subsystem_names[][4] = {"DT","CSC","RPC","GEM"};
 }
 
 //constructors from DT data
@@ -120,6 +122,20 @@ TriggerPrimitive::TriggerPrimitive(const RPCDetId& detid,
   _rpc.layer = layer;
   _rpc.bx = bx;
 }
+
+// constructor from GEM data
+TriggerPrimitive::TriggerPrimitive(const GEMDetId& detid,
+				   const unsigned pad,
+				   const unsigned layer,
+				   const uint16_t bx):
+  _id(detid),
+  _subsystem(TriggerPrimitive::kGEM) {
+  calculateGEMGlobalSector(detid,_globalsector,_subsector);
+  _gem.pad = pad;
+  _gem.layer = layer;
+  _gem.bx = bx;
+}
+
 /*
 TriggerPrimitive::TriggerPrimitive(const TriggerPrimitive& tp):
   _dt(tp._dt),
@@ -138,6 +154,7 @@ TriggerPrimitive& TriggerPrimitive::operator=(const TriggerPrimitive& tp) {
   this->_dt = tp._dt;
   this->_csc = tp._csc;
   this->_rpc = tp._rpc;
+  this->_gem = tp._gem;
   this->_id = tp._id;
   this->_subsystem = tp._subsystem;
   this->_globalsector = tp._globalsector;
@@ -152,6 +169,7 @@ TriggerPrimitive::TriggerPrimitive(const TriggerPrimitive& tp):
   _dt(tp._dt),
   _csc(tp._csc),
   _rpc(tp._rpc),
+  _gem(tp._gem),
   _id(tp._id),
   _subsystem(tp._subsystem),
   _globalsector(tp._globalsector),
@@ -191,6 +209,9 @@ bool TriggerPrimitive::operator==(const TriggerPrimitive& tp) const {
 	   this->_rpc.strip == tp._rpc.strip &&
 	   this->_rpc.layer == tp._rpc.layer &&
 	   this->_rpc.bx == tp._rpc.bx &&
+	   this->_gem.pad == tp._gem.pad &&
+	   this->_gem.layer == tp._gem.layer &&
+	   this->_gem.bx == tp._gem.bx &&
 	   this->_id == tp._id &&
 	   this->_subsystem == tp._subsystem &&
 	   this->_globalsector == tp._globalsector &&
@@ -205,6 +226,8 @@ const int TriggerPrimitive::getBX() const {
     return _csc.bx;
   case kRPC:
     return _rpc.bx;
+  case kGEM:
+    return _gem.bx;
   default:
     throw cms::Exception("Invalid Subsytem")
       << "The specified subsystem for this track stub is out of range"
@@ -221,6 +244,8 @@ const int TriggerPrimitive::getStrip() const {
     return _csc.strip;
   case kRPC:
     return _rpc.strip;
+  case kGEM:
+    return _gem.pad;
   default:
     throw cms::Exception("Invalid Subsytem")
       << "The specified subsystem for this track stub is out of range"
@@ -236,6 +261,8 @@ const int TriggerPrimitive::getWire() const {
   case kCSC:
     return _csc.keywire;
   case kRPC:
+    return -1;
+  case kGEM:
     return -1;
   default:
     throw cms::Exception("Invalid Subsytem")
@@ -253,6 +280,8 @@ const int TriggerPrimitive::getPattern() const {
     return _csc.pattern;
   case kRPC:
     return -1;
+  case kGEM:
+    return -1;
   default:
     throw cms::Exception("Invalid Subsytem")
       << "The specified subsystem for this track stub is out of range"
@@ -267,6 +296,8 @@ const int TriggerPrimitive::Id() const {
   case kCSC:
     return _csc.cscID;
   case kRPC:
+    return -1;
+  case kGEM:
     return -1;
   default:
     throw cms::Exception("Invalid Subsytem")
@@ -287,6 +318,11 @@ void TriggerPrimitive::calculateCSCGlobalSector(const CSCDetId& chid,
 }
 
 void TriggerPrimitive::calculateRPCGlobalSector(const RPCDetId& chid,
+						unsigned& global_sector,
+						unsigned& subsector ) {
+}
+
+void TriggerPrimitive::calculateGEMGlobalSector(const GEMDetId& chid,
 						unsigned& global_sector,
 						unsigned& subsector ) {
 }
@@ -330,6 +366,12 @@ void TriggerPrimitive::print(std::ostream& out) const {
     out << "Local BX      : " << _rpc.bx << std::endl;
     out << "Strip         : " << _rpc.strip << std::endl;
     out << "Layer         : " << _rpc.layer << std::endl;
+    break;
+  case kGEM:
+    out << detId<GEMDetId>() << std::endl;
+    out << "Local BX      : " << _gem.bx << std::endl;
+    out << "Pad           : " << _gem.pad << std::endl;
+    out << "Layer         : " << _gem.layer << std::endl;
     break;
   default:
     throw cms::Exception("Invalid Subsytem")
