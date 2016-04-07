@@ -210,6 +210,8 @@ class L1NtupleProducer : public edm::EDAnalyzer {
       unsigned long long ecalScaleCacheID_;
       unsigned long long hcalScaleCacheID_;
 
+      edm::EDGetTokenT<reco::BeamSpot> beamSpotSource_;
+
    //   
       edm::Service<TFileService> tfs_;
       TTree* tree_;

@@ -234,6 +234,9 @@ namespace L1Analysis
     Float_t genA1Mu_dPhi;
     Float_t genA0Mu_dR;
     Float_t genA1Mu_dR;
+
+    std::vector<std::string> hltPaths;
+
      
   }; 
 } 

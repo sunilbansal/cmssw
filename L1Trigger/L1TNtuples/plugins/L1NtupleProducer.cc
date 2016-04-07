@@ -76,6 +76,7 @@ L1NtupleProducer::L1NtupleProducer(const edm::ParameterSet& ps) : csctfPtLUTs_(N
   gtEvmSource_         = consumes<L1GlobalTriggerEvmReadoutRecord>(ps.getParameter<edm::InputTag>("gtEvmSource"));
   gtSource_	       = consumes<L1GlobalTriggerReadoutRecord>(ps.getParameter<edm::InputTag>("gtSource"));
   generatorSource_     = consumes<reco::GenParticleCollection>(ps.getParameter<edm::InputTag>("generatorSource"));
+  beamSpotSource_     = consumes<reco::BeamSpot>(ps.getParameter<edm::InputTag>("beamSpotSource"));
   //  simulationSource_    = consumes<CaloTowerBxCollection>(ps.getParameter<edm::InputTag>("simulationSource"));
   physVal_             = ps.getParameter< bool >("physVal");
   

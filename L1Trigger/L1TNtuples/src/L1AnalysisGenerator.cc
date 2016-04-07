@@ -43,8 +43,6 @@ void L1Analysis::L1AnalysisGenerator::Set(const edm::Event& e)
   int m_debug = 0;
   double eq = 0.000001; // small number used below to compare variables
   
-
-
   edm::Handle<reco::GenParticleCollection> genParticles;
    e.getByLabel("genParticles", genParticles);
    for(size_t i = 0; i < genParticles->size(); ++ i) {
@@ -110,7 +108,7 @@ void L1Analysis::L1AnalysisGenerator::Set(const edm::Event& e)
    }
 
    edm::Handle<reco::BeamSpot> beamSpot;
-   e.getByLabel("offlineBeamSpot", beamSpot);
+   e.getByLabel("hltOnlineBeamSpot", beamSpot);
    generator_.beamSpot_x = beamSpot->position().x();
    generator_.beamSpot_y = beamSpot->position().y();
    generator_.beamSpot_z = beamSpot->position().z();
@@ -474,4 +472,26 @@ void L1Analysis::L1AnalysisGenerator::Set(const edm::Event& e)
      }
    }
 
+   // // HLT cut
+   // edm::Handle<pat::TriggerEvent> triggerEvent;
+   // e.getByLabel("patTriggerEvent", triggerEvent);
+  
+   // isDiMuonHLTFired = false;
+   // hltPaths.clear();
+   
+   // std::vector<std::string> hltPaths_;  
+   // hltPaths_.push_back("HLT_TrkMu15_DoubleTrkMu5NoFilterNoVtx_v1");
+   // hltPaths_.push_back("HLT_TrkMu15_DoubleTrkMu5NoFilterNoVtx_v2");
+     
+   // for (auto p : hltPaths_){
+   //   if ( !triggerEvent->path(p) ) {
+   //     if ( m_debug > 10 ) std::cout << p << " is not present in patTriggerEvent!" << std::endl;
+   //   }
+   //   else{
+   //     if ( triggerEvent->path(p)->wasAccept() ) {
+   //       isDiMuonHLTFired = true;
+   //       hltPaths.push_back(p);
+   //     }
+   //   }
+   // } 
 }

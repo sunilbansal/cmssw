@@ -33,6 +33,7 @@ l1Tree = cms.EDAnalyzer("L1NtupleProducer",
     csctfLCTSource       = cms.InputTag("csctfDigis"),
     csctfStatusSource    = cms.InputTag("csctfDigis"),
     csctfDTStubsSource   = cms.InputTag("csctfDigis:DT"),
+    beamSpotSource       = cms.InputTag("hltOnlineBeamSpot"),
     # if initCSCTFPtLutsPSet is True, then the CSCTF ptLUTs
     # get initialized from the PSet, csctfPtLutsPSet
     # useful for experts to overwrite the csctf pt LUTs
