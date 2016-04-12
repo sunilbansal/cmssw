@@ -1,0 +1,38 @@
+cmsDriver.py SingleMuPt2-50Fwd_cfi \
+-s GEN,SIM \
+--conditions auto:run2_mc \
+--mc \
+--magField 38T_PostLS1 \
+--datatier GEN-SIM \
+--eventcontent FEVTDEBUG \
+--era Run2_25ns \
+--evt_type GEMCode/GEMValidation/SingleMuPt2-50Fwd_cfi \
+--customise GEMCode/GEMValidation/randomizeMuonGun.randomizeMuonGun \
+-n 1000 \
+--no_exec \
+--fileout out_sim.root
+
+cmsDriver.py SingleMuPt2-50Fwd_cfi \
+-s DIGI:pdigi_valid \
+--conditions auto:run2_mc \
+--mc \
+--magField 38T_PostLS1 \
+--datatier GEN-SIM-DIGI \
+--eventcontent FEVTDEBUGHLT \
+--era Run2_25ns \
+--pileup AVE_35_BX_25ns \
+-n 1000 \
+--no_exec \
+--fileout out_digi.root
+
+cmsDriver.py SingleMuPt2-50Fwd_cfi \
+-s L1 \
+--conditions auto:run2_mc \
+--mc \
+--magField 38T_PostLS1 \
+--datatier GEN-SIM-DIGI \
+--eventcontent FEVTDEBUGHLT \
+--era Run2_25ns \
+-n 1000 \
+--no_exec \
+--fileout out_l1.root

@@ -1,0 +1,186 @@
+DEBUG 2016-04-08 16:00:49,918: 	 Executing command: 'submit'
+DEBUG 2016-04-08 16:00:49,937: 	 Found CRAB cache file /uscms/home/dildick/.crab3
+DEBUG 2016-04-08 16:00:50,045: 	 Checking credentials
+DEBUG 2016-04-08 16:00:50,046: 	 Found proxy file /tmp/x509up_u47566
+DEBUG 2016-04-08 16:00:50,046: 	 Getting proxy life time left
+DEBUG 2016-04-08 16:00:50,249: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47566 -timeleft
+ output : 80604
+
+ error: 
+ retcode : 0
+DEBUG 2016-04-08 16:00:50,353: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47566 -actimeleft
+ output : 80604
+
+ error: 
+ retcode : 0
+DEBUG 2016-04-08 16:00:50,353: 	 Proxy valid for 22:23:24 hours
+INFO 2016-04-08 16:00:50,359: 	 Will use CRAB configuration file crab_DIGI.py
+DEBUG 2016-04-08 16:00:50,359: 	 Loading CRAB configuration file.
+ERROR 2016-04-08 16:00:50,407: 	 Invalid CRAB configuration: Parameter Data.useParents is not known. Maybe you mean Data.useParent?
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+ERROR 2016-04-08 16:00:50,407: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 160, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 146, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/SubCommand.py", line 295, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/SubCommand.py", line 89, in loadConfig
+    raise ConfigurationException(configmsg)
+ConfigurationException: Invalid CRAB configuration: Parameter Data.useParents is not known. Maybe you mean Data.useParent?
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+DEBUG 2016-04-08 16:47:48,238: 	 Executing command: 'submit'
+DEBUG 2016-04-08 16:47:48,244: 	 Found CRAB cache file /uscms/home/dildick/.crab3
+DEBUG 2016-04-08 16:47:48,281: 	 Checking credentials
+DEBUG 2016-04-08 16:47:48,281: 	 Found proxy file /tmp/x509up_u47566
+DEBUG 2016-04-08 16:47:48,281: 	 Getting proxy life time left
+DEBUG 2016-04-08 16:47:48,384: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47566 -timeleft
+ output : 77786
+
+ error: 
+ retcode : 0
+DEBUG 2016-04-08 16:47:48,488: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47566 -actimeleft
+ output : 77786
+
+ error: 
+ retcode : 0
+DEBUG 2016-04-08 16:47:48,488: 	 Proxy valid for 21:36:26 hours
+INFO 2016-04-08 16:47:48,495: 	 Will use CRAB configuration file crab_DIGI.py
+DEBUG 2016-04-08 16:47:48,495: 	 Loading CRAB configuration file.
+DEBUG 2016-04-08 16:47:48,544: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2016-04-08 16:47:48,545: 	 Working area '/uscms_data/d3/dildick/work/PR13364/CMSSW_8_1_0_pre2/src/CrabJobs/crab_projects/crab_SingleMuPt2-50Fwd_DIGI_ForPR13364' already exists 
+Please change the requestName in the config file
+ERROR 2016-04-08 16:47:48,545: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 160, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 146, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/SubCommand.py", line 299, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/ClientUtilities.py", line 394, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/uscms_data/d3/dildick/work/PR13364/CMSSW_8_1_0_pre2/src/CrabJobs/crab_projects/crab_SingleMuPt2-50Fwd_DIGI_ForPR13364' already exists 
+Please change the requestName in the config file
+DEBUG 2016-04-08 16:53:36,467: 	 Executing command: 'submit'
+DEBUG 2016-04-08 16:53:36,475: 	 Found CRAB cache file /uscms/home/dildick/.crab3
+DEBUG 2016-04-08 16:53:36,507: 	 Checking credentials
+DEBUG 2016-04-08 16:53:36,507: 	 Found proxy file /tmp/x509up_u47566
+DEBUG 2016-04-08 16:53:36,507: 	 Getting proxy life time left
+DEBUG 2016-04-08 16:53:36,610: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47566 -timeleft
+ output : 77438
+
+ error: 
+ retcode : 0
+DEBUG 2016-04-08 16:53:36,714: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47566 -actimeleft
+ output : 77438
+
+ error: 
+ retcode : 0
+DEBUG 2016-04-08 16:53:36,714: 	 Proxy valid for 21:30:38 hours
+ERROR 2016-04-08 16:53:36,714: 	 CRAB configuration file crab_projects/crab_SingleMuPt2-50Fwd_DIGI_ForPR13364/ not found.
+ERROR 2016-04-08 16:53:36,715: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 160, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 146, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/SubCommand.py", line 295, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/SubCommand.py", line 46, in loadConfig
+    raise ConfigurationException("CRAB configuration file %s not found." % (configname))
+ConfigurationException: CRAB configuration file crab_projects/crab_SingleMuPt2-50Fwd_DIGI_ForPR13364/ not found.
+DEBUG 2016-04-08 16:57:32,972: 	 Executing command: 'checkwrite'
+DEBUG 2016-04-08 16:57:32,979: 	 Found CRAB cache file /uscms/home/dildick/.crab3
+DEBUG 2016-04-08 16:57:44,037: 	 Executing command: 'checkwrite'
+DEBUG 2016-04-08 16:57:44,044: 	 Found CRAB cache file /uscms/home/dildick/.crab3
+WARNING 2016-04-08 16:57:44,058: 	 Warning: 'crab checkwrite' command takes no arguments, 1 given. Ignoring arguments ['crab_projects/crab_SingleMuPt2-50Fwd_DIGI_ForPR13364/'].
+ERROR 2016-04-08 16:57:44,058: 	 Error: Please specify the site where to check the write permissions. Use the --site option.
+ERROR 2016-04-08 16:57:44,058: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 160, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 146, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/checkwrite.py", line 22, in __init__
+    SubCommand.__init__(self, logger, cmdargs)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/SubCommand.py", line 254, in __init__
+    self.validateOptions()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/checkwrite.py", line 249, in validateOptions
+    raise ex
+MissingOptionException: [91mError[0m: Please specify the site where to check the write permissions. Use the --site option.
+DEBUG 2016-04-08 16:58:21,553: 	 Executing command: 'checkwrite'
+DEBUG 2016-04-08 16:58:21,561: 	 Found CRAB cache file /uscms/home/dildick/.crab3
+ERROR 2016-04-08 16:58:21,575: 	 Error: Please specify the site where to check the write permissions. Use the --site option.
+ERROR 2016-04-08 16:58:21,575: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 160, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 146, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/checkwrite.py", line 22, in __init__
+    SubCommand.__init__(self, logger, cmdargs)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/SubCommand.py", line 254, in __init__
+    self.validateOptions()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/checkwrite.py", line 249, in validateOptions
+    raise ex
+MissingOptionException: [91mError[0m: Please specify the site where to check the write permissions. Use the --site option.
+DEBUG 2016-04-08 21:01:47,946: 	 Executing command: 'submit'
+DEBUG 2016-04-08 21:01:47,947: 	 Found CRAB cache file /uscms/home/dildick/.crab3
+DEBUG 2016-04-08 21:01:47,965: 	 Checking credentials
+DEBUG 2016-04-08 21:01:47,965: 	 Found proxy file /tmp/x509up_u47566
+DEBUG 2016-04-08 21:01:47,965: 	 Getting proxy life time left
+DEBUG 2016-04-08 21:01:48,068: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47566 -timeleft
+ output : 62546
+
+ error: 
+ retcode : 0
+DEBUG 2016-04-08 21:01:48,171: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u47566 -actimeleft
+ output : 62546
+
+ error: 
+ retcode : 0
+DEBUG 2016-04-08 21:01:48,172: 	 Proxy valid for 17:22:26 hours
+INFO 2016-04-08 21:01:48,172: 	 Will use CRAB configuration file SingleMuPt2-50Fwd_cfi_DIGI_L1.py
+DEBUG 2016-04-08 21:01:48,172: 	 Loading CRAB configuration file.
+ERROR 2016-04-08 21:01:51,237: 	 Error while loading CRAB configuration:
+Unable to find a Configuration object instance in file:
+/uscms_data/d3/dildick/work/PR13364/CMSSW_8_1_0_pre2/src/CrabJobs/SingleMuPt2-50Fwd_cfi_DIGI_L1.py
+
+Please refer to https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3CommonErrors#Syntax_error_in_CRAB_configurati
+See the ./crab.log file for more details.
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+ERROR 2016-04-08 21:01:51,237: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 160, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/bin/crab", line 146, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/submit.py", line 32, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/SubCommand.py", line 295, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1603.patch1/lib/python2.7/site-packages/CRABClient/Commands/SubCommand.py", line 84, in loadConfig
+    raise ConfigurationException(configmsg)
+ConfigurationException: Error while loading CRAB configuration:
+Unable to find a Configuration object instance in file:
+/uscms_data/d3/dildick/work/PR13364/CMSSW_8_1_0_pre2/src/CrabJobs/SingleMuPt2-50Fwd_cfi_DIGI_L1.py
+
+Please refer to https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3CommonErrors#Syntax_error_in_CRAB_configurati
+See the ./crab.log file for more details.
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
