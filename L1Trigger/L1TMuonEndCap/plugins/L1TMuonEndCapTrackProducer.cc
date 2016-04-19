@@ -37,6 +37,8 @@ using namespace L1TMuon;
 L1TMuonEndCapTrackProducer::L1TMuonEndCapTrackProducer(const PSet& p) {
 
   inputTokenCSC = consumes<CSCCorrelatedLCTDigiCollection>(p.getParameter<edm::InputTag>("CSCInput"));
+  inputTokenRPC = consumes<RPCDigiCollection>(p.getParameter<edm::InputTag>("RPCInput"));
+  inputTokenGEM = consumes<GEMPadDigiCollection>(p.getParameter<edm::InputTag>("GEMInput"));
   
   produces<l1t::RegionalMuonCandBxCollection >("EMTF");
 }
@@ -66,10 +68,10 @@ void L1TMuonEndCapTrackProducer::produce(edm::Event& ev,
   ///////// Make Trigger Primitives ////////////
   //////////////////////////////////////////////
   
+  std::vector<TriggerPrimitive> out;
+
   edm::Handle<CSCCorrelatedLCTDigiCollection> MDC;
   ev.getByToken(inputTokenCSC, MDC);
-  std::vector<TriggerPrimitive> out;
-  
   auto chamber = MDC->begin();
   auto chend  = MDC->end();
   for( ; chamber != chend; ++chamber ) {
@@ -80,6 +82,29 @@ void L1TMuonEndCapTrackProducer::produce(edm::Event& ev,
     }
   }
   
+  edm::Handle<RPCDigiCollection> RDC;
+  ev.getByToken(inputTokenRPC, RDC);
+  auto chamber = RDC->begin();
+  auto chend  = RDC->end();
+  for( ; chamber != chend; ++chamber ) {
+    auto digi = (*chamber).second.first;
+    auto dend = (*chamber).second.second;
+    for( ; digi != dend; ++digi ) {
+      out.push_back(TriggerPrimitive((*chamber).first,*digi));
+    }
+  }
+
+  edm::Handle<GEMPadDigiCollection> GDC;
+  ev.getByToken(inputTokenGEM, GDC);
+  auto chamber = GDC->begin();
+  auto chend  = GDC->end();
+  for( ; chamber != chend; ++chamber ) {
+    auto digi = (*chamber).second.first;
+    auto dend = (*chamber).second.second;
+    for( ; digi != dend; ++digi ) {
+      out.push_back(TriggerPrimitive((*chamber).first,*digi));
+    }
+  }
 
   //////////////////////////////////////////////
   ///////// Get Trigger Primitives /////////////  Retrieve TriggerPrimitives from the event record: Currently does nothing because we don't take RPC's
