@@ -36,6 +36,8 @@
 #include "L1Trigger/CSCTrackFinder/interface/CSCTFPtLUT.h"
 #include "L1Trigger/CSCTrackFinder/interface/CSCSectorReceiverLUT.h"
 #include "DataFormats/CSCDigi/interface/CSCCorrelatedLCTDigiCollection.h"
+#include "DataFormats/RPCDigi/interface/RPCDigiCollection.h"
+#include "DataFormats/GEMDigi/interface/GEMPadDigiCollection.h"
 
 typedef edm::ParameterSet PSet;
 
@@ -79,6 +81,8 @@ public:
 private:
 
   edm::EDGetTokenT<CSCCorrelatedLCTDigiCollection> inputTokenCSC;
+  edm::EDGetTokenT<RPCDigiCollection> inputTokenRPC;
+  edm::EDGetTokenT<GEMPadDigiCollection> inputTokenGEM;
   
 };
 
