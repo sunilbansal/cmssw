@@ -25,7 +25,7 @@ cscnames = {
         2 : "ME3/2",
         3 : "ME3/3",
         },
-    3 : {
+    4 : {
         2 : "ME4/2",
         3 : "ME4/3",
         },
@@ -75,7 +75,7 @@ def makePlot(lcttype,variable, nBin, minBin, maxBin, st=1, ri=1):
     st1.Draw("same");
     st2.Draw("same");
 
-    c.SaveAs("comparison_plots/" + lcttype + "_" + variable + ".png")
+    c.SaveAs("comparison_plots/" + lcttype + "_" + variable + "_st%d"%(st) + "_ri%d"%(ri) + ".png")
 
 csctypes = [
     (1,1),
@@ -117,6 +117,6 @@ for p in csctypes:
     makePlot("CSCCLCT","bx_",8,4,12,st,ri)
     makePlot("CSCCLCT","quality_",8,0,8,st,ri)
 
-    makePlot("CSCCorrelatedLCT","valid_",3,0,3,st,ri)
-    makePlot("CSCCorrelatedLCT","bx_",8,4,12,st,ri)
-    makePlot("CSCCorrelatedLCT","quality_",10,10,20,st,ri)
+    makePlot("CSCCorrelatedLCT","valid",3,0,3,st,ri)
+    makePlot("CSCCorrelatedLCT","bx",8,4,12,st,ri)
+    makePlot("CSCCorrelatedLCT","quality",10,10,20,st,ri)
