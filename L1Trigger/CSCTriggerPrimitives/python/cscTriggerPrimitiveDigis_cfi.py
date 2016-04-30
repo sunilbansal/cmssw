@@ -14,7 +14,7 @@ cscTriggerPrimitiveDigis = cms.EDProducer("CSCTriggerPrimitivesProducer",
     CSCComparatorDigiProducer = cms.InputTag("simMuonCSCDigis","MuonCSCComparatorDigi"),
     CSCWireDigiProducer = cms.InputTag("simMuonCSCDigis","MuonCSCWireDigi"),
 
-    # for SLHC studies we don't want bad chambers checks so far
+    # If True, output collections will only be built for good chambers
     checkBadChambers = cms.bool(True),
 
     # Parameters common for all boards
@@ -521,12 +521,17 @@ me3141tmbSLHCRPC = cms.PSet(
 )
 
 from Configuration.StandardSequences.Eras import eras
-## SLHC upgrades in ME1/1 
+## unganging in ME1/a
 eras.run2_common.toModify( cscTriggerPrimitiveDigis,
     commonParam = dict(debugParameters = True,
                        gangedME1a = False,
                        smartME1aME1b = True
                   ) 
+)
+
+## SLHC upgrades in ME1/1
+eras.muonTrigger2017.toModify( cscTriggerPrimitiveDigis,
+    commonParam = dict(isSLHC = True)
 )
 
 ## GEM-CSC ILT in ME1/1
