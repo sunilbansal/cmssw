@@ -1573,7 +1573,6 @@ void CSCMotherboardME11GEM::correlateLCTsGEM(CSCALCTDigi bestALCT,
 
 void CSCMotherboardME11GEM::matchGEMPads(enum ME11Part ME)
 {
-  /*
   using namespace std;
 
   auto allLCTs(ME==ME1A ? allLCTs1a : allLCTs1b);
@@ -1620,11 +1619,11 @@ void CSCMotherboardME11GEM::matchGEMPads(enum ME11Part ME)
       for (int i=0; i<2; ++i)
       {
         CSCCorrelatedLCTDigi& lct = allLCTs[bx][mbx][i];
-        if (!lct.isValid() or fabs(lct.getGEMDPhi()) < 0.000001) continue;
+        //if (!lct.isValid() or fabs(lct.getGEMDPhi()) < 0.000001) continue;
         if (debug_gem_dphi) std::cout<<"LCTbefore "<<bx<<" "<<mbx<<" "<<i<<" "<<lct;
 
         // use -99 as default value whe we don't know if there could have been a gem match
-        lct.setGEMDPhi(-99.);
+        //lct.setGEMDPhi(-99.);
 
         // "strip" here is actually a half-strip in geometry's terms
         // note that LCT::getStrip() starts from 0
@@ -1660,7 +1659,7 @@ void CSCMotherboardME11GEM::matchGEMPads(enum ME11Part ME)
           continue;
         }
         // use 100 ad default value when within gem fiducial region
-        lct.setGEMDPhi(100.);
+        //lct.setGEMDPhi(100.);
 
         if (in_pads == pads_.end()) // has no potential GEM hits with similar BX -> zap it
         {
@@ -1670,7 +1669,7 @@ void CSCMotherboardME11GEM::matchGEMPads(enum ME11Part ME)
         }
         if (debug_gem_dphi) std::cout<<"    -- gem possible"<<std::endl;
 	// use 99 ad default value when we expect there to be a gem match
-        lct.setGEMDPhi(99.);
+        //lct.setGEMDPhi(99.);
 
         // to consider a GEM pad as "matched" it has to be 
         // within specified delta_eta and delta_phi ranges
@@ -1683,7 +1682,7 @@ void CSCMotherboardME11GEM::matchGEMPads(enum ME11Part ME)
           GEMDetId gem_id(id_pad.first);
           LocalPoint gem_lp = gem_g->etaPartition(gem_id)->centreOfPad(id_pad.second->pad());
           GlobalPoint gem_gp = gem_g->idToDet(gem_id)->surface().toGlobal(gem_lp);
-          float dphi = deltaPhi(csc_gp.phi(), gem_gp.phi());
+          float dphi = deltaPhi((float)csc_gp.phi(), (float)gem_gp.phi());
           float deta = csc_gp.eta() - gem_gp.eta();
           if (debug_gem_dphi) std::cout<<"pad"<< id_pad.second->pad()<<" phi:"<<gem_gp.phi()
 	      <<" gem with dphi "<< std::abs(dphi) <<" deta "<< std::abs(deta) <<std::endl;
@@ -1702,7 +1701,7 @@ void CSCMotherboardME11GEM::matchGEMPads(enum ME11Part ME)
         if (gem_matched)
         {
           if (debug_gem_dphi) std::cout<<" GOT MATCHED GEM!"<<std::endl;
-          lct.setGEMDPhi(min_dphi);
+          //lct.setGEMDPhi(min_dphi);
 	  // assing the bit value
 	  int oddEven = int(not is_odd) + 1;
 	  int numberOfBendAngles(sizeof lut_pt_vs_dphi_gemcsc / sizeof *lut_pt_vs_dphi_gemcsc);
@@ -1715,8 +1714,10 @@ void CSCMotherboardME11GEM::matchGEMPads(enum ME11Part ME)
 		iFound = i+1;
 	    }
 	  }
-	  lct.setGEMDPhiBits(iFound);
-	  if (debug_gem_dphi) std::cout<<"found bend angle "<<abs(min_dphi)<<" "<<lct.getGEMDPhiBits()<<" "<<lut_pt_vs_dphi_gemcsc[iFound][oddEven]<<" "<<iFound << std::endl;
+	  //lct.setGEMDPhiBits(iFound);
+	  if (debug_gem_dphi) std::cout<<"found bend angle "<<abs(min_dphi)<<" "<<
+				//lct.getGEMDPhiBits()<<" "<<
+				lut_pt_vs_dphi_gemcsc[iFound][oddEven]<<" "<<iFound << std::endl;
         }
         else
         {
@@ -1741,7 +1742,6 @@ void CSCMotherboardME11GEM::matchGEMPads(enum ME11Part ME)
         if (allLCTs[bx][mbx][i].isValid()) nlct_after++;
       }
   if (debug_gem_dphi) std::cout<<"before "<<nlct<<"  after "<<nlct_after<<std::endl;
-  */
 }
 
 
