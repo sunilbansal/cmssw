@@ -93,130 +93,127 @@ L1CSCTPEmulatorConfigAnalyzer::analyze( const edm::Event& /*iEvent*/, const edm:
   unsigned int db_tmbClctTrigEnable = dbConfig->tmbClctTrigEnable(); 
   unsigned int db_tmbMatchTrigEnable = dbConfig->tmbMatchTrigEnable(); 
   unsigned int db_tmbMatchTrigWindowSize = dbConfig->tmbMatchTrigWindowSize(); 
-  unsigned int db_tmbTmbL1aWindowSize = dbConfig->tmbTmbL1aWindowSize(); 
-
-  unsigned int py_alctFifoTbins = alctParams->getParameter<unsigned int>("alctFifoTbins");
-  unsigned int py_alctFifoPretrig = alctParams->getParameter<unsigned int>("alctFifoPretrig");
-  unsigned int py_alctDriftDelay = alctParams->getParameter<unsigned int>("alctDriftDelay");
-  unsigned int py_alctNplanesHitPretrig = alctParams->getParameter<unsigned int>("alctNplanesHitPretrig");  
-  unsigned int py_alctNplanesHitPattern = alctParams->getParameter<unsigned int>("alctNplanesHitPattern"); 
-  unsigned int py_alctNplanesHitAccelPretrig = alctParams->getParameter<unsigned int>("alctNplanesHitAccelPretrig"); 
-  unsigned int py_alctNplanesHitAccelPattern = alctParams->getParameter<unsigned int>("alctNplanesHitAccelPattern"); 
-  unsigned int py_alctTrigMode = alctParams->getParameter<unsigned int>("alctTrigMode");   
-  unsigned int py_alctAccelMode = alctParams->getParameter<unsigned int>("alctAccelMode");  
-  unsigned int py_alctL1aWindowWidth = alctParams->getParameter<unsigned int>("alctL1aWindowWidth"); 
-
-  unsigned int py_clctFifoTbins = clctParams->getParameter<unsigned int>("clctFifoTbins"); 
-  unsigned int py_clctFifoPretrig = clctParams->getParameter<unsigned int>("clctFifoPretrig"); 
-  unsigned int py_clctHitPersist = clctParams->getParameter<unsigned int>("clctHitPersist");
-  unsigned int py_clctDriftDelay = clctParams->getParameter<unsigned int>("clctDriftDelay");
-  unsigned int py_clctNplanesHitPretrig = clctParams->getParameter<unsigned int>("clctNplanesHitPretrig"); 
-  unsigned int py_clctNplanesHitPattern = clctParams->getParameter<unsigned int>("clctNplanesHitPattern"); 
-  unsigned int py_clctPidThreshPretrig = clctParams->getParameter<unsigned int>("clctPidThreshPretrig"); 
-  unsigned int py_clctMinSeparation = clctParams->getParameter<unsigned int>("clctMinSeparation"); 
-
-  unsigned int py_tmbMpcBlockMe1a = tmbParams->getParameter<unsigned int>("tmbMpcBlockMe1a");
-  unsigned int py_tmbAlctTrigEnable = tmbParams->getParameter<unsigned int>("tmbAlctTrigEnable"); 
-  unsigned int py_tmbClctTrigEnable = tmbParams->getParameter<unsigned int>("tmbClctTrigEnable"); 
-  unsigned int py_tmbMatchTrigEnable = tmbParams->getParameter<unsigned int>("tmbMatchTrigEnable"); 
-  unsigned int py_tmbMatchTrigWindowSize = tmbParams->getParameter<unsigned int>("tmbMatchTrigWindowSize"); 
-  unsigned int py_tmbTmbL1aWindowSize = tmbParams->getParameter<unsigned int>("tmbTmbL1aWindowSize"); 
-
-  
-  if (dbConfig->alctFifoTbins() != alctParams.getParameter<unsigned int>("alctFifoTbins"))
-    std::cout << "alctFifoTbins " << dbConfig->alctFifoTbins() << " " << alctParams.getParameter<unsigned int>("alctFifoTbins") << std::endl;
-  else
-    std::cout << "They are the same " << dbConfig->alctFifoTbins() << std::endl;
-  /*
-
-    alctParam07 = cms.PSet(
-        alctFifoTbins   = cms.uint32(16),
-        alctFifoPretrig = cms.uint32(10),
-        alctDriftDelay  = cms.uint32(2),
-        alctNplanesHitPretrig = cms.uint32(3),
-        alctNplanesHitPattern = cms.uint32(4),
-        alctNplanesHitAccelPretrig = cms.uint32(3),
-        alctNplanesHitAccelPattern = cms.uint32(4),
-        alctTrigMode       = cms.uint32(2),
-        alctAccelMode      = cms.uint32(0),
-        alctL1aWindowWidth = cms.uint32(7),
-        verbosity = cms.int32(0),
-
-        # Configure early_tbins instead of hardcoding it
-        alctEarlyTbins = cms.int32(4),
-
-        # Use narrow pattern mask for ring 1 chambers
-        alctNarrowMaskForR1 = cms.bool(False),
-
-        # configured, not hardcoded, hit persistency
-        alctHitPersist  = cms.uint32(6),
-
-        # configure, not hardcode, up to how many BXs in the past
-        # ghost cancellation in neighboring WGs may happen
-        alctGhostCancellationBxDepth = cms.int32(4),
-
-        # whether to compare the quality of stubs in neighboring WGs in the past
-        # to the quality of a stub in current WG 
-        # when doing ghost cancellation 
-        alctGhostCancellationSideQuality = cms.bool(False),
-        
-        # how soon after pretrigger and alctDriftDelay can next pretrigger happen?
-        alctPretrigDeadtime = cms.uint32(4),
-        
-        # SLHC only for ME11:
-        # whether to store the "corrected" ALCT stub time 
-        # (currently it is median time of particular hits in a pattern) into the ASCCLCTDigi bx,
-        # and temporary store the regular "key layer hit" time into the CSCCLCTDigi fullBX:
-        alctUseCorrectedBx = cms.bool(False)
+  unsigned int db_tmbL1aWindowSize = dbConfig->tmbTmbL1aWindowSize(); 
 
 
-  alctFifoPretrig()  {return m_alct_fifo_pretrig;}
+  unsigned int py_alctFifoTbins = alctParams.getParameter<unsigned int>("alctFifoTbins");
+  unsigned int py_alctFifoPretrig = alctParams.getParameter<unsigned int>("alctFifoPretrig");
+  unsigned int py_alctDriftDelay = alctParams.getParameter<unsigned int>("alctDriftDelay");
+  unsigned int py_alctNplanesHitPretrig = alctParams.getParameter<unsigned int>("alctNplanesHitPretrig");  
+  unsigned int py_alctNplanesHitPattern = alctParams.getParameter<unsigned int>("alctNplanesHitPattern"); 
+  unsigned int py_alctNplanesHitAccelPretrig = alctParams.getParameter<unsigned int>("alctNplanesHitAccelPretrig"); 
+  unsigned int py_alctNplanesHitAccelPattern = alctParams.getParameter<unsigned int>("alctNplanesHitAccelPattern"); 
+  unsigned int py_alctTrigMode = alctParams.getParameter<unsigned int>("alctTrigMode");   
+  unsigned int py_alctAccelMode = alctParams.getParameter<unsigned int>("alctAccelMode");  
+  unsigned int py_alctL1aWindowWidth = alctParams.getParameter<unsigned int>("alctL1aWindowWidth"); 
 
-  alctDriftDelay()   {return m_alct_drift_delay;}
+  unsigned int py_clctFifoTbins = clctParams.getParameter<unsigned int>("clctFifoTbins"); 
+  unsigned int py_clctFifoPretrig = clctParams.getParameter<unsigned int>("clctFifoPretrig"); 
+  unsigned int py_clctHitPersist = clctParams.getParameter<unsigned int>("clctHitPersist");
+  unsigned int py_clctDriftDelay = clctParams.getParameter<unsigned int>("clctDriftDelay");
+  unsigned int py_clctNplanesHitPretrig = clctParams.getParameter<unsigned int>("clctNplanesHitPretrig"); 
+  unsigned int py_clctNplanesHitPattern = clctParams.getParameter<unsigned int>("clctNplanesHitPattern"); 
+  unsigned int py_clctPidThreshPretrig = clctParams.getParameter<unsigned int>("clctPidThreshPretrig"); 
+  unsigned int py_clctMinSeparation = clctParams.getParameter<unsigned int>("clctMinSeparation"); 
 
-  alctNplanesHitPretrig()  
-
-  alctNplanesHitPattern() 
-
-  alctNplanesHitAccelPretrig() 
-
-  alctNplanesHitAccelPattern() 
-
-  alctTrigMode()     {return m_alct_trig_mode;}
-
-  alctAccelMode()    {return m_alct_accel_mode;}
-
-  alctL1aWindowWidth() 
-
-  clctFifoTbins()    {return m_clct_fifo_tbins;}
-
-  clctFifoPretrig()  {return m_clct_fifo_pretrig;}
-
-  clctHitPersist()   {return m_clct_hit_persist;}
-
-  clctDriftDelay()   {return m_clct_drift_delay;}
-
-  clctNplanesHitPretrig() 
-
-  clctNplanesHitPattern() 
-
-  clctPidThreshPretrig() 
-
-  clctMinSeparation() 
-
-  tmbMpcBlockMe1a()
-
-  tmbAlctTrigEnable() 
-
-  tmbClctTrigEnable() 
+  unsigned int py_tmbMpcBlockMe1a = tmbParams.getParameter<unsigned int>("mpcBlockMe1a");
+  unsigned int py_tmbAlctTrigEnable = tmbParams.getParameter<unsigned int>("alctTrigEnable"); 
+  unsigned int py_tmbClctTrigEnable = tmbParams.getParameter<unsigned int>("clctTrigEnable"); 
+  unsigned int py_tmbMatchTrigEnable = tmbParams.getParameter<unsigned int>("matchTrigEnable"); 
+  unsigned int py_tmbMatchTrigWindowSize = tmbParams.getParameter<unsigned int>("matchTrigWindowSize"); 
+  unsigned int py_tmbL1aWindowSize = tmbParams.getParameter<unsigned int>("tmbL1aWindowSize"); 
 
 
-  tmbMatchTrigEnable() 
+  //check
+  bool ok_alctFifoTbins = db_alctFifoTbins == py_alctFifoTbins;
+  bool ok_alctFifoPretrig = db_alctFifoPretrig == py_alctFifoPretrig;
+  bool ok_alctDriftDelay = db_alctDriftDelay == py_alctDriftDelay;
+  bool ok_alctNplanesHitPretrig = db_alctNplanesHitPretrig == py_alctNplanesHitPretrig;  
+  bool ok_alctNplanesHitPattern = db_alctNplanesHitPattern == py_alctNplanesHitPattern; 
+  bool ok_alctNplanesHitAccelPretrig = db_alctNplanesHitAccelPretrig == py_alctNplanesHitAccelPretrig; 
+  bool ok_alctNplanesHitAccelPattern = db_alctNplanesHitAccelPattern == py_alctNplanesHitAccelPattern; 
+  bool ok_alctTrigMode = db_alctTrigMode == py_alctTrigMode;   
+  bool ok_alctAccelMode = db_alctAccelMode == py_alctAccelMode;  
+  bool ok_alctL1aWindowWidth = db_alctL1aWindowWidth == py_alctL1aWindowWidth; 
 
-  tmbMatchTrigWindowSize() 
+  bool ok_clctFifoTbins = db_clctFifoTbins == py_clctFifoTbins; 
+  bool ok_clctFifoPretrig = db_clctFifoPretrig == py_clctFifoPretrig; 
+  bool ok_clctHitPersist = db_clctHitPersist == py_clctHitPersist;
+  bool ok_clctDriftDelay = db_clctDriftDelay == py_clctDriftDelay;
+  bool ok_clctNplanesHitPretrig = db_clctNplanesHitPretrig == py_clctNplanesHitPretrig; 
+  bool ok_clctNplanesHitPattern = db_clctNplanesHitPattern == py_clctNplanesHitPattern; 
+  bool ok_clctPidThreshPretrig = db_clctPidThreshPretrig == py_clctPidThreshPretrig; 
+  bool ok_clctMinSeparation = db_clctMinSeparation == py_clctMinSeparation; 
 
-  tmbTmbL1aWindowSize() 
-    */
+  bool ok_tmbMpcBlockMe1a = db_tmbMpcBlockMe1a == py_tmbMpcBlockMe1a;
+  bool ok_tmbAlctTrigEnable = db_tmbAlctTrigEnable == py_tmbAlctTrigEnable; 
+  bool ok_tmbClctTrigEnable = db_tmbClctTrigEnable == py_tmbClctTrigEnable; 
+  bool ok_tmbMatchTrigEnable = db_tmbMatchTrigEnable == py_tmbMatchTrigEnable; 
+  bool ok_tmbMatchTrigWindowSize = db_tmbMatchTrigWindowSize == py_tmbMatchTrigWindowSize; 
+  bool ok_tmbL1aWindowSize = db_tmbL1aWindowSize == py_tmbL1aWindowSize; 
+
+  std::cout << "-----------------------" <<std::endl;
+  std::cout << "Comparison of parameters" <<std::endl;
+  std::cout << "-----------------------" <<std::endl;
+  std::cout << std::endl;
+  std::cout << "Parameters same in Py and DB" << std::endl;
+
+  if (ok_alctFifoTbins) std::cout <<"alctFifoTbins: " << py_alctFifoTbins << std::endl;
+  if (ok_alctFifoPretrig) std::cout <<"alctFifoPretrig: " << py_alctFifoPretrig << std::endl;
+  if (ok_alctDriftDelay) std::cout <<"alctDriftDelay: " << py_alctDriftDelay << std::endl;
+  if (ok_alctNplanesHitPretrig) std::cout <<"alctNplanesHitPretrig: " << py_alctNplanesHitPretrig << std::endl;
+  if (ok_alctNplanesHitPattern) std::cout <<"alctNplanesHitPattern: " << py_alctNplanesHitPattern << std::endl;
+  if (ok_alctNplanesHitAccelPretrig) std::cout <<"alctNplanesHitAccelPretrig: " << py_alctNplanesHitAccelPretrig << std::endl;
+  if (ok_alctNplanesHitAccelPattern) std::cout <<"alctNplanesHitAccelPattern: " << py_alctNplanesHitAccelPattern << std::endl;
+  if (ok_alctTrigMode) std::cout <<"alctTrigMode: " << py_alctTrigMode << std::endl;
+  if (ok_alctAccelMode) std::cout <<"alctAccelMode: " << py_alctAccelMode << std::endl;
+  if (ok_alctL1aWindowWidth) std::cout <<"alctL1aWindowWidth: " << py_alctL1aWindowWidth << std::endl;
+
+  if (ok_clctFifoTbins) std::cout <<"clctFifoTbins: " << py_clctFifoTbins << std::endl;
+  if (ok_clctFifoPretrig) std::cout <<"clctFifoPretrig: " << py_clctFifoPretrig << std::endl;
+  if (ok_clctHitPersist) std::cout <<"clctHitPersist: " << py_clctHitPersist << std::endl;
+  if (ok_clctDriftDelay) std::cout <<"clctDriftDelay: " << py_clctDriftDelay << std::endl;
+  if (ok_clctNplanesHitPretrig) std::cout <<"clctNplanesHitPretrig: " << py_clctNplanesHitPretrig << std::endl;
+  if (ok_clctNplanesHitPattern) std::cout <<"clctNplanesHitPattern: " << py_clctNplanesHitPattern << std::endl;
+  if (ok_clctPidThreshPretrig) std::cout <<"clctPidThreshPretrig: " << py_clctPidThreshPretrig << std::endl;
+  if (ok_clctMinSeparation) std::cout <<"clctMinSeparation: " << py_clctMinSeparation << std::endl;
+
+  if (ok_tmbMpcBlockMe1a) std::cout <<"tmbMpcBlockMe1a: " << py_tmbMpcBlockMe1a << std::endl;
+  if (ok_tmbAlctTrigEnable) std::cout <<"tmbAlctTrigEnable: " << py_tmbAlctTrigEnable << std::endl;
+  if (ok_tmbClctTrigEnable) std::cout <<"tmbClctTrigEnable: " << py_tmbClctTrigEnable << std::endl;
+  if (ok_tmbMatchTrigEnable) std::cout <<"tmbMatchTrigEnable: " << py_tmbMatchTrigEnable << std::endl;
+  if (ok_tmbMatchTrigWindowSize) std::cout <<"tmbMatchTrigWindowSize: " << py_tmbMatchTrigWindowSize << std::endl;
+  if (ok_tmbL1aWindowSize) std::cout <<"tmbL1aWindowSize: " << py_tmbL1aWindowSize << std::endl;
+
+  std::cout << std::endl;
+  std::cout << "Parameters different in Py and DB" << std::endl;
+
+  if (!ok_alctFifoTbins) std::cout <<"alctFifoTbins: Py = " << py_alctFifoTbins << ", DB = " << db_alctFifoTbins << std::endl;
+  if (!ok_alctFifoPretrig) std::cout <<"alctFifoPretrig: Py = " << py_alctFifoPretrig << ", DB = " << db_alctFifoPretrig << std::endl;
+  if (!ok_alctDriftDelay) std::cout <<"alctDriftDelay: Py = " << py_alctDriftDelay << ", DB = " << db_alctDriftDelay << std::endl;
+  if (!ok_alctNplanesHitPretrig) std::cout <<"alctNplanesHitPretrig: Py = " << py_alctNplanesHitPretrig << ", DB = " << db_alctNplanesHitPretrig << std::endl;
+  if (!ok_alctNplanesHitPattern) std::cout <<"alctNplanesHitPattern: Py = " << py_alctNplanesHitPattern << ", DB = " << db_alctNplanesHitPattern << std::endl;
+  if (!ok_alctNplanesHitAccelPretrig) std::cout <<"alctNplanesHitAccelPretrig: Py = " << py_alctNplanesHitAccelPretrig << ", DB = " << db_alctNplanesHitAccelPretrig << std::endl;
+  if (!ok_alctNplanesHitAccelPattern) std::cout <<"alctNplanesHitAccelPattern: Py = " << py_alctNplanesHitAccelPattern << ", DB = " << db_alctNplanesHitAccelPattern << std::endl;
+  if (!ok_alctTrigMode) std::cout <<"alctTrigMode: Py = " << py_alctTrigMode << ", DB = " << db_alctTrigMode << std::endl;
+  if (!ok_alctAccelMode) std::cout <<"alctAccelMode: Py = " << py_alctAccelMode << ", DB = " << db_alctAccelMode << std::endl;
+  if (!ok_alctL1aWindowWidth) std::cout <<"alctL1aWindowWidth: Py = " << py_alctL1aWindowWidth << ", DB = " << db_alctL1aWindowWidth << std::endl;
+
+  if (!ok_clctFifoTbins) std::cout <<"clctFifoTbins: Py = " << py_clctFifoTbins << ", DB = " << db_clctFifoTbins << std::endl;
+  if (!ok_clctFifoPretrig) std::cout <<"clctFifoPretrig: Py = " << py_clctFifoPretrig << ", DB = " << db_clctFifoPretrig << std::endl;
+  if (!ok_clctHitPersist) std::cout <<"clctHitPersist: Py = " << py_clctHitPersist << ", DB = " << db_clctHitPersist << std::endl;
+  if (!ok_clctDriftDelay) std::cout <<"clctDriftDelay: Py = " << py_clctDriftDelay << ", DB = " << db_clctDriftDelay << std::endl;
+  if (!ok_clctNplanesHitPretrig) std::cout <<"clctNplanesHitPretrig: Py = " << py_clctNplanesHitPretrig << ", DB = " << db_clctNplanesHitPretrig << std::endl;
+  if (!ok_clctNplanesHitPattern) std::cout <<"clctNplanesHitPattern: Py = " << py_clctNplanesHitPattern << ", DB = " << db_clctNplanesHitPattern << std::endl;
+  if (!ok_clctPidThreshPretrig) std::cout <<"clctPidThreshPretrig: Py = " << py_clctPidThreshPretrig << ", DB = " << db_clctPidThreshPretrig << std::endl;
+  if (!ok_clctMinSeparation) std::cout <<"clctMinSeparation: Py = " << py_clctMinSeparation << ", DB = " << db_clctMinSeparation << std::endl;
+
+  if (!ok_tmbMpcBlockMe1a) std::cout <<"tmbMpcBlockMe1a: Py = " << py_tmbMpcBlockMe1a << ", DB = " << db_tmbMpcBlockMe1a << std::endl;
+  if (!ok_tmbAlctTrigEnable) std::cout <<"tmbAlctTrigEnable: Py = " << py_tmbAlctTrigEnable << ", DB = " << db_tmbAlctTrigEnable << std::endl;
+  if (!ok_tmbClctTrigEnable) std::cout <<"tmbClctTrigEnable: Py = " << py_tmbClctTrigEnable << ", DB = " << db_tmbClctTrigEnable << std::endl;
+  if (!ok_tmbMatchTrigEnable) std::cout <<"tmbMatchTrigEnable: Py = " << py_tmbMatchTrigEnable << ", DB = " << db_tmbMatchTrigEnable << std::endl;
+  if (!ok_tmbMatchTrigWindowSize) std::cout <<"tmbMatchTrigWindowSize: Py = " << py_tmbMatchTrigWindowSize << ", DB = " << db_tmbMatchTrigWindowSize << std::endl;
+  if (!ok_tmbL1aWindowSize) std::cout <<"tmbL1aWindowSize: Py = " << py_tmbL1aWindowSize << ", DB = " << db_tmbL1aWindowSize << std::endl;
 }
 
 //define this as a plug-in
