@@ -155,38 +155,11 @@ L1CSCTPEmulatorConfigAnalyzer::analyze( const edm::Event& /*iEvent*/, const edm:
   std::cout << "-----------------------" <<std::endl;
   std::cout << "Comparison of parameters" <<std::endl;
   std::cout << "-----------------------" <<std::endl;
-  std::cout << std::endl;
-  std::cout << "Parameters same in Py and DB" << std::endl;
-
-  if (ok_alctFifoTbins) std::cout <<"alctFifoTbins: " << py_alctFifoTbins << std::endl;
-  if (ok_alctFifoPretrig) std::cout <<"alctFifoPretrig: " << py_alctFifoPretrig << std::endl;
-  if (ok_alctDriftDelay) std::cout <<"alctDriftDelay: " << py_alctDriftDelay << std::endl;
-  if (ok_alctNplanesHitPretrig) std::cout <<"alctNplanesHitPretrig: " << py_alctNplanesHitPretrig << std::endl;
-  if (ok_alctNplanesHitPattern) std::cout <<"alctNplanesHitPattern: " << py_alctNplanesHitPattern << std::endl;
-  if (ok_alctNplanesHitAccelPretrig) std::cout <<"alctNplanesHitAccelPretrig: " << py_alctNplanesHitAccelPretrig << std::endl;
-  if (ok_alctNplanesHitAccelPattern) std::cout <<"alctNplanesHitAccelPattern: " << py_alctNplanesHitAccelPattern << std::endl;
-  if (ok_alctTrigMode) std::cout <<"alctTrigMode: " << py_alctTrigMode << std::endl;
-  if (ok_alctAccelMode) std::cout <<"alctAccelMode: " << py_alctAccelMode << std::endl;
-  if (ok_alctL1aWindowWidth) std::cout <<"alctL1aWindowWidth: " << py_alctL1aWindowWidth << std::endl;
-
-  if (ok_clctFifoTbins) std::cout <<"clctFifoTbins: " << py_clctFifoTbins << std::endl;
-  if (ok_clctFifoPretrig) std::cout <<"clctFifoPretrig: " << py_clctFifoPretrig << std::endl;
-  if (ok_clctHitPersist) std::cout <<"clctHitPersist: " << py_clctHitPersist << std::endl;
-  if (ok_clctDriftDelay) std::cout <<"clctDriftDelay: " << py_clctDriftDelay << std::endl;
-  if (ok_clctNplanesHitPretrig) std::cout <<"clctNplanesHitPretrig: " << py_clctNplanesHitPretrig << std::endl;
-  if (ok_clctNplanesHitPattern) std::cout <<"clctNplanesHitPattern: " << py_clctNplanesHitPattern << std::endl;
-  if (ok_clctPidThreshPretrig) std::cout <<"clctPidThreshPretrig: " << py_clctPidThreshPretrig << std::endl;
-  if (ok_clctMinSeparation) std::cout <<"clctMinSeparation: " << py_clctMinSeparation << std::endl;
-
-  if (ok_tmbMpcBlockMe1a) std::cout <<"tmbMpcBlockMe1a: " << py_tmbMpcBlockMe1a << std::endl;
-  if (ok_tmbAlctTrigEnable) std::cout <<"tmbAlctTrigEnable: " << py_tmbAlctTrigEnable << std::endl;
-  if (ok_tmbClctTrigEnable) std::cout <<"tmbClctTrigEnable: " << py_tmbClctTrigEnable << std::endl;
-  if (ok_tmbMatchTrigEnable) std::cout <<"tmbMatchTrigEnable: " << py_tmbMatchTrigEnable << std::endl;
-  if (ok_tmbMatchTrigWindowSize) std::cout <<"tmbMatchTrigWindowSize: " << py_tmbMatchTrigWindowSize << std::endl;
-  if (ok_tmbL1aWindowSize) std::cout <<"tmbL1aWindowSize: " << py_tmbL1aWindowSize << std::endl;
 
   std::cout << std::endl;
-  std::cout << "Parameters different in Py and DB" << std::endl;
+  std::cout << "Parameters different between Py and DB" << std::endl;
+  std::cout << "- - - - - - - - - - - - - - - - - - - " <<std::endl;
+  std::cout << std::endl;
 
   if (!ok_alctFifoTbins) std::cout <<"alctFifoTbins: Py = " << py_alctFifoTbins << ", DB = " << db_alctFifoTbins << std::endl;
   if (!ok_alctFifoPretrig) std::cout <<"alctFifoPretrig: Py = " << py_alctFifoPretrig << ", DB = " << db_alctFifoPretrig << std::endl;
@@ -198,6 +171,7 @@ L1CSCTPEmulatorConfigAnalyzer::analyze( const edm::Event& /*iEvent*/, const edm:
   if (!ok_alctTrigMode) std::cout <<"alctTrigMode: Py = " << py_alctTrigMode << ", DB = " << db_alctTrigMode << std::endl;
   if (!ok_alctAccelMode) std::cout <<"alctAccelMode: Py = " << py_alctAccelMode << ", DB = " << db_alctAccelMode << std::endl;
   if (!ok_alctL1aWindowWidth) std::cout <<"alctL1aWindowWidth: Py = " << py_alctL1aWindowWidth << ", DB = " << db_alctL1aWindowWidth << std::endl;
+  std::cout << std::endl;
 
   if (!ok_clctFifoTbins) std::cout <<"clctFifoTbins: Py = " << py_clctFifoTbins << ", DB = " << db_clctFifoTbins << std::endl;
   if (!ok_clctFifoPretrig) std::cout <<"clctFifoPretrig: Py = " << py_clctFifoPretrig << ", DB = " << db_clctFifoPretrig << std::endl;
@@ -207,6 +181,7 @@ L1CSCTPEmulatorConfigAnalyzer::analyze( const edm::Event& /*iEvent*/, const edm:
   if (!ok_clctNplanesHitPattern) std::cout <<"clctNplanesHitPattern: Py = " << py_clctNplanesHitPattern << ", DB = " << db_clctNplanesHitPattern << std::endl;
   if (!ok_clctPidThreshPretrig) std::cout <<"clctPidThreshPretrig: Py = " << py_clctPidThreshPretrig << ", DB = " << db_clctPidThreshPretrig << std::endl;
   if (!ok_clctMinSeparation) std::cout <<"clctMinSeparation: Py = " << py_clctMinSeparation << ", DB = " << db_clctMinSeparation << std::endl;
+  std::cout << std::endl;
 
   if (!ok_tmbMpcBlockMe1a) std::cout <<"tmbMpcBlockMe1a: Py = " << py_tmbMpcBlockMe1a << ", DB = " << db_tmbMpcBlockMe1a << std::endl;
   if (!ok_tmbAlctTrigEnable) std::cout <<"tmbAlctTrigEnable: Py = " << py_tmbAlctTrigEnable << ", DB = " << db_tmbAlctTrigEnable << std::endl;
@@ -214,6 +189,41 @@ L1CSCTPEmulatorConfigAnalyzer::analyze( const edm::Event& /*iEvent*/, const edm:
   if (!ok_tmbMatchTrigEnable) std::cout <<"tmbMatchTrigEnable: Py = " << py_tmbMatchTrigEnable << ", DB = " << db_tmbMatchTrigEnable << std::endl;
   if (!ok_tmbMatchTrigWindowSize) std::cout <<"tmbMatchTrigWindowSize: Py = " << py_tmbMatchTrigWindowSize << ", DB = " << db_tmbMatchTrigWindowSize << std::endl;
   if (!ok_tmbL1aWindowSize) std::cout <<"tmbL1aWindowSize: Py = " << py_tmbL1aWindowSize << ", DB = " << db_tmbL1aWindowSize << std::endl;
+
+  std::cout << std::endl;
+  std::cout << "Parameters same in Py and DB" << std::endl;
+  std::cout << "- - - - - - - - - - - - - - " <<std::endl;
+  std::cout << std::endl;
+
+  if (ok_alctFifoTbins) std::cout <<"alctFifoTbins: " << py_alctFifoTbins << std::endl;
+  if (ok_alctFifoPretrig) std::cout <<"alctFifoPretrig: " << py_alctFifoPretrig << std::endl;
+  if (ok_alctDriftDelay) std::cout <<"alctDriftDelay: " << py_alctDriftDelay << std::endl;
+  if (ok_alctNplanesHitPretrig) std::cout <<"alctNplanesHitPretrig: " << py_alctNplanesHitPretrig << std::endl;
+  if (ok_alctNplanesHitPattern) std::cout <<"alctNplanesHitPattern: " << py_alctNplanesHitPattern << std::endl;
+  if (ok_alctNplanesHitAccelPretrig) std::cout <<"alctNplanesHitAccelPretrig: " << py_alctNplanesHitAccelPretrig << std::endl;
+  if (ok_alctNplanesHitAccelPattern) std::cout <<"alctNplanesHitAccelPattern: " << py_alctNplanesHitAccelPattern << std::endl;
+  if (ok_alctTrigMode) std::cout <<"alctTrigMode: " << py_alctTrigMode << std::endl;
+  if (ok_alctAccelMode) std::cout <<"alctAccelMode: " << py_alctAccelMode << std::endl;
+  if (ok_alctL1aWindowWidth) std::cout <<"alctL1aWindowWidth: " << py_alctL1aWindowWidth << std::endl;
+  std::cout << std::endl;
+
+  if (ok_clctFifoTbins) std::cout <<"clctFifoTbins: " << py_clctFifoTbins << std::endl;
+  if (ok_clctFifoPretrig) std::cout <<"clctFifoPretrig: " << py_clctFifoPretrig << std::endl;
+  if (ok_clctHitPersist) std::cout <<"clctHitPersist: " << py_clctHitPersist << std::endl;
+  if (ok_clctDriftDelay) std::cout <<"clctDriftDelay: " << py_clctDriftDelay << std::endl;
+  if (ok_clctNplanesHitPretrig) std::cout <<"clctNplanesHitPretrig: " << py_clctNplanesHitPretrig << std::endl;
+  if (ok_clctNplanesHitPattern) std::cout <<"clctNplanesHitPattern: " << py_clctNplanesHitPattern << std::endl;
+  if (ok_clctPidThreshPretrig) std::cout <<"clctPidThreshPretrig: " << py_clctPidThreshPretrig << std::endl;
+  if (ok_clctMinSeparation) std::cout <<"clctMinSeparation: " << py_clctMinSeparation << std::endl;
+  std::cout << std::endl;
+
+  if (ok_tmbMpcBlockMe1a) std::cout <<"tmbMpcBlockMe1a: " << py_tmbMpcBlockMe1a << std::endl;
+  if (ok_tmbAlctTrigEnable) std::cout <<"tmbAlctTrigEnable: " << py_tmbAlctTrigEnable << std::endl;
+  if (ok_tmbClctTrigEnable) std::cout <<"tmbClctTrigEnable: " << py_tmbClctTrigEnable << std::endl;
+  if (ok_tmbMatchTrigEnable) std::cout <<"tmbMatchTrigEnable: " << py_tmbMatchTrigEnable << std::endl;
+  if (ok_tmbMatchTrigWindowSize) std::cout <<"tmbMatchTrigWindowSize: " << py_tmbMatchTrigWindowSize << std::endl;
+  if (ok_tmbL1aWindowSize) std::cout <<"tmbL1aWindowSize: " << py_tmbL1aWindowSize << std::endl;
+
 }
 
 //define this as a plug-in
