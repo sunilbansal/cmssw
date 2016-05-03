@@ -1,3 +1,5 @@
+<use   name="CondFormats/CSCObjects"/>
+<use   name="CondFormats/DataRecord"/>
 <use   name="DataFormats/Common"/>
 <use   name="DataFormats/CSCDigi"/>
 <use   name="FWCore/Framework"/>
