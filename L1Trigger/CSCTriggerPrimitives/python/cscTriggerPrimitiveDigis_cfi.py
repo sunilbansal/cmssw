@@ -6,9 +6,9 @@ import FWCore.ParameterSet.Config as cms
 # is opened, but not applied until after cscTriggerPrimitiveDigis is
 # declared (and then only if the "run2" era is active).
 def _modifyCscTriggerPrimitiveDigisForRun2( object ) :
-    """
-    Modifies cscTriggerPrimitiveDigis for Run 2
-    """
+    print
+    print "Modifies cscTriggerPrimitiveDigis for Run 2"
+    print
     object.debugParameters = True
     object.checkBadChambers = False
     object.commonParam.isSLHC = True
