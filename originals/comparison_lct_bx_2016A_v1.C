@@ -1,11 +1,11 @@
-void test()
+void comparison_lct_bx_2016A_v1()
 {
 //=========Macro generated from canvas: c/c
-//=========  (Wed May  4 23:55:11 2016) by ROOT version6.06/01
+//=========  (Wed May  4 23:51:35 2016) by ROOT version6.06/01
    TCanvas *c = new TCanvas("c", "c",0,0,800,800);
    gStyle->SetOptFit(1);
    c->SetHighLightColor(2);
-   c->Range(-10.25806,-40.23871,18.12903,228.0194);
+   c->Range(-10.25806,-38.81613,18.12903,219.9581);
    c->SetFillColor(0);
    c->SetBorderMode(0);
    c->SetBorderSize(2);
@@ -19,11 +19,11 @@ void test()
    c->SetFrameBorderMode(0);
    
    TH1D *simCscTriggerPrimitiveDigis__1 = new TH1D("simCscTriggerPrimitiveDigis__1","CSCCorrelatedLCTDigi BX",22,-6,16);
-   simCscTriggerPrimitiveDigis__1->SetBinContent(15,198);
-   simCscTriggerPrimitiveDigis__1->SetBinContent(16,4);
-   simCscTriggerPrimitiveDigis__1->SetEntries(202);
+   simCscTriggerPrimitiveDigis__1->SetBinContent(14,1);
+   simCscTriggerPrimitiveDigis__1->SetBinContent(15,191);
+   simCscTriggerPrimitiveDigis__1->SetEntries(192);
    
-   TPaveStats *ptstats = new TPaveStats(0.78,0.75,0.98,1,"brNDC");
+   TPaveStats *ptstats = new TPaveStats(0.78,0.8,0.98,1,"brNDC");
    ptstats->SetName("stats");
    ptstats->SetBorderSize(1);
    ptstats->SetFillColor(0);
@@ -36,10 +36,10 @@ void test()
    ptstats->SetTextColor(ci);
    ptstats->SetTextFont(42);
    TText *AText = ptstats->AddText("simCscTriggerPrimitiveDigis");
-   AText->SetTextSize(0.0575);
-   AText = ptstats->AddText("Entries = 202    ");
-   AText = ptstats->AddText("Mean  =   8.02");
-   AText = ptstats->AddText("Std Dev   = 0.1393");
+   AText->SetTextSize(0.046);
+   AText = ptstats->AddText("Entries = 192    ");
+   AText = ptstats->AddText("Mean  =  7.995");
+   AText = ptstats->AddText("Std Dev   = 0.07198");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
@@ -66,11 +66,11 @@ void test()
    simCscTriggerPrimitiveDigis__1->Draw("");
    
    TH1D *simCscTriggerPrimitiveDigis_MPCSORTED__2 = new TH1D("simCscTriggerPrimitiveDigis_MPCSORTED__2","SimCscTriggerPrimitiveDigis_MPCSORTED",22,-6,16);
-   simCscTriggerPrimitiveDigis_MPCSORTED__2->SetBinContent(15,198);
-   simCscTriggerPrimitiveDigis_MPCSORTED__2->SetBinContent(16,4);
-   simCscTriggerPrimitiveDigis_MPCSORTED__2->SetEntries(202);
+   simCscTriggerPrimitiveDigis_MPCSORTED__2->SetBinContent(14,1);
+   simCscTriggerPrimitiveDigis_MPCSORTED__2->SetBinContent(15,191);
+   simCscTriggerPrimitiveDigis_MPCSORTED__2->SetEntries(192);
    
-   ptstats = new TPaveStats(0.78,0.5,0.98,0.75,"brNDC");
+   ptstats = new TPaveStats(0.78,0.6,0.98,0.8,"brNDC");
    ptstats->SetName("stats");
    ptstats->SetBorderSize(1);
    ptstats->SetFillColor(0);
@@ -81,10 +81,10 @@ void test()
    ptstats->SetTextColor(ci);
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("simCscTriggerPrimitiveDigis_MPCSORTED");
-   AText->SetTextSize(0.0575);
-   AText = ptstats->AddText("Entries = 202    ");
-   AText = ptstats->AddText("Mean  =   8.02");
-   AText = ptstats->AddText("Std Dev   = 0.1393");
+   AText->SetTextSize(0.046);
+   AText = ptstats->AddText("Entries = 192    ");
+   AText = ptstats->AddText("Mean  =  7.995");
+   AText = ptstats->AddText("Std Dev   = 0.07198");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
@@ -113,7 +113,7 @@ void test()
    csctfDigis__3->SetBinContent(14,5);
    csctfDigis__3->SetEntries(205);
    
-   ptstats = new TPaveStats(0.78,0.25,0.98,0.5,"brNDC");
+   ptstats = new TPaveStats(0.78,0.4,0.98,0.6,"brNDC");
    ptstats->SetName("stats");
    ptstats->SetBorderSize(1);
    ptstats->SetFillColor(0);
@@ -124,7 +124,7 @@ void test()
    ptstats->SetTextColor(ci);
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("csctfDigis");
-   AText->SetTextSize(0.0575);
+   AText->SetTextSize(0.046);
    AText = ptstats->AddText("Entries = 205    ");
    AText = ptstats->AddText("Mean  =  6.024");
    AText = ptstats->AddText("Std Dev   = 0.1543");
@@ -156,7 +156,7 @@ void test()
    muonCSCDigis__4->SetBinContent(8,80);
    muonCSCDigis__4->SetEntries(205);
    
-   ptstats = new TPaveStats(0.78,0,0.98,0.25,"brNDC");
+   ptstats = new TPaveStats(0.78,0.2,0.98,0.4,"brNDC");
    ptstats->SetName("stats");
    ptstats->SetBorderSize(1);
    ptstats->SetFillColor(0);
@@ -164,7 +164,7 @@ void test()
    ptstats->SetTextAlign(12);
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("muonCSCDigis");
-   AText->SetTextSize(0.0575);
+   AText->SetTextSize(0.046);
    AText = ptstats->AddText("Entries = 205    ");
    AText = ptstats->AddText("Mean  = 0.3902");
    AText = ptstats->AddText("Std Dev   = 0.4878");
@@ -188,7 +188,7 @@ void test()
    muonCSCDigis__4->GetZaxis()->SetTitleFont(42);
    muonCSCDigis__4->Draw("sames");
    
-   ptstats = new TPaveStats(0.78,0.75,0.98,1,"brNDC");
+   ptstats = new TPaveStats(0.78,0.8,0.98,1,"brNDC");
    ptstats->SetName("stats");
    ptstats->SetBorderSize(1);
    ptstats->SetFillColor(0);
@@ -199,20 +199,20 @@ void test()
    ptstats->SetTextColor(ci);
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("simCscTriggerPrimitiveDigis");
-   AText->SetTextSize(0.0575);
-   AText = ptstats->AddText("Entries = 202    ");
-   AText = ptstats->AddText("Mean  =   8.02");
-   AText = ptstats->AddText("Std Dev   = 0.1393");
+   AText->SetTextSize(0.046);
+   AText = ptstats->AddText("Entries = 192    ");
+   AText = ptstats->AddText("Mean  =  7.995");
+   AText = ptstats->AddText("Std Dev   = 0.07198");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
    
    TH1D *simCscTriggerPrimitiveDigis_MPCSORTED__5 = new TH1D("simCscTriggerPrimitiveDigis_MPCSORTED__5","SimCscTriggerPrimitiveDigis_MPCSORTED",22,-6,16);
-   simCscTriggerPrimitiveDigis_MPCSORTED__5->SetBinContent(15,198);
-   simCscTriggerPrimitiveDigis_MPCSORTED__5->SetBinContent(16,4);
-   simCscTriggerPrimitiveDigis_MPCSORTED__5->SetEntries(202);
+   simCscTriggerPrimitiveDigis_MPCSORTED__5->SetBinContent(14,1);
+   simCscTriggerPrimitiveDigis_MPCSORTED__5->SetBinContent(15,191);
+   simCscTriggerPrimitiveDigis_MPCSORTED__5->SetEntries(192);
    
-   ptstats = new TPaveStats(0.78,0.5,0.98,0.75,"brNDC");
+   ptstats = new TPaveStats(0.78,0.6,0.98,0.8,"brNDC");
    ptstats->SetName("stats");
    ptstats->SetBorderSize(1);
    ptstats->SetFillColor(0);
@@ -223,10 +223,10 @@ void test()
    ptstats->SetTextColor(ci);
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("simCscTriggerPrimitiveDigis_MPCSORTED");
-   AText->SetTextSize(0.0575);
-   AText = ptstats->AddText("Entries = 202    ");
-   AText = ptstats->AddText("Mean  =   8.02");
-   AText = ptstats->AddText("Std Dev   = 0.1393");
+   AText->SetTextSize(0.046);
+   AText = ptstats->AddText("Entries = 192    ");
+   AText = ptstats->AddText("Mean  =  7.995");
+   AText = ptstats->AddText("Std Dev   = 0.07198");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
@@ -250,7 +250,7 @@ void test()
    simCscTriggerPrimitiveDigis_MPCSORTED__5->GetZaxis()->SetTitleFont(42);
    simCscTriggerPrimitiveDigis_MPCSORTED__5->Draw("same");
    
-   ptstats = new TPaveStats(0.78,0.25,0.98,0.5,"brNDC");
+   ptstats = new TPaveStats(0.78,0.4,0.98,0.6,"brNDC");
    ptstats->SetName("stats");
    ptstats->SetBorderSize(1);
    ptstats->SetFillColor(0);
@@ -261,7 +261,7 @@ void test()
    ptstats->SetTextColor(ci);
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("csctfDigis");
-   AText->SetTextSize(0.0575);
+   AText->SetTextSize(0.046);
    AText = ptstats->AddText("Entries = 205    ");
    AText = ptstats->AddText("Mean  =  6.024");
    AText = ptstats->AddText("Std Dev   = 0.1543");
@@ -269,7 +269,7 @@ void test()
    ptstats->SetOptFit(1111);
    ptstats->Draw();
    
-   ptstats = new TPaveStats(0.78,0,0.98,0.25,"brNDC");
+   ptstats = new TPaveStats(0.78,0.2,0.98,0.4,"brNDC");
    ptstats->SetName("stats");
    ptstats->SetBorderSize(1);
    ptstats->SetFillColor(0);
@@ -277,7 +277,7 @@ void test()
    ptstats->SetTextAlign(12);
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("muonCSCDigis");
-   AText->SetTextSize(0.0575);
+   AText->SetTextSize(0.046);
    AText = ptstats->AddText("Entries = 205    ");
    AText = ptstats->AddText("Mean  = 0.3902");
    AText = ptstats->AddText("Std Dev   = 0.4878");

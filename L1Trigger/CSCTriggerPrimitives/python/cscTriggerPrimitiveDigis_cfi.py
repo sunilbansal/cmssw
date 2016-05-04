@@ -11,9 +11,10 @@ def _modifyCscTriggerPrimitiveDigisForRun2( object ) :
     print
     object.debugParameters = True
     object.checkBadChambers = False
-    object.commonParam.isSLHC = True
+#    object.commonParam.isSLHC = True
     object.commonParam.smartME1aME1b = True
     object.commonParam.gangedME1a = False
+    """
     object.alctParam07.alctNarrowMaskForR1 = True
     object.alctParam07.alctGhostCancellationBxDepth = cms.int32(1)
     object.alctParam07.alctGhostCancellationSideQuality = cms.bool(True)
@@ -21,6 +22,7 @@ def _modifyCscTriggerPrimitiveDigisForRun2( object ) :
     object.clctParam07.clctPidThreshPretrig = 4
     object.clctParam07.clctMinSeparation = 5
     object.tmbParam.matchTrigWindowSize = 3
+    """
 
 
 def _modifyCscTriggerPrimitiveDigisForRun2GE11( object ) :

@@ -54,7 +54,7 @@ simCscTriggerPrimitiveDigis_MPCSORTED_st.SetTextColor(kBlue);
  
 csctfDigis = TH1D("csctfDigis","csctfDigis",22,-6,16)
 tree.Draw("CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_csctfDigis__RAW2DIGI.obj.data_.second.bx>>csctfDigis")
-csctfDigis.SetLineColor(kGreen+1)
+csctfDigis.SetLineColor(kGreen+2)
 csctfDigis.Draw()
 gPad.Update();
 
@@ -66,7 +66,7 @@ csctfDigis_st.SetY2NDC(0.5);
 Y5 = csctfDigis_st.GetY1NDC();
 Y6 = csctfDigis_st.GetY2NDC();
 
-csctfDigis_st.SetTextColor(kGreen+1);
+csctfDigis_st.SetTextColor(kGreen+2);
 #csctfDigis_st.SetTextSize(0.8);
 
 
