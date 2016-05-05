@@ -53,7 +53,7 @@ files_2015D = [
 "/store/data/Run2015D/ZeroBias/RAW/v1/000/259/626/00000/FCA4A331-C479-E511-A117-02163E013805.root"
 ]
 
-files_Run2016B = [
+files_2016B = [
 "/store/user/abrinke1/EMTF/Run2016B/2016_04_29/RAW/ZeroBias1/272012/02BF7BEC-9F0D-E611-90BB-02163E0143F1.root",
 "/store/user/abrinke1/EMTF/Run2016B/2016_04_29/RAW/ZeroBias1/272012/02C0D3DB-980D-E611-B09F-02163E01433F.root",
 "/store/user/abrinke1/EMTF/Run2016B/2016_04_29/RAW/ZeroBias1/272012/047083AF-A40D-E611-ADD1-02163E0144CB.root",
@@ -252,7 +252,7 @@ files_Run2016B = [
 # Input source
 process.source = cms.Source("PoolSource",
 #    fileNames = cms.untracked.vstring('/store/data/Run2016A/ZeroBias1/RAW/v1/000/271/336/00000/00963A5A-BF0A-E611-A657-02163E0141FB.root'),
-    fileNames = cms.untracked.vstring(*files_2015D),
+    fileNames = cms.untracked.vstring(*files_2016B),
     #fileNames = cms.untracked.vstring(*files_2016B),
     secondaryFileNames = cms.untracked.vstring()
 )
@@ -275,7 +275,7 @@ process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
-    fileName = cms.untracked.string('output_l1.root'),
+    fileName = cms.untracked.string('output_l1_2016B_fixed.root'),
     outputCommands = cms.untracked.vstring('keep *'),
 #                                         process.RECOSIMEventContent.outputCommands,                                                                                     
     splitLevel = cms.untracked.int32(0)
