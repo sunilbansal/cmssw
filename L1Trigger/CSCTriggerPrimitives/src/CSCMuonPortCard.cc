@@ -73,7 +73,7 @@ std::vector<csctf::TrackStub> CSCMuonPortCard::sort(const unsigned endcap, const
   }
 
   if (result.size()) {
-    std::sort(result.begin(), result.end(), std::greater<csctf::TrackStub>());
+    //std::sort(result.begin(), result.end(), std::greater<csctf::TrackStub>());
     // Can only return maxStubs or less LCTs per bunch crossing.
     if (result.size() > max_stubs_)
       result.erase(result.begin() + max_stubs_, result.end());

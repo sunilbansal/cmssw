@@ -12,7 +12,7 @@ def _modifyCscTriggerPrimitiveDigisForRun2( object ) :
     object.debugParameters = True
     object.checkBadChambers = False
 #    object.commonParam.isSLHC = True
-    #object.commonParam.smartME1aME1b = True
+    object.commonParam.smartME1aME1b = True
     object.commonParam.gangedME1a = False
     """
     object.alctParam07.alctNarrowMaskForR1 = True
@@ -524,6 +524,7 @@ cscTriggerPrimitiveDigis = cms.EDProducer("CSCTriggerPrimitivesProducer",
         # to CLCTs in this BX, and not use them in the following BX 
         # (default non-upgrade TMB behavior).
         tmbDropUsedAlcts = cms.bool(True)
+
     ),
 
     # to be used by ME11 chambers with upgraded TMB and ALCT
