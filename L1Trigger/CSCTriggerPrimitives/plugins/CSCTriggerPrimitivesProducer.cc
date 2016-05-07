@@ -51,7 +51,7 @@ CSCTriggerPrimitivesProducer::CSCTriggerPrimitivesProducer(const edm::ParameterS
   rpcDigiProducer_ = conf.existsAs<edm::InputTag>("RPCDigiProducer")?conf.getParameter<edm::InputTag>("RPCDigiProducer"):edm::InputTag("");
   checkBadChambers_ = conf.getParameter<bool>("checkBadChambers");
   lctBuilder_.reset( new CSCTriggerPrimitivesBuilder(conf) ); // pass on the conf
-  
+
   wire_token_ = consumes<CSCWireDigiCollection>(wireDigiProducer_);
   comp_token_ = consumes<CSCComparatorDigiCollection>(compDigiProducer_);
   gem_pad_token_ = consumes<GEMPadDigiCollection>(gemPadDigiProducer_);
@@ -130,7 +130,11 @@ void CSCTriggerPrimitivesProducer::produce(edm::Event& ev,
     }
     lctBuilder_->setConfigParameters(conf.product());
   }
-  
+
+  // check if running on data
+  std::cout << "isRealData " << ev.eventAuxiliary().isRealData() << std::endl;
+  lctBuilder_->runOnData(ev.eventAuxiliary().isRealData());
+
   // Get the collections of comparator & wire digis from event.
   edm::Handle<CSCComparatorDigiCollection> compDigis;
   edm::Handle<CSCWireDigiCollection>       wireDigis;

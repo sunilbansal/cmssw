@@ -82,7 +82,7 @@ class CSCMotherboard
 
  // VK: change to protected, to allow inheritance
  protected:
-
+  
   /** Verbosity level: 0: no print (default).
    *                   1: print LCTs found. */
   int infoV;

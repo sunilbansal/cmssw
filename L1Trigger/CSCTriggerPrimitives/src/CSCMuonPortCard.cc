@@ -67,10 +67,12 @@ std::vector<csctf::TrackStub> CSCMuonPortCard::sort(const unsigned endcap, const
   result = stubs_.get(endcap, station, sector, subsector, bx);
 
   // Make sure no Quality 0 or non-valid LCTs come through the portcard.
+  /*
   for (LCT = result.begin(); LCT != result.end(); LCT++) {
     if ( !(LCT->getQuality() && LCT->isValid()) )
       result.erase(LCT, LCT);
   }
+  */
 
   if (result.size()) {
     //std::sort(result.begin(), result.end(), std::greater<csctf::TrackStub>());
