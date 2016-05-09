@@ -30,7 +30,9 @@ process.GlobalTag = GlobalTag(process.GlobalTag, globalTag, '')
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(1)
 )
-process.source = cms.Source("EmptySource")
+process.source = cms.Source("EmptySource",
+                            firstRun = cms.untracked.uint32(272798)
+)
 
 print "---------------------------------------------------------------------------"
 print "Release:", os.environ['CMSSW_VERSION'], ", globaltag:", process.GlobalTag.globaltag.value()
