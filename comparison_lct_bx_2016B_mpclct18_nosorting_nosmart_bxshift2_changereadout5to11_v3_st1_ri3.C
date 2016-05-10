@@ -1,11 +1,11 @@
 void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3_st1_ri3()
 {
 //=========Macro generated from canvas: c/c
-//=========  (Tue May 10 02:22:06 2016) by ROOT version6.06/01
+//=========  (Tue May 10 06:08:53 2016) by ROOT version6.06/01
    TCanvas *c = new TCanvas("c", "c",0,0,800,800);
    gStyle->SetOptFit(1);
    c->SetHighLightColor(2);
-   c->Range(-10.25806,-0.8129032,18.12903,4.606452);
+   c->Range(-10.25806,-0.2032258,18.12903,1.151613);
    c->SetFillColor(0);
    c->SetBorderMode(0);
    c->SetBorderSize(2);
@@ -18,14 +18,7 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    c->SetFrameBorderMode(0);
    c->SetFrameBorderMode(0);
    
-   TH1D *simCscTriggerPrimitiveDigis__16 = new TH1D("simCscTriggerPrimitiveDigis__16","CSCCorrelatedLCTDigi BX",22,-6,16);
-   simCscTriggerPrimitiveDigis__16->SetBinContent(10,1);
-   simCscTriggerPrimitiveDigis__16->SetBinContent(11,1);
-   simCscTriggerPrimitiveDigis__16->SetBinContent(12,2);
-   simCscTriggerPrimitiveDigis__16->SetBinContent(13,2);
-   simCscTriggerPrimitiveDigis__16->SetBinContent(15,3);
-   simCscTriggerPrimitiveDigis__16->SetBinContent(16,4);
-   simCscTriggerPrimitiveDigis__16->SetEntries(13);
+   TH1D *simCscTriggerPrimitiveDigis__16 = new TH1D("simCscTriggerPrimitiveDigis__16","CSCCorrelatedLCTDigi BX ME1/2",22,-6,16);
    
    TPaveStats *ptstats = new TPaveStats(0.78,0.8,0.98,1,"brNDC");
    ptstats->SetName("stats");
@@ -41,9 +34,9 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    ptstats->SetTextFont(42);
    TText *AText = ptstats->AddText("simCscTriggerPrimitiveDigis");
    AText->SetTextSize(0.046);
-   AText = ptstats->AddText("Entries = 13     ");
-   AText = ptstats->AddText("Mean  =  6.846");
-   AText = ptstats->AddText("Std Dev   =  2.032");
+   AText = ptstats->AddText("Entries = 0      ");
+   AText = ptstats->AddText("Mean  =      0");
+   AText = ptstats->AddText("Std Dev   =      0");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
@@ -70,13 +63,14 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    simCscTriggerPrimitiveDigis__16->Draw("");
    
    TH1D *simCscTriggerPrimitiveDigis_MPCSORTED__17 = new TH1D("simCscTriggerPrimitiveDigis_MPCSORTED__17","SimCscTriggerPrimitiveDigis_MPCSORTED",22,-6,16);
-   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(10,1);
-   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(11,1);
-   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(12,2);
-   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(13,2);
-   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(15,3);
-   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(16,4);
-   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetEntries(13);
+   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(10,11);
+   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(11,15);
+   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(12,17);
+   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(13,15);
+   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(14,6);
+   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(15,13);
+   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetBinContent(16,13);
+   simCscTriggerPrimitiveDigis_MPCSORTED__17->SetEntries(90);
    
    ptstats = new TPaveStats(0.78,0.6,0.98,0.8,"brNDC");
    ptstats->SetName("stats");
@@ -90,9 +84,9 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("simCscTriggerPrimitiveDigis_MPCSORTED");
    AText->SetTextSize(0.046);
-   AText = ptstats->AddText("Entries = 13     ");
-   AText = ptstats->AddText("Mean  =  6.846");
-   AText = ptstats->AddText("Std Dev   =  2.032");
+   AText = ptstats->AddText("Entries = 90     ");
+   AText = ptstats->AddText("Mean  =    5.9");
+   AText = ptstats->AddText("Std Dev   =  1.972");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
@@ -117,13 +111,14 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    simCscTriggerPrimitiveDigis_MPCSORTED__17->Draw("sames");
    
    TH1D *csctfDigis__18 = new TH1D("csctfDigis__18","csctfDigis",22,-6,16);
-   csctfDigis__18->SetBinContent(10,1);
-   csctfDigis__18->SetBinContent(11,1);
-   csctfDigis__18->SetBinContent(12,2);
-   csctfDigis__18->SetBinContent(13,2);
-   csctfDigis__18->SetBinContent(15,3);
-   csctfDigis__18->SetBinContent(16,4);
-   csctfDigis__18->SetEntries(13);
+   csctfDigis__18->SetBinContent(10,11);
+   csctfDigis__18->SetBinContent(11,15);
+   csctfDigis__18->SetBinContent(12,17);
+   csctfDigis__18->SetBinContent(13,15);
+   csctfDigis__18->SetBinContent(14,6);
+   csctfDigis__18->SetBinContent(15,13);
+   csctfDigis__18->SetBinContent(16,13);
+   csctfDigis__18->SetEntries(90);
    
    ptstats = new TPaveStats(0.78,0.4,0.98,0.6,"brNDC");
    ptstats->SetName("stats");
@@ -137,9 +132,9 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("csctfDigis");
    AText->SetTextSize(0.046);
-   AText = ptstats->AddText("Entries = 13     ");
-   AText = ptstats->AddText("Mean  =  6.846");
-   AText = ptstats->AddText("Std Dev   =  2.032");
+   AText = ptstats->AddText("Entries = 90     ");
+   AText = ptstats->AddText("Mean  =    5.9");
+   AText = ptstats->AddText("Std Dev   =  1.972");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
@@ -164,9 +159,9 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    csctfDigis__18->Draw("sames");
    
    TH1D *muonCSCDigis__19 = new TH1D("muonCSCDigis__19","muonCSCDigis",22,-6,16);
-   muonCSCDigis__19->SetBinContent(7,5);
-   muonCSCDigis__19->SetBinContent(8,8);
-   muonCSCDigis__19->SetEntries(13);
+   muonCSCDigis__19->SetBinContent(7,49);
+   muonCSCDigis__19->SetBinContent(8,41);
+   muonCSCDigis__19->SetEntries(90);
    
    ptstats = new TPaveStats(0.78,0.2,0.98,0.4,"brNDC");
    ptstats->SetName("stats");
@@ -177,9 +172,9 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("muonCSCDigis");
    AText->SetTextSize(0.046);
-   AText = ptstats->AddText("Entries = 13     ");
-   AText = ptstats->AddText("Mean  = 0.6154");
-   AText = ptstats->AddText("Std Dev   = 0.4865");
+   AText = ptstats->AddText("Entries = 90     ");
+   AText = ptstats->AddText("Mean  = 0.4556");
+   AText = ptstats->AddText("Std Dev   =  0.498");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
@@ -212,21 +207,22 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("simCscTriggerPrimitiveDigis");
    AText->SetTextSize(0.046);
-   AText = ptstats->AddText("Entries = 13     ");
-   AText = ptstats->AddText("Mean  =  6.846");
-   AText = ptstats->AddText("Std Dev   =  2.032");
+   AText = ptstats->AddText("Entries = 0      ");
+   AText = ptstats->AddText("Mean  =      0");
+   AText = ptstats->AddText("Std Dev   =      0");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
    
    TH1D *simCscTriggerPrimitiveDigis_MPCSORTED__20 = new TH1D("simCscTriggerPrimitiveDigis_MPCSORTED__20","SimCscTriggerPrimitiveDigis_MPCSORTED",22,-6,16);
-   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(10,1);
-   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(11,1);
-   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(12,2);
-   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(13,2);
-   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(15,3);
-   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(16,4);
-   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetEntries(13);
+   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(10,11);
+   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(11,15);
+   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(12,17);
+   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(13,15);
+   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(14,6);
+   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(15,13);
+   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetBinContent(16,13);
+   simCscTriggerPrimitiveDigis_MPCSORTED__20->SetEntries(90);
    
    ptstats = new TPaveStats(0.78,0.6,0.98,0.8,"brNDC");
    ptstats->SetName("stats");
@@ -240,9 +236,9 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("simCscTriggerPrimitiveDigis_MPCSORTED");
    AText->SetTextSize(0.046);
-   AText = ptstats->AddText("Entries = 13     ");
-   AText = ptstats->AddText("Mean  =  6.846");
-   AText = ptstats->AddText("Std Dev   =  2.032");
+   AText = ptstats->AddText("Entries = 90     ");
+   AText = ptstats->AddText("Mean  =    5.9");
+   AText = ptstats->AddText("Std Dev   =  1.972");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
@@ -278,9 +274,9 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("csctfDigis");
    AText->SetTextSize(0.046);
-   AText = ptstats->AddText("Entries = 13     ");
-   AText = ptstats->AddText("Mean  =  6.846");
-   AText = ptstats->AddText("Std Dev   =  2.032");
+   AText = ptstats->AddText("Entries = 90     ");
+   AText = ptstats->AddText("Mean  =    5.9");
+   AText = ptstats->AddText("Std Dev   =  1.972");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
@@ -294,20 +290,20 @@ void comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5t
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("muonCSCDigis");
    AText->SetTextSize(0.046);
-   AText = ptstats->AddText("Entries = 13     ");
-   AText = ptstats->AddText("Mean  = 0.6154");
-   AText = ptstats->AddText("Std Dev   = 0.4865");
+   AText = ptstats->AddText("Entries = 90     ");
+   AText = ptstats->AddText("Mean  = 0.4556");
+   AText = ptstats->AddText("Std Dev   =  0.498");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
    
-   TPaveText *pt = new TPaveText(0.1734171,0.9343782,0.8265829,0.995,"blNDC");
+   TPaveText *pt = new TPaveText(0.15,0.9343782,0.85,0.995,"blNDC");
    pt->SetName("title");
    pt->SetBorderSize(1);
    pt->SetFillColor(0);
    pt->SetFillStyle(0);
    pt->SetTextFont(42);
-   AText = pt->AddText("CSCCorrelatedLCTDigi BX");
+   AText = pt->AddText("CSCCorrelatedLCTDigi BX ME1/2");
    pt->Draw();
    c->Modified();
    c->cd();

@@ -1,14 +1,15 @@
 void comparison_clct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3_st4_ri2()
 {
 //=========Macro generated from canvas: c/c
-//=========  (Tue May 10 02:22:09 2016) by ROOT version6.06/01
+//=========  (Tue May 10 15:28:43 2016) by ROOT version6.06/01
    TCanvas *c = new TCanvas("c", "c",0,0,800,800);
    gStyle->SetOptFit(1);
    c->SetHighLightColor(2);
-   c->Range(-10.25806,-77.22581,18.12903,437.6129);
+   c->Range(-10.25806,-0.6917834,18.12903,3.920106);
    c->SetFillColor(0);
    c->SetBorderMode(0);
    c->SetBorderSize(2);
+   c->SetLogy();
    c->SetTickx(1);
    c->SetTicky(1);
    c->SetLeftMargin(0.15);
@@ -18,10 +19,10 @@ void comparison_clct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5
    c->SetFrameBorderMode(0);
    c->SetFrameBorderMode(0);
    
-   TH1D *simCscTriggerPrimitiveDigis__71 = new TH1D("simCscTriggerPrimitiveDigis__71","CSCCLCTDigi BX",22,-6,16);
-   simCscTriggerPrimitiveDigis__71->SetBinContent(12,1);
-   simCscTriggerPrimitiveDigis__71->SetBinContent(14,380);
-   simCscTriggerPrimitiveDigis__71->SetEntries(381);
+   TH1D *simCscTriggerPrimitiveDigis__89 = new TH1D("simCscTriggerPrimitiveDigis__89","CSCCLCTDigi BX ME4/2",22,-6,16);
+   simCscTriggerPrimitiveDigis__89->SetBinContent(12,2);
+   simCscTriggerPrimitiveDigis__89->SetBinContent(14,1980);
+   simCscTriggerPrimitiveDigis__89->SetEntries(1982);
    
    TPaveStats *ptstats = new TPaveStats(0.78,0.655,0.98,0.935,"brNDC");
    ptstats->SetName("stats");
@@ -37,40 +38,40 @@ void comparison_clct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5
    ptstats->SetTextFont(42);
    TText *AText = ptstats->AddText("simCscTriggerPrimitiveDigis");
    AText->SetTextSize(0.06439999);
-   AText = ptstats->AddText("Entries = 381    ");
-   AText = ptstats->AddText("Mean  =  6.995");
-   AText = ptstats->AddText("Std Dev   = 0.1023");
+   AText = ptstats->AddText("Entries = 1982   ");
+   AText = ptstats->AddText("Mean  =  6.998");
+   AText = ptstats->AddText("Std Dev   = 0.0635");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
-   simCscTriggerPrimitiveDigis__71->GetListOfFunctions()->Add(ptstats);
-   ptstats->SetParent(simCscTriggerPrimitiveDigis__71);
+   simCscTriggerPrimitiveDigis__89->GetListOfFunctions()->Add(ptstats);
+   ptstats->SetParent(simCscTriggerPrimitiveDigis__89);
 
    ci = TColor::GetColor("#ff0000");
-   simCscTriggerPrimitiveDigis__71->SetLineColor(ci);
-   simCscTriggerPrimitiveDigis__71->SetMarkerStyle(8);
-   simCscTriggerPrimitiveDigis__71->GetXaxis()->SetTitle(" BX");
-   simCscTriggerPrimitiveDigis__71->GetXaxis()->SetLabelFont(42);
-   simCscTriggerPrimitiveDigis__71->GetXaxis()->SetLabelSize(0.035);
-   simCscTriggerPrimitiveDigis__71->GetXaxis()->SetTitleSize(0.06);
-   simCscTriggerPrimitiveDigis__71->GetXaxis()->SetTitleFont(42);
-   simCscTriggerPrimitiveDigis__71->GetYaxis()->SetTitle(" Entries");
-   simCscTriggerPrimitiveDigis__71->GetYaxis()->SetLabelFont(42);
-   simCscTriggerPrimitiveDigis__71->GetYaxis()->SetLabelSize(0.035);
-   simCscTriggerPrimitiveDigis__71->GetYaxis()->SetTitleSize(0.06);
-   simCscTriggerPrimitiveDigis__71->GetYaxis()->SetTitleFont(42);
-   simCscTriggerPrimitiveDigis__71->GetZaxis()->SetLabelFont(42);
-   simCscTriggerPrimitiveDigis__71->GetZaxis()->SetLabelSize(0.035);
-   simCscTriggerPrimitiveDigis__71->GetZaxis()->SetTitleSize(0.06);
-   simCscTriggerPrimitiveDigis__71->GetZaxis()->SetTitleFont(42);
-   simCscTriggerPrimitiveDigis__71->Draw("");
+   simCscTriggerPrimitiveDigis__89->SetLineColor(ci);
+   simCscTriggerPrimitiveDigis__89->SetMarkerStyle(8);
+   simCscTriggerPrimitiveDigis__89->GetXaxis()->SetTitle(" BX");
+   simCscTriggerPrimitiveDigis__89->GetXaxis()->SetLabelFont(42);
+   simCscTriggerPrimitiveDigis__89->GetXaxis()->SetLabelSize(0.035);
+   simCscTriggerPrimitiveDigis__89->GetXaxis()->SetTitleSize(0.06);
+   simCscTriggerPrimitiveDigis__89->GetXaxis()->SetTitleFont(42);
+   simCscTriggerPrimitiveDigis__89->GetYaxis()->SetTitle(" Entries");
+   simCscTriggerPrimitiveDigis__89->GetYaxis()->SetLabelFont(42);
+   simCscTriggerPrimitiveDigis__89->GetYaxis()->SetLabelSize(0.035);
+   simCscTriggerPrimitiveDigis__89->GetYaxis()->SetTitleSize(0.06);
+   simCscTriggerPrimitiveDigis__89->GetYaxis()->SetTitleFont(42);
+   simCscTriggerPrimitiveDigis__89->GetZaxis()->SetLabelFont(42);
+   simCscTriggerPrimitiveDigis__89->GetZaxis()->SetLabelSize(0.035);
+   simCscTriggerPrimitiveDigis__89->GetZaxis()->SetTitleSize(0.06);
+   simCscTriggerPrimitiveDigis__89->GetZaxis()->SetTitleFont(42);
+   simCscTriggerPrimitiveDigis__89->Draw("");
    
-   TH1D *muonCSCDigis__72 = new TH1D("muonCSCDigis__72","muonCSCDigis",22,-6,16);
-   muonCSCDigis__72->SetBinContent(7,85);
-   muonCSCDigis__72->SetBinContent(8,94);
-   muonCSCDigis__72->SetBinContent(9,97);
-   muonCSCDigis__72->SetBinContent(10,105);
-   muonCSCDigis__72->SetEntries(381);
+   TH1D *muonCSCDigis__90 = new TH1D("muonCSCDigis__90","muonCSCDigis",22,-6,16);
+   muonCSCDigis__90->SetBinContent(7,469);
+   muonCSCDigis__90->SetBinContent(8,504);
+   muonCSCDigis__90->SetBinContent(9,449);
+   muonCSCDigis__90->SetBinContent(10,560);
+   muonCSCDigis__90->SetEntries(1982);
    
    ptstats = new TPaveStats(0.78,0.375,0.98,0.655,"brNDC");
    ptstats->SetName("stats");
@@ -81,28 +82,28 @@ void comparison_clct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("muonCSCDigis");
    AText->SetTextSize(0.06439999);
-   AText = ptstats->AddText("Entries = 381    ");
-   AText = ptstats->AddText("Mean  =  1.583");
-   AText = ptstats->AddText("Std Dev   =  1.114");
+   AText = ptstats->AddText("Entries = 1982   ");
+   AText = ptstats->AddText("Mean  =  1.555");
+   AText = ptstats->AddText("Std Dev   =  1.134");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
-   muonCSCDigis__72->GetListOfFunctions()->Add(ptstats);
-   ptstats->SetParent(muonCSCDigis__72);
-   muonCSCDigis__72->SetMarkerStyle(8);
-   muonCSCDigis__72->GetXaxis()->SetLabelFont(42);
-   muonCSCDigis__72->GetXaxis()->SetLabelSize(0.035);
-   muonCSCDigis__72->GetXaxis()->SetTitleSize(0.06);
-   muonCSCDigis__72->GetXaxis()->SetTitleFont(42);
-   muonCSCDigis__72->GetYaxis()->SetLabelFont(42);
-   muonCSCDigis__72->GetYaxis()->SetLabelSize(0.035);
-   muonCSCDigis__72->GetYaxis()->SetTitleSize(0.06);
-   muonCSCDigis__72->GetYaxis()->SetTitleFont(42);
-   muonCSCDigis__72->GetZaxis()->SetLabelFont(42);
-   muonCSCDigis__72->GetZaxis()->SetLabelSize(0.035);
-   muonCSCDigis__72->GetZaxis()->SetTitleSize(0.06);
-   muonCSCDigis__72->GetZaxis()->SetTitleFont(42);
-   muonCSCDigis__72->Draw("sames");
+   muonCSCDigis__90->GetListOfFunctions()->Add(ptstats);
+   ptstats->SetParent(muonCSCDigis__90);
+   muonCSCDigis__90->SetMarkerStyle(8);
+   muonCSCDigis__90->GetXaxis()->SetLabelFont(42);
+   muonCSCDigis__90->GetXaxis()->SetLabelSize(0.035);
+   muonCSCDigis__90->GetXaxis()->SetTitleSize(0.06);
+   muonCSCDigis__90->GetXaxis()->SetTitleFont(42);
+   muonCSCDigis__90->GetYaxis()->SetLabelFont(42);
+   muonCSCDigis__90->GetYaxis()->SetLabelSize(0.035);
+   muonCSCDigis__90->GetYaxis()->SetTitleSize(0.06);
+   muonCSCDigis__90->GetYaxis()->SetTitleFont(42);
+   muonCSCDigis__90->GetZaxis()->SetLabelFont(42);
+   muonCSCDigis__90->GetZaxis()->SetLabelSize(0.035);
+   muonCSCDigis__90->GetZaxis()->SetTitleSize(0.06);
+   muonCSCDigis__90->GetZaxis()->SetTitleFont(42);
+   muonCSCDigis__90->Draw("sames");
    
    ptstats = new TPaveStats(0.78,0.655,0.98,0.935,"brNDC");
    ptstats->SetName("stats");
@@ -116,9 +117,9 @@ void comparison_clct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("simCscTriggerPrimitiveDigis");
    AText->SetTextSize(0.06439999);
-   AText = ptstats->AddText("Entries = 381    ");
-   AText = ptstats->AddText("Mean  =  6.995");
-   AText = ptstats->AddText("Std Dev   = 0.1023");
+   AText = ptstats->AddText("Entries = 1982   ");
+   AText = ptstats->AddText("Mean  =  6.998");
+   AText = ptstats->AddText("Std Dev   = 0.0635");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
@@ -132,20 +133,20 @@ void comparison_clct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5
    ptstats->SetTextFont(42);
    AText = ptstats->AddText("muonCSCDigis");
    AText->SetTextSize(0.06439999);
-   AText = ptstats->AddText("Entries = 381    ");
-   AText = ptstats->AddText("Mean  =  1.583");
-   AText = ptstats->AddText("Std Dev   =  1.114");
+   AText = ptstats->AddText("Entries = 1982   ");
+   AText = ptstats->AddText("Mean  =  1.555");
+   AText = ptstats->AddText("Std Dev   =  1.134");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(1111);
    ptstats->Draw();
    
-   TPaveText *pt = new TPaveText(0.2808291,0.9343782,0.7191709,0.995,"blNDC");
+   TPaveText *pt = new TPaveText(0.2016834,0.9343782,0.7983166,0.995,"blNDC");
    pt->SetName("title");
    pt->SetBorderSize(1);
    pt->SetFillColor(0);
    pt->SetFillStyle(0);
    pt->SetTextFont(42);
-   AText = pt->AddText("CSCCLCTDigi BX");
+   AText = pt->AddText("CSCCLCTDigi BX ME4/2");
    pt->Draw();
    c->Modified();
    c->cd();

@@ -273,7 +273,7 @@ CSCCathodeLCTProcessorLegacyUnganged::CSCCathodeLCTProcessorLegacyUnganged(unsig
   }
 
   // Verbosity level, set to 0 (no print) by default.
-  infoV        = conf.getUntrackedParameter<int>("verbosity", 0);
+  infoV        = conf.getParameter<int>("verbosity");
 
   // Check and print configuration parameters.
   checkConfigParameters();
@@ -491,6 +491,7 @@ CSCCathodeLCTProcessorLegacyUnganged::run(const CSCComparatorDigiCollection* com
     CSCTriggerGeomManager* theGeom = CSCTriggerGeometry::get();
     CSCChamber* theChamber = theGeom->chamber(theEndcap, theStation, theSector,
 					      theSubsector, theTrigChamber);
+    std::cout <<"theChamber " << theChamber << std::endl;
     if (theChamber) {
       numStrips = theChamber->layer(1)->geometry()->numberOfStrips();
       // ME1/a is known to the readout hardware as strips 65-80 of ME1/1.
@@ -503,7 +504,7 @@ CSCCathodeLCTProcessorLegacyUnganged::run(const CSCComparatorDigiCollection* com
 	if (theRing == 1 && gangedME1a) numStrips = 80;
       }
 
-      if (numStrips > CSCConstants::MAX_NUM_STRIPS) {
+      if (numStrips > CSCConstants::MAX_NUM_STRIPS_7CFEBS) {
 	if (infoV >= 0) edm::LogError("L1CSCTPEmulatorSetupError")
 	  << "+++ Number of strips, " << numStrips
 	  << " found in ME" << ((theEndcap == 1) ? "+" : "-")
@@ -514,7 +515,7 @@ CSCCathodeLCTProcessorLegacyUnganged::run(const CSCComparatorDigiCollection* com
 			      theSubsector, theStation, theTrigChamber)
 	  << " (sector " << theSector << " subsector " << theSubsector
 	  << " trig id. " << theTrigChamber << ")"
-	  << " exceeds max expected, " << CSCConstants::MAX_NUM_STRIPS
+	  << " exceeds max expected, " << CSCConstants::MAX_NUM_STRIPS_7CFEBS
 	  << " +++\n" 
 	  << "+++ CSC geometry looks garbled; no emulation possible +++\n";
 	numStrips = -1;
@@ -851,11 +852,11 @@ void CSCCathodeLCTProcessorLegacyUnganged::readComparatorDigis(
   // Takes the comparator & time info and stuffs it into halfstrip and (and
   // possibly distrip) vector.
 
-  int time[CSCConstants::NUM_LAYERS][CSCConstants::MAX_NUM_STRIPS];
-  int comp[CSCConstants::NUM_LAYERS][CSCConstants::MAX_NUM_STRIPS];
-  int digiNum[CSCConstants::NUM_LAYERS][CSCConstants::MAX_NUM_STRIPS];
+  int time[CSCConstants::NUM_LAYERS][CSCConstants::MAX_NUM_STRIPS_7CFEBS];
+  int comp[CSCConstants::NUM_LAYERS][CSCConstants::MAX_NUM_STRIPS_7CFEBS];
+  int digiNum[CSCConstants::NUM_LAYERS][CSCConstants::MAX_NUM_STRIPS_7CFEBS];
   for (int i = 0; i < CSCConstants::NUM_LAYERS; i++){
-    for (int j = 0; j < CSCConstants::MAX_NUM_STRIPS; j++) {
+    for (int j = 0; j < CSCConstants::MAX_NUM_STRIPS_7CFEBS; j++) {
       time[i][j]    = -999;
       comp[i][j]    =    0;
       digiNum[i][j] = -999;
@@ -937,7 +938,7 @@ void CSCCathodeLCTProcessorLegacyUnganged::readComparatorDigis(
   for (int i = 0; i < CSCConstants::NUM_LAYERS; i++) {
     // Use the comparator info to setup the halfstrips and distrips.  -BT
     // This loop is only for halfstrips.
-    for (int j = 0; j < CSCConstants::MAX_NUM_STRIPS; j++) {
+    for (int j = 0; j < CSCConstants::MAX_NUM_STRIPS_7CFEBS; j++) {
       if (time[i][j] >= 0) {
 	int i_halfstrip = 2*j + comp[i][j] + stagger[i];
 	// 2*j    : convert strip to 1/2 strip
@@ -990,9 +991,9 @@ void CSCCathodeLCTProcessorLegacyUnganged::readComparatorDigis(
   }
 }
 
-void CSCCathodeLCTProcessorLegacyUnganged::distripStagger(int stag_triad[CSCConstants::MAX_NUM_STRIPS],
-				   int stag_time[CSCConstants::MAX_NUM_STRIPS],
-				   int stag_digi[CSCConstants::MAX_NUM_STRIPS],
+void CSCCathodeLCTProcessorLegacyUnganged::distripStagger(int stag_triad[CSCConstants::MAX_NUM_STRIPS_7CFEBS],
+				   int stag_time[CSCConstants::MAX_NUM_STRIPS_7CFEBS],
+				   int stag_digi[CSCConstants::MAX_NUM_STRIPS_7CFEBS],
 				   int i_strip, bool debug) {
   // Author: Jason Mumford (mumford@physics.ucla.edu)
   // This routine takes care of the stagger situation where there is a hit
@@ -1436,7 +1437,7 @@ std::vector <CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(
 
     // TMB latches LCTs drift_delay clocks after pretrigger.
     int latch_bx = first_bx + drift_delay;
-    latchLCTs(h_pulse, h_keyStrip, h_nhits, 1, CSCConstants::NUM_HALF_STRIPS_7CFEBS,
+    latchLCTs(h_pulse, h_keyStrip, h_nhits, 1, CSCConstants::NUM_HALF_STRIPS,
 	      latch_bx);
     latchLCTs(d_pulse, d_keyStrip, d_nhits, 0,   CSCConstants::NUM_DI_STRIPS,
 	      latch_bx);
@@ -1862,7 +1863,7 @@ void CSCCathodeLCTProcessorLegacyUnganged::getKeyStripData(
       // This conditional statement prevents us from looking at strips
       // that don't exist along the chamber boundaries.
       if (keystrip_data[ilct][CLCT_STRIP_TYPE] == 1) {
-	if (this_strip >= 0 && this_strip < CSCConstants::NUM_HALF_STRIPS_7CFEBS) {
+	if (this_strip >= 0 && this_strip < CSCConstants::NUM_HALF_STRIPS) {
 	  // Now look at one-shots in bx where TMB latches the LCTs
 	  if (((h_pulse[this_layer][this_strip] >> latch_bx) & 1) == 1)
 	    lct_pattern[pattern_strip] = 1;

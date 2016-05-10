@@ -1063,10 +1063,10 @@ std::vector<CSCCLCTDigi> CSCCathodeLCTProcessorLegacy::findLCTs(const std::vecto
   const int max_lct_num = 2;
   const int adjacent_strips = 2;
   // Distrip, halfstrip pattern threshold.
-  const int ptrn_thrsh[2] = {nplanes_hit_pattern, nplanes_hit_pattern};
+  unsigned int ptrn_thrsh[2] = {nplanes_hit_pattern, nplanes_hit_pattern};
   int highest_quality = 0;
 
-  int keystrip_data[CSCConstants::NUM_HALF_STRIPS][7];
+  unsigned int keystrip_data[CSCConstants::NUM_HALF_STRIPS][7];
   int final_lcts[max_lct_num];
 
   std::vector <CSCCLCTDigi> lctList;
@@ -1107,7 +1107,7 @@ std::vector<CSCCLCTDigi> CSCCathodeLCTProcessorLegacy::findLCTs(const std::vecto
     for (j = 0; j < max_lct_num; j++){
       // Only report LCTs if the number of layers hit is greater than or
       // equal to the (variable) valid pattern threshold ptrn_thrsh.
-      int keystrip = final_lcts[j];
+      unsigned int keystrip = final_lcts[j];
       if (keystrip >= 0 &&
 	  keystrip_data[keystrip][CLCT_QUALITY] >= ptrn_thrsh[stripType]) {
      	// assign the stripType here. 1 = halfstrip, 0 = distrip.
