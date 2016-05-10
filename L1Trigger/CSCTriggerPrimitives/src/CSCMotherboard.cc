@@ -149,7 +149,7 @@ CSCMotherboard::CSCMotherboard(unsigned endcap, unsigned station,
   infoV = tmbParams.getParameter<int>("verbosity");
 
   alct.reset( new CSCAnodeLCTProcessor(endcap, station, sector, subsector, chamber, alctParams, commonParams) );
-  clct.reset( new CSCCathodeLCTProcessor(endcap, station, sector, subsector, chamber, clctParams, commonParams, tmbParams) );
+  clct.reset( new CSCCathodeLCTProcessorLegacyUnganged(endcap, station, sector, subsector, chamber, clctParams, commonParams, tmbParams) );
 
   //if (theStation==1 && CSCTriggerNumbering::ringFromTriggerLabels(theStation, theTrigChamber)==2) infoV = 3;
 
@@ -177,7 +177,7 @@ CSCMotherboard::CSCMotherboard() :
   early_tbins = 4;
 
   alct.reset( new CSCAnodeLCTProcessor() );
-  clct.reset( new CSCCathodeLCTProcessor() );
+  clct.reset( new CSCCathodeLCTProcessorLegacyUnganged() );
   mpc_block_me1a      = def_mpc_block_me1a;
   alct_trig_enable    = def_alct_trig_enable;
   clct_trig_enable    = def_clct_trig_enable;
@@ -303,7 +303,7 @@ void CSCMotherboard::run(
   clct->run(hs_times, ds_times); // run cathodeLCT
 
   int bx_alct_matched = 0;
-  for (int bx_clct = 0; bx_clct < CSCCathodeLCTProcessor::MAX_CLCT_BINS;
+  for (int bx_clct = 0; bx_clct < CSCCathodeLCTProcessorLegacyUnganged::MAX_CLCT_BINS;
        bx_clct++) {
     if (clct->bestCLCT[bx_clct].isValid()) {
       bool is_matched = false;
@@ -359,7 +359,7 @@ CSCMotherboard::run(const CSCWireDigiCollection* wiredc,
     for (int a=0;a<20;++a) used_alct_mask[a]=0;
 
     int bx_alct_matched = 0; // bx of last matched ALCT
-    for (int bx_clct = 0; bx_clct < CSCCathodeLCTProcessor::MAX_CLCT_BINS;
+    for (int bx_clct = 0; bx_clct < CSCCathodeLCTProcessorLegacyUnganged::MAX_CLCT_BINS;
          bx_clct++) {
       // There should be at least one valid ALCT or CLCT for a
       // correlated LCT to be formed.  Decision on whether to reject

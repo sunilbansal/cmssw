@@ -36,6 +36,7 @@
 
 #include "L1Trigger/CSCTriggerPrimitives/src/CSCAnodeLCTProcessor.h"
 #include "L1Trigger/CSCTriggerPrimitives/src/CSCCathodeLCTProcessor.h"
+#include "L1Trigger/CSCTriggerPrimitives/src/CSCCathodeLCTProcessorLegacyUnganged.h"
 #include "DataFormats/CSCDigi/interface/CSCCorrelatedLCTDigi.h"
 
 class CSCMotherboard
@@ -78,7 +79,7 @@ class CSCMotherboard
   std::unique_ptr<CSCAnodeLCTProcessor> alct;
 
   /** Cathode LCT processor. */
-  std::unique_ptr<CSCCathodeLCTProcessor> clct;
+  std::unique_ptr<CSCCathodeLCTProcessorLegacyUnganged> clct;
 
  // VK: change to protected, to allow inheritance
  protected:
