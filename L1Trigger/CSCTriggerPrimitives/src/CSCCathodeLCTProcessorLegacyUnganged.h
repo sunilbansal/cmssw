@@ -1,7 +1,7 @@
-#ifndef CSCTriggerPrimitives_CSCCathodeLCTProcessorLegacy_h
-#define CSCTriggerPrimitives_CSCCathodeLCTProcessorLegacy_h
+#ifndef CSCTriggerPrimitives_CSCCathodeLCTProcessorLegacyUnganged_h
+#define CSCTriggerPrimitives_CSCCathodeLCTProcessorLegacyUnganged_h
 
-/** \class CSCCathodeLCTProcessorLegacy
+/** \class CSCCathodeLCTProcessorLegacyUnganged
  *
  * This class simulates the functionality of the cathode LCT card. It is run by
  * the MotherBoard and returns up to two CathodeLCTs.  It can be run either in
@@ -35,17 +35,17 @@
 #include <CondFormats/CSCObjects/interface/CSCDBL1TPParameters.h>
 #include <L1Trigger/CSCCommonTrigger/interface/CSCConstants.h>
 
-class CSCCathodeLCTProcessorLegacy
+class CSCCathodeLCTProcessorLegacyUnganged
 {
  public:
   /** Normal constructor. */
-  CSCCathodeLCTProcessorLegacy(unsigned endcap, unsigned station, unsigned sector,
+  CSCCathodeLCTProcessorLegacyUnganged(unsigned endcap, unsigned station, unsigned sector,
 			 unsigned subsector, unsigned chamber,
 			 const edm::ParameterSet& conf,
 			 const edm::ParameterSet& comm);
 
   /** Default constructor. Used for testing. */
-  CSCCathodeLCTProcessorLegacy();
+  CSCCathodeLCTProcessorLegacyUnganged();
 
   /** Sets configuration parameters obtained via EventSetup mechanism. */
   void setConfigParameters(const CSCDBL1TPParameters* conf);
