@@ -233,12 +233,13 @@ const int CSCCathodeLCTProcessorLegacyUnganged::cfeb_strips[2] = { 8, 32};
 //----------------
 
 CSCCathodeLCTProcessorLegacyUnganged::CSCCathodeLCTProcessorLegacyUnganged(unsigned endcap,
-					       unsigned station,
-					       unsigned sector,
-					       unsigned subsector,
-					       unsigned chamber,
-					       const edm::ParameterSet& conf,
-					       const edm::ParameterSet& comm) :
+									   unsigned station,
+									   unsigned sector,
+									   unsigned subsector,
+									   unsigned chamber,
+									   const edm::ParameterSet& conf,
+									   const edm::ParameterSet& comm,
+									   const edm::ParameterSet& ctmb) :
 		     theEndcap(endcap), theStation(station), theSector(sector),
                      theSubsector(subsector), theTrigChamber(chamber) {
   static std::atomic<bool> config_dumped{false};
@@ -261,6 +262,9 @@ CSCCathodeLCTProcessorLegacyUnganged::CSCCathodeLCTProcessorLegacyUnganged(unsig
 
   // TMB07 firmware used since 2007: switch and config. parameters.
   isTMB07      = comm.getParameter<bool>("isTMB07");
+
+  gangedME1a = comm.getParameter<bool>("gangedME1a");
+
   if (isTMB07) {
     pid_thresh_pretrig =
       conf.getParameter<unsigned int>("clctPidThreshPretrig");
@@ -284,6 +288,14 @@ CSCCathodeLCTProcessorLegacyUnganged::CSCCathodeLCTProcessorLegacyUnganged(unsig
     if ((i_layer+1)%2 == 0) stagger[i_layer] = 0;
     else                    stagger[i_layer] = 1;
   }
+
+  theRing = CSCTriggerNumbering::ringFromTriggerLabels(theStation, theTrigChamber);
+
+  theChamber = CSCTriggerNumbering::chamberFromTriggerLabels(theSector, theSubsector,
+                                                             theStation, theTrigChamber);
+
+  // trigger numbering doesn't distinguish between ME1a and ME1b chambers:
+  isME11 = (theStation == 1 && theRing == 1);
 
   // engage in various and sundry tests, but only for a single chamber.
   //if (theStation == 2 && theSector == 1 &&
@@ -325,6 +337,9 @@ CSCCathodeLCTProcessorLegacyUnganged::CSCCathodeLCTProcessorLegacyUnganged() :
     if ((i_layer+1)%2 == 0) stagger[i_layer] = 0;
     else                    stagger[i_layer] = 1;
   }
+
+  theRing = CSCTriggerNumbering::ringFromTriggerLabels(theStation, theTrigChamber);
+  isME11 = (theStation == 1 && theRing == 1);
 }
 
 void CSCCathodeLCTProcessorLegacyUnganged::setDefaultConfigParameters() {
@@ -382,7 +397,7 @@ void CSCCathodeLCTProcessorLegacyUnganged::checkConfigParameters() {
   static const unsigned int max_nplanes_hit_pretrig = 1 << 3;
   static const unsigned int max_nplanes_hit_pattern = 1 << 3;
   static const unsigned int max_pid_thresh_pretrig  = 1 << 4;
-  static const unsigned int max_min_separation = CSCConstants::NUM_HALF_STRIPS;
+  static const unsigned int max_min_separation = CSCConstants::NUM_HALF_STRIPS_7CFEBS;
 
   // Checks.
   if (fifo_tbins >= max_fifo_tbins) {
@@ -483,10 +498,9 @@ CSCCathodeLCTProcessorLegacyUnganged::run(const CSCComparatorDigiCollection* com
       // reconstruct LCTs in this region (3:1 ganged strips); for now, we
       // simply allow for hits in ME1/a and apply standard reconstruction
       // to them.
-      if (theStation == 1 &&
-	  CSCTriggerNumbering::ringFromTriggerLabels(theStation,
-						     theTrigChamber) == 1) {
-	numStrips = 80;
+      if (isME11) {
+	if (theRing == 1 && !gangedME1a) numStrips = 112;
+	if (theRing == 1 && gangedME1a) numStrips = 80;
       }
 
       if (numStrips > CSCConstants::MAX_NUM_STRIPS) {
@@ -558,9 +572,9 @@ CSCCathodeLCTProcessorLegacyUnganged::run(const CSCComparatorDigiCollection* com
   if (!noDigis) {
     // Get halfstrip (and possibly distrip) times from comparator digis.
     std::vector<int>
-      halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS];
+      halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS];
     std::vector<int>
-      distrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS];
+      distrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS];
     if (isTMB07) { // TMB07 (latest) version: halfstrips only.
       readComparatorDigis(halfstrip);
     }
@@ -576,7 +590,7 @@ CSCCathodeLCTProcessorLegacyUnganged::run(const CSCComparatorDigiCollection* com
     // to the number of planes required to pre-trigger.)
     unsigned int layersHit = 0;
     for (int i_layer = 0; i_layer < CSCConstants::NUM_LAYERS; i_layer++) {
-      for (int i_hstrip = 0; i_hstrip < CSCConstants::NUM_HALF_STRIPS;
+      for (int i_hstrip = 0; i_hstrip < CSCConstants::NUM_HALF_STRIPS_7CFEBS;
 	   i_hstrip++) {
 	if (!halfstrip[i_layer][i_hstrip].empty()) {layersHit++; break;}
       }
@@ -590,8 +604,8 @@ CSCCathodeLCTProcessorLegacyUnganged::run(const CSCComparatorDigiCollection* com
 }
 
 void CSCCathodeLCTProcessorLegacyUnganged::run(
-  const std::vector<int> halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
-  const std::vector<int> distrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS]) {
+  const std::vector<int> halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
+  const std::vector<int> distrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS]) {
   // This version of the run() function can either be called in a standalone
   // test, being passed the halfstrip and distrip times, or called by the 
   // run() function above.  It uses the findLCTs() method to find vectors
@@ -709,14 +723,19 @@ bool CSCCathodeLCTProcessorLegacyUnganged::getDigis(const CSCComparatorDigiColle
 
 void CSCCathodeLCTProcessorLegacyUnganged::getDigis(const CSCComparatorDigiCollection* compdc,
 				      const CSCDetId& id) {
+  // bool me1bProc = theStation == 1 && theRing == 1;
+  // bool me1aProc = theStation == 1 && theRing == 4;
+  // bool me1b = (id.station() == 1) && (id.ring() == 1);
   bool me1a = (id.station() == 1) && (id.ring() == 4);
   const CSCComparatorDigiCollection::Range rcompd = compdc->get(id);
   for (CSCComparatorDigiCollection::const_iterator digiIt = rcompd.first;
        digiIt != rcompd.second; ++digiIt) {
-    if (me1a && digiIt->getStrip() <= 16) {
+    unsigned int origStrip = digiIt->getStrip();
+    unsigned int maxStripsME1a = gangedME1a ? 16 : 48;
+    if (me1a && origStrip <= maxStripsME1a) {
       // Move ME1/A comparators from CFEB=0 to CFEB=4 if this has not
       // been done already.
-      CSCComparatorDigi digi_corr(digiIt->getStrip()+64,
+      CSCComparatorDigi digi_corr(origStrip+64,
 				  digiIt->getComparator(),
 				  digiIt->getTimeBinWord());
       digiV[id.layer()-1].push_back(digi_corr);
@@ -728,7 +747,7 @@ void CSCCathodeLCTProcessorLegacyUnganged::getDigis(const CSCComparatorDigiColle
 }
 
 void CSCCathodeLCTProcessorLegacyUnganged::readComparatorDigis(
-        std::vector<int> halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS]) {
+        std::vector<int> halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS]) {
   // Single-argument version for TMB07 (halfstrip-only) firmware.
   // Takes the comparator & time info and stuffs it into halfstrip vector.
   // Multiple hits on the same strip are allowed.
@@ -826,8 +845,8 @@ void CSCCathodeLCTProcessorLegacyUnganged::readComparatorDigis(
 }
 
 void CSCCathodeLCTProcessorLegacyUnganged::readComparatorDigis(
-  std::vector<int> halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
-  std::vector<int> distrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS]) {
+  std::vector<int> halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
+  std::vector<int> distrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS]) {
   // Two-argument version for pre-TMB07 (halfstrip and distrips) firmware.
   // Takes the comparator & time info and stuffs it into halfstrip and (and
   // possibly distrip) vector.
@@ -1054,7 +1073,7 @@ void CSCCathodeLCTProcessorLegacyUnganged::distripStagger(int stag_triad[CSCCons
 // class were discarded.
 // --------------------------------------------------------------------------
 // Idealized version for MC studies.
-std::vector<CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(const std::vector<int> strip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS], int stripType)
+std::vector<CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(const std::vector<int> strip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS], int stripType)
 {
   int j;
   int best_strip = 0;
@@ -1065,7 +1084,7 @@ std::vector<CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(const st
   const unsigned int ptrn_thrsh[2] = {nplanes_hit_pattern, nplanes_hit_pattern};
   int highest_quality = 0;
 
-  int keystrip_data[CSCConstants::NUM_HALF_STRIPS][7];
+  int keystrip_data[CSCConstants::NUM_HALF_STRIPS_7CFEBS][7];
   int final_lcts[max_lct_num];
 
   std::vector <CSCCLCTDigi> lctList;
@@ -1154,14 +1173,14 @@ std::vector<CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(const st
 
 
 // Idealized version for MC studies.
-bool CSCCathodeLCTProcessorLegacyUnganged::preTrigger(const std::vector<int> strip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
+bool CSCCathodeLCTProcessorLegacyUnganged::preTrigger(const std::vector<int> strip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
 					const int stripType, const int nStrips,
 					int& first_bx)
 {
   static const int hs_thresh = nplanes_hit_pretrig;
   static const int ds_thresh = nplanes_hit_pretrig;
 
-  unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS];
+  unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS];
   int i_layer, i_strip, this_layer, this_strip;
   int hits, layers_hit;
   bool hit_layer[CSCConstants::NUM_LAYERS];
@@ -1216,8 +1235,8 @@ bool CSCCathodeLCTProcessorLegacyUnganged::preTrigger(const std::vector<int> str
 
 
 // Idealized version for MC studies.
-void CSCCathodeLCTProcessorLegacyUnganged::getKeyStripData(const std::vector<int> strip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
-        int keystrip_data[CSCConstants::NUM_HALF_STRIPS][7],
+void CSCCathodeLCTProcessorLegacyUnganged::getKeyStripData(const std::vector<int> strip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
+        int keystrip_data[CSCConstants::NUM_HALF_STRIPS_7CFEBS][7],
         int nStrips, int first_bx, int& best_strip, int stripType) {
   int lct_pattern[NUM_PATTERN_STRIPS];
   int key_strip, this_layer, this_strip;
@@ -1350,8 +1369,8 @@ bool CSCCathodeLCTProcessorLegacyUnganged::hitIsGood(int hitTime, int BX) {
 // --------------------------------------------------------------------------
 // Pre-2007 version.
 std::vector <CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(
- const std::vector<int> halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
- const std::vector<int> distrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS]) {
+ const std::vector<int> halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
+ const std::vector<int> distrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS]) {
   std::vector <CSCCLCTDigi> lctList;
   int _bx[2] = {999, 999};
   int first_bx = 999;
@@ -1370,8 +1389,8 @@ std::vector <CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(
   int d_keyStrip[MAX_CFEBS];       // one key per CFEB
   unsigned int d_nhits[MAX_CFEBS]; // number of hits in envelope for each key
   int keystrip_data[2][7];    // 2 possible LCTs per CSC x 7 LCT quantities
-  unsigned int h_pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS]; // simulate digital one-shot
-  unsigned int d_pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS]; // simulate digital one-shot
+  unsigned int h_pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS]; // simulate digital one-shot
+  unsigned int d_pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS]; // simulate digital one-shot
   bool pre_trig[2] = {false, false};
 
   // All half-strip and di-strip pattern envelopes are evaluated
@@ -1398,7 +1417,7 @@ std::vector <CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(
     /*
     int max_bx = 4;
     for (int ilayer = 0; ilayer < CSCConstants::NUM_LAYERS; ilayer++) {
-      for (int istrip = 0; istrip < CSCConstants::NUM_HALF_STRIPS; istrip++) {
+      for (int istrip = 0; istrip < CSCConstants::NUM_HALF_STRIPS_7CFEBS; istrip++) {
 	for (int bx = 0; bx < max_bx; bx++) {
 	  if (((h_pulse[ilayer][istrip] >> bx) & 1) == 1) {
 	    h_pulse[ilayer][istrip] = 0;
@@ -1417,7 +1436,7 @@ std::vector <CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(
 
     // TMB latches LCTs drift_delay clocks after pretrigger.
     int latch_bx = first_bx + drift_delay;
-    latchLCTs(h_pulse, h_keyStrip, h_nhits, 1, CSCConstants::NUM_HALF_STRIPS,
+    latchLCTs(h_pulse, h_keyStrip, h_nhits, 1, CSCConstants::NUM_HALF_STRIPS_7CFEBS,
 	      latch_bx);
     latchLCTs(d_pulse, d_keyStrip, d_nhits, 0,   CSCConstants::NUM_DI_STRIPS,
 	      latch_bx);
@@ -1474,8 +1493,8 @@ std::vector <CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(
 
 // Pre-2007 version.
 bool CSCCathodeLCTProcessorLegacyUnganged::preTrigger(
-   const std::vector<int> strip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
-   unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
+   const std::vector<int> strip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
+   unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
 					const int stripType, const int nStrips,
 					const int start_bx, int& first_bx) {
   if (infoV > 1) LogTrace("CSCCathodeLCTProcessorLegacyUnganged")
@@ -1510,7 +1529,7 @@ bool CSCCathodeLCTProcessorLegacyUnganged::preTrigger(
 
 // Pre-2007 version.
 bool CSCCathodeLCTProcessorLegacyUnganged::preTrigLookUp(
-	   const unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
+	   const unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
 	   const int stripType, const int nStrips,
 	   const unsigned int bx_time) {
   static const int hs_thresh = nplanes_hit_pretrig;
@@ -1569,7 +1588,7 @@ bool CSCCathodeLCTProcessorLegacyUnganged::preTrigLookUp(
 
 // Pre-2007 version.
 void CSCCathodeLCTProcessorLegacyUnganged::latchLCTs(
-	   const unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
+	   const unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
 	   int keyStrip[MAX_CFEBS], unsigned int n_hits[MAX_CFEBS],
 	   const int stripType, const int nStrips, const int bx_time) {
 
@@ -1805,8 +1824,8 @@ void CSCCathodeLCTProcessorLegacyUnganged::priorityEncode(
 
 // Pre-2007 version.
 void CSCCathodeLCTProcessorLegacyUnganged::getKeyStripData(
-		const unsigned int h_pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
-		const unsigned int d_pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
+		const unsigned int h_pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
+		const unsigned int d_pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
 		int keystrip_data[2][7], const int first_bx) {
 
   int lct_pattern[NUM_PATTERN_STRIPS];
@@ -1843,7 +1862,7 @@ void CSCCathodeLCTProcessorLegacyUnganged::getKeyStripData(
       // This conditional statement prevents us from looking at strips
       // that don't exist along the chamber boundaries.
       if (keystrip_data[ilct][CLCT_STRIP_TYPE] == 1) {
-	if (this_strip >= 0 && this_strip < CSCConstants::NUM_HALF_STRIPS) {
+	if (this_strip >= 0 && this_strip < CSCConstants::NUM_HALF_STRIPS_7CFEBS) {
 	  // Now look at one-shots in bx where TMB latches the LCTs
 	  if (((h_pulse[this_layer][this_strip] >> latch_bx) & 1) == 1)
 	    lct_pattern[pattern_strip] = 1;
@@ -1958,7 +1977,7 @@ void CSCCathodeLCTProcessorLegacyUnganged::getPattern(unsigned int pattern_num,
 // Monte Carlo studies in March 2008 (CMSSW_2_0_0).
 // --------------------------------------------------------------------------
 // TMB-07 version.
-std::vector<CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(const std::vector<int> halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS]) {
+std::vector<CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(const std::vector<int> halfstrip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS]) {
   std::vector<CSCCLCTDigi> lctList;
 
   // Max. number of half-strips for this chamber.
@@ -1970,7 +1989,7 @@ std::vector<CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(const st
   enum {max_lcts = 2};
   // 2 possible LCTs per CSC x 7 LCT quantities
   int keystrip_data[max_lcts][7] = {{0}};
-  unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS];
+  unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS];
 
   // Fire half-strip one-shots for hit_persist bx's (6 bx's by default).
   pulseExtension(halfstrip, maxHalfStrips, pulse);
@@ -2016,7 +2035,7 @@ std::vector<CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(const st
       start_bx = first_bx + 1;
 
       // Quality for sorting.
-      int quality[CSCConstants::NUM_HALF_STRIPS];
+      int quality[CSCConstants::NUM_HALF_STRIPS_7CFEBS];
       int best_halfstrip[max_lcts], best_quality[max_lcts];
       for (int ilct = 0; ilct < max_lcts; ilct++) {
 	best_halfstrip[ilct] = -1;
@@ -2150,9 +2169,9 @@ std::vector<CSCCLCTDigi> CSCCathodeLCTProcessorLegacyUnganged::findLCTs(const st
 
 // Common to all versions.
 void CSCCathodeLCTProcessorLegacyUnganged::pulseExtension(
- const std::vector<int> time[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
+ const std::vector<int> time[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
  const int nStrips,
- unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS]) {
+ unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS]) {
 
   static const unsigned int bits_in_pulse = 8*sizeof(pulse[0][0]);
 
@@ -2197,7 +2216,7 @@ void CSCCathodeLCTProcessorLegacyUnganged::pulseExtension(
 
 // TMB-07 version.
 bool CSCCathodeLCTProcessorLegacyUnganged::preTrigger(
-  const unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
+  const unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
 					const int start_bx, int& first_bx) {
   if (infoV > 1) LogTrace("CSCCathodeLCTProcessorLegacyUnganged")
     << "....................PreTrigger...........................";
@@ -2248,7 +2267,7 @@ bool CSCCathodeLCTProcessorLegacyUnganged::preTrigger(
 
 // TMB-07 version.
 bool CSCCathodeLCTProcessorLegacyUnganged::ptnFinding(
-	   const unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS],
+	   const unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
 	   const int nStrips, const unsigned int bx_time) {
   if (bx_time >= fifo_tbins) return false;
 
@@ -2321,12 +2340,12 @@ bool CSCCathodeLCTProcessorLegacyUnganged::ptnFinding(
 // TMB-07 version.
 void CSCCathodeLCTProcessorLegacyUnganged::markBusyKeys(const int best_hstrip,
 					  const int best_patid,
-                                int quality[CSCConstants::NUM_HALF_STRIPS]) {
+                                int quality[CSCConstants::NUM_HALF_STRIPS_7CFEBS]) {
   int nspan = min_separation;
   int pspan = min_separation;
 
   for (int hstrip = best_hstrip-nspan; hstrip <= best_hstrip+pspan; hstrip++) {
-    if (hstrip >= 0 && hstrip < CSCConstants::NUM_HALF_STRIPS) {
+    if (hstrip >= 0 && hstrip < CSCConstants::NUM_HALF_STRIPS_7CFEBS) {
       quality[hstrip] = 0;
     }
   }
@@ -2365,7 +2384,7 @@ void CSCCathodeLCTProcessorLegacyUnganged::dumpConfigParams() const {
 }
 
 // Reasonably nice dump of digis on half-strips and di-strips.
-void CSCCathodeLCTProcessorLegacyUnganged::dumpDigis(const std::vector<int> strip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS], const int stripType, const int nStrips) const
+void CSCCathodeLCTProcessorLegacyUnganged::dumpDigis(const std::vector<int> strip[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS], const int stripType, const int nStrips) const
 {
   LogDebug("CSCCathodeLCTProcessorLegacyUnganged")
     << "ME" << ((theEndcap == 1) ? "+" : "-") << theStation << "/"
@@ -2641,7 +2660,7 @@ void CSCCathodeLCTProcessorLegacyUnganged::testPatterns() {
   //there are 16 strips in our uber-pattern, each of which can be on or off.
   // 2^16 = 65536
   for (int possibleHits = 0; possibleHits < 65536; possibleHits++) {
-    std::vector<int> stripsHit[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS];
+    std::vector<int> stripsHit[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS];
     //assign one bit to each strip in an array. I'll start centered around strip 10.
     stripsHit[0][ 9].push_back(( possibleHits &     1 ) != 0);     // 2^0
     stripsHit[0][10].push_back(( possibleHits &     2 ) != 0);     // 2^1
@@ -2732,7 +2751,7 @@ void CSCCathodeLCTProcessorLegacyUnganged::testPatterns() {
 }
 
 int CSCCathodeLCTProcessorLegacyUnganged::findNumLayersHit(std::vector<int> 
-          stripsHit[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS]) {
+          stripsHit[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS]) {
   int number = 0;
   for (int layer = 0; layer < CSCConstants::NUM_LAYERS; layer++) {
     if ((!stripsHit[layer][ 9].empty()) || 
