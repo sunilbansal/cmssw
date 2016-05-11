@@ -12,22 +12,22 @@ csclabel = {
         0 : "All" 
         },
     1 : {
-        1 : "ME1/b",
-        4 : "ME1/a",
-        3 : "ME1/2",
-        2 : "ME1/3"
+        1 : "ME1b",
+        4 : "ME1a",
+        3 : "ME12",
+        2 : "ME13"
         },
     2 : {
-        1 : "ME2/1",
-        2 : "ME2/2"
+        1 : "ME21",
+        2 : "ME22"
         },
     3 : {
-        1 : "ME3/1",
-        2 : "ME3/2"
+        1 : "ME31",
+        2 : "ME32"
         },
     4 : {
-        1 : "ME4/1",
-        2 : "ME4/2"
+        1 : "ME41",
+        2 : "ME42"
         },
     }
 
@@ -47,41 +47,24 @@ file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v3.r
 
 tree = file.Get("Events")
 
-
-"""
-Variables:
-  uint16_t trknmb;
-  uint16_t valid;
-  uint16_t quality;
-  uint16_t keywire;
-  uint16_t strip;
-  uint16_t pattern;
-  uint16_t bend;
-  uint16_t bx;
-  uint16_t mpclink;
-  uint16_t bx0; 
-  uint16_t syncErr;
-  uint16_t cscID;
-"""
-
 csccorrelatedlctdigi = {
     0 : ["trknmb", "trknmb",10,0,10],
-    1 : ["valid", "valid",10,0,10],
-    2 : ["quality", "quality",10,0,10],
+    1 : ["valid", "valid",20,0,20],
+    2 : ["quality", "quality",20,0,20],
     3 : ["keywire", "keywire",150,0,150],
-    4 : ["strip", "strip",150,0,150],
+    4 : ["strip", "strip",224,0,224],
     5 : ["pattern", "pattern",10,0,10],
     6 : ["bend", "bend",10,0,10],
-    7 : ["bx", "bx",22,-6,16],
-    8 : ["mpclink", "mpclink",10,0,10],
-    9 : ["bx0", "bx0",22,-6,16],
+    7 : ["bx", "bx",10,0,10],
+    8 : ["mpclink", "mpclink",100,0,100],
+    9 : ["bx0", "bx0",10,0,10],
     10 : ["syncErr", "syncErr",10,0,10],
-    11 : ["cscID", "cscID",10,0,10],
+    11 : ["cscID", "cscID",15,0,15],
     }
 
 alctdigi = {
     0 : ["valid_", "Valid",10,0,10],
-    1 : ["quality_", "quality",10,0,10],
+    1 : ["quality_", "quality",20,0,20],
     2 : ["accel_", "accelerator",10,0,10],
     3 : ["patternb_", "patternb",10,0,10],
     4 : ["keywire_", "keywire",150,0,150],
@@ -92,14 +75,14 @@ alctdigi = {
 
 clctdigi = {
     0 : ["valid_", "Valid",10,0,10],
-    1 : ["quality_", "quality",10,0,10],
-    2 : ["pattern_", "pattern",10,0,10],
+    1 : ["quality_", "quality",20,0,20],
+    2 : ["pattern_", "pattern",20,0,20],
     3 : ["striptype_", "striptype",150,0,150],
-    4 : ["bend", "bend",10,0,10],
+    4 : ["bend_", "bend",10,0,10],
     5 : ["cfeb_", "cfeb",150,0,150],
     6 : ["strip_", "strip",150,0,150],
     7 : ["bx_", "bx",10,0,10],
-    8 : ["trknmb", "trknmb",10,0,10],
+    8 : ["trknmb_", "trknmb",10,0,10],
     10 : ["fullbx_", "fullbx",10,0,10],
     }
 
@@ -110,13 +93,135 @@ def compareLCTs(station, ring, variable):
     varnbin = csccorrelatedlctdigi[variable][2]
     varminbin = csccorrelatedlctdigi[variable][3]
     varmaxbin = csccorrelatedlctdigi[variable][4]
-    
+
+    extraCut = ""
+
+    ## case ME1/a
+    if station==1 and ring==1:
+        extraCut = "strip <122"
+    if station==1 and ring==4:
+        ring == 1
+        extraCut = "strip >=122"
+    else:
+        extraCut = "strip >=0"
+
     c = TCanvas("c","c",800,800)
     c.cd()
 
     simCscTriggerPrimitiveDigis = TH1D("simCscTriggerPrimitiveDigis","CSCCorrelatedLCTDigi " + varstr + " " + 
                                        csclabel[station][ring] + "; " + varstr + "; Entries",varnbin,varminbin,varmaxbin)
     collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI"
+    if station==0 and ring==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis")
+    else:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis",
+                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
+                  + " && " + collection + ".obj.data_.second." + extraCut)
+    
+    simCscTriggerPrimitiveDigis.SetLineColor(kRed)
+    simCscTriggerPrimitiveDigis.Draw()
+    gPad.Update();
+    
+    simCscTriggerPrimitiveDigis_st = simCscTriggerPrimitiveDigis.FindObject("stats");
+    X1 = simCscTriggerPrimitiveDigis_st.GetX1NDC();
+    Y1 = simCscTriggerPrimitiveDigis_st.GetY1NDC();
+    X2 = simCscTriggerPrimitiveDigis_st.GetX2NDC();
+    Y2 = simCscTriggerPrimitiveDigis_st.GetY2NDC();
+    simCscTriggerPrimitiveDigis_st.SetY1NDC(0.8);
+    simCscTriggerPrimitiveDigis_st.SetY2NDC(1.);
+    simCscTriggerPrimitiveDigis_st.SetTextColor(kRed);
+
+    simCscTriggerPrimitiveDigis_MPCSORTED = TH1D("simCscTriggerPrimitiveDigis_MPCSORTED","SimCscTriggerPrimitiveDigis_MPCSORTED",
+                                                 varnbin,varminbin,varmaxbin)
+    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis_MPCSORTED_RAW2DIGI"
+    if station==0 and ring==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis_MPCSORTED")
+    else:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis_MPCSORTED",
+                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
+                  + " && " + collection + ".obj.data_.second." + extraCut)
+    simCscTriggerPrimitiveDigis_MPCSORTED.SetLineColor(kBlue)
+    simCscTriggerPrimitiveDigis_MPCSORTED.Draw()
+    gPad.Update();
+    
+    simCscTriggerPrimitiveDigis_MPCSORTED_st = simCscTriggerPrimitiveDigis_MPCSORTED.FindObject("stats");
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetX1NDC(X1);
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetX2NDC(X2);
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY1NDC(Y1-(Y2-Y1));
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY2NDC(Y1);
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY1NDC(0.6);
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY2NDC(0.8);
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetTextColor(kBlue);
+ 
+    csctfDigis = TH1D("csctfDigis","csctfDigis",varnbin,varminbin,varmaxbin)
+    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_csctfDigis__RAW2DIGI"
+    if station==0 and ring==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>csctfDigis")
+    else:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>csctfDigis",
+                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
+                  + " && " + collection + ".obj.data_.second." + extraCut)
+    csctfDigis.SetLineColor(kGreen+2)
+    csctfDigis.Draw()
+    gPad.Update();
+
+    csctfDigis_st = csctfDigis.FindObject("stats");
+    csctfDigis_st.SetX1NDC(X1);
+    csctfDigis_st.SetX2NDC(X2);
+    csctfDigis_st.SetY1NDC(0.4);
+    csctfDigis_st.SetY2NDC(0.6);
+    csctfDigis_st.SetTextColor(kGreen+2);
+    Y5 = csctfDigis_st.GetY1NDC();
+    Y6 = csctfDigis_st.GetY2NDC();
+
+    muonCSCDigis = TH1D("muonCSCDigis","muonCSCDigis",varnbin,varminbin,varmaxbin)
+    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCCorrelatedLCTDigi_RAW2DIGI"
+    if station==0 and ring==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis")
+    else:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis",
+                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
+                  + " && " + collection + ".obj.data_.second." + extraCut)
+    muonCSCDigis.SetLineColor(kBlack)
+    muonCSCDigis.Draw()
+    gPad.Update();
+
+    muonCSCDigis_st = muonCSCDigis.FindObject("stats");
+    muonCSCDigis_st.SetX1NDC(X1);
+    muonCSCDigis_st.SetX2NDC(X2);
+    muonCSCDigis_st.SetY1NDC(Y5-(Y6-Y5));
+    muonCSCDigis_st.SetY2NDC(Y5);
+    muonCSCDigis_st.SetY1NDC(0.2);
+    muonCSCDigis_st.SetY2NDC(0.4);
+    muonCSCDigis_st.SetTextColor(kBlack);
+
+    simCscTriggerPrimitiveDigis.Draw();
+    simCscTriggerPrimitiveDigis_MPCSORTED.Draw("sames");
+    csctfDigis.Draw("sames");
+    muonCSCDigis.Draw("sames");
+    
+    simCscTriggerPrimitiveDigis_st.Draw("same");
+    simCscTriggerPrimitiveDigis_MPCSORTED.Draw("same");
+    csctfDigis_st.Draw("same");
+    muonCSCDigis_st.Draw("same");
+    
+    c.SaveAs("mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3/comparison_lct_" + 
+             varstr + "_2016B_postFixes_" + csclabel[station][ring] + ".png")
+
+def compareALCTs(station, ring, variable):
+
+    var = cscalctdigi[variable][0]
+    varstr = cscalctdigi[variable][1]
+    varnbin = cscalctdigi[variable][2]
+    varminbin = cscalctdigi[variable][3]
+    varmaxbin = cscalctdigi[variable][4]
+
+    c = TCanvas("c","c",800,800)
+    c.cd()
+
+    simCscTriggerPrimitiveDigis = TH1D("simCscTriggerPrimitiveDigis","CSCALCTDigi " + varstr + " " + 
+                                       csclabel[station][ring] + "; " + varstr + "; Entries",varnbin,varminbin,varmaxbin)
+    collection = "CSCDetIdCSCALCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI"
     if station==0 and ring==0:
         tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis")
     else:
@@ -134,56 +239,11 @@ def compareLCTs(station, ring, variable):
     Y2 = simCscTriggerPrimitiveDigis_st.GetY2NDC();
     simCscTriggerPrimitiveDigis_st.SetY1NDC(0.8);
     simCscTriggerPrimitiveDigis_st.SetY2NDC(1.);
-    
     simCscTriggerPrimitiveDigis_st.SetTextColor(kRed);
-
-    simCscTriggerPrimitiveDigis_MPCSORTED = TH1D("simCscTriggerPrimitiveDigis_MPCSORTED","SimCscTriggerPrimitiveDigis_MPCSORTED",
-                                                 varnbin,varminbin,varmaxbin)
-    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis_MPCSORTED_RAW2DIGI"
-    if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis_MPCSORTED")
-    else:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis_MPCSORTED",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
-    simCscTriggerPrimitiveDigis_MPCSORTED.SetLineColor(kBlue)
-    simCscTriggerPrimitiveDigis_MPCSORTED.Draw()
-    gPad.Update();
-    
-    simCscTriggerPrimitiveDigis_MPCSORTED_st = simCscTriggerPrimitiveDigis_MPCSORTED.FindObject("stats");
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetX1NDC(X1);
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetX2NDC(X2);
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY1NDC(Y1-(Y2-Y1));
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY2NDC(Y1);
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY1NDC(0.6);
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY2NDC(0.8);
-    
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetTextColor(kBlue);
- 
-    csctfDigis = TH1D("csctfDigis","csctfDigis",varnbin,varminbin,varmaxbin)
-    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_csctfDigis__RAW2DIGI"
-    if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>csctfDigis")
-    else:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>csctfDigis",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
-    csctfDigis.SetLineColor(kGreen+2)
-    csctfDigis.Draw()
-    gPad.Update();
-
-    csctfDigis_st = csctfDigis.FindObject("stats");
-    csctfDigis_st.SetX1NDC(X1);
-    csctfDigis_st.SetX2NDC(X2);
-    csctfDigis_st.SetY1NDC(0.4);
-    csctfDigis_st.SetY2NDC(0.6);
-    Y5 = csctfDigis_st.GetY1NDC();
-    Y6 = csctfDigis_st.GetY2NDC();
-    
-    csctfDigis_st.SetTextColor(kGreen+2);
-    #csctfDigis_st.SetTextSize(0.8);
 
 
     muonCSCDigis = TH1D("muonCSCDigis","muonCSCDigis",varnbin,varminbin,varmaxbin)
-    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCCorrelatedLCTDigi_RAW2DIGI"
+    collection = "CSCDetIdCSCALCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCALCTDigi_RAW2DIGI"
     if station==0 and ring==0:
         tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis")
     else:
@@ -196,74 +256,53 @@ def compareLCTs(station, ring, variable):
     muonCSCDigis_st = muonCSCDigis.FindObject("stats");
     muonCSCDigis_st.SetX1NDC(X1);
     muonCSCDigis_st.SetX2NDC(X2);
-    muonCSCDigis_st.SetY1NDC(Y5-(Y6-Y5));
-    muonCSCDigis_st.SetY2NDC(Y5);
+    muonCSCDigis_st.SetY1NDC(Y1-(Y2-Y1));
+    muonCSCDigis_st.SetY2NDC(Y1);
     muonCSCDigis_st.SetY1NDC(0.2);
     muonCSCDigis_st.SetY2NDC(0.4);
-    
     muonCSCDigis_st.SetTextColor(kBlack);
-    #muonCSCDigis_st.SetTextSize(0.8);
-
 
     simCscTriggerPrimitiveDigis.Draw();
-    simCscTriggerPrimitiveDigis_MPCSORTED.Draw("sames");
-    csctfDigis.Draw("sames");
     muonCSCDigis.Draw("sames");
     
     simCscTriggerPrimitiveDigis_st.Draw("same");
-    simCscTriggerPrimitiveDigis_MPCSORTED.Draw("same");
-    csctfDigis_st.Draw("same");
     muonCSCDigis_st.Draw("same");
     
-    """
-    legend=TLegend(0.6,0.6,0.8,0.8)
-    legend.SetTextSize(0.5)
-    legend.AddEntry(g, "Old", "l")
-    legend.AddEntry(h, "SimCscTriggerPrimitiveDigis_MPCSORTED", "l")
-    legend.Draw("same")
-    """
+    c.SaveAs("mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3/comparison_alct_" + 
+             varstr + "_2016B_postFixes_" + csclabel[station][ring] + ".png")
 
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18.png")
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18.C")
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_bxshift2.png")
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_bxshift2.C")
-    #c.SaveAs("comparison_lct_bx_2016B_original.png")
-    #c.SaveAs("comparison_lct_bx_2016B_original.C")
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v2_clctpretrig2_clcthitpersist6.png")
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v2_clctpretrig2_clcthitpersist6.C")
-    c.SaveAs("mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3/comparison_lct_" + varstr + "_2016B_postFixes_st%d_ri%d.png"%(station, ring))
 
-for i in range(0,12):
-    compareLCTs(0,0,i)
+def compareCLCTs(station, ring, variable):
 
-exit(1)
+    var = cscclctdigi[variable][0]
+    varstr = cscclctdigi[variable][1]
+    varnbin = cscclctdigi[variable][2]
+    varminbin = cscclctdigi[variable][3]
+    varmaxbin = cscclctdigi[variable][4]
 
-compareLCTs(1,1)
-compareLCTs(1,4)
-compareLCTs(1,2)
-compareLCTs(1,3)
+    extraCut = ""
 
-compareLCTs(2,1)
-compareLCTs(2,2)
-
-compareLCTs(3,1)
-compareLCTs(3,2)
-
-compareLCTs(4,1)
-compareLCTs(4,2)
-
-def compareLCTs(station, ring):
+    ## case ME1/a
+    if station==1 and ring==1:
+        extraCut = "strip <122"
+    if station==1 and ring==4:
+        ring == 1
+        extraCut = "strip >=122"
+    else:
+        extraCut = "strip >=0"
 
     c = TCanvas("c","c",800,800)
     c.cd()
 
-    simCscTriggerPrimitiveDigis = TH1D("simCscTriggerPrimitiveDigis","CSCCorrelatedLCTDigi BX " + csclabel[station][ring] + "; BX; Entries",22,-6,16)
-    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI"
+    simCscTriggerPrimitiveDigis = TH1D("simCscTriggerPrimitiveDigis","CSCCLCTDigi " + varstr + " " + 
+                                       csclabel[station][ring] + "; " + varstr + "; Entries",varnbin,varminbin,varmaxbin)
+    collection = "CSCDetIdCSCCLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI"
     if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second.bx>>simCscTriggerPrimitiveDigis")
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis")
     else:
-        tree.Draw(collection + ".obj.data_.second.bx>>simCscTriggerPrimitiveDigis",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis",
+                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
+                  + " && " + collection + ".obj.data_.second." + extraCut)
     
     simCscTriggerPrimitiveDigis.SetLineColor(kRed)
     simCscTriggerPrimitiveDigis.Draw()
@@ -276,64 +315,17 @@ def compareLCTs(station, ring):
     Y2 = simCscTriggerPrimitiveDigis_st.GetY2NDC();
     simCscTriggerPrimitiveDigis_st.SetY1NDC(0.8);
     simCscTriggerPrimitiveDigis_st.SetY2NDC(1.);
-    
     simCscTriggerPrimitiveDigis_st.SetTextColor(kRed);
-    #simCscTriggerPrimitiveDigis_st.SetTextSize(0.8);
 
-    simCscTriggerPrimitiveDigis_MPCSORTED = TH1D("simCscTriggerPrimitiveDigis_MPCSORTED","SimCscTriggerPrimitiveDigis_MPCSORTED",22,-6,16)
-    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis_MPCSORTED_RAW2DIGI"
+
+    muonCSCDigis = TH1D("muonCSCDigis","muonCSCDigis",varnbin,varminbin,varmaxbin)
+    collection = "CSCDetIdCSCCLCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCCLCTDigi_RAW2DIGI"
     if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second.bx>>simCscTriggerPrimitiveDigis_MPCSORTED")
+        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis")
     else:
-        tree.Draw(collection + ".obj.data_.second.bx>>simCscTriggerPrimitiveDigis_MPCSORTED",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
-    simCscTriggerPrimitiveDigis_MPCSORTED.SetLineColor(kBlue)
-    simCscTriggerPrimitiveDigis_MPCSORTED.Draw()
-    gPad.Update();
-    
-    simCscTriggerPrimitiveDigis_MPCSORTED_st = simCscTriggerPrimitiveDigis_MPCSORTED.FindObject("stats");
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetX1NDC(X1);
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetX2NDC(X2);
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY1NDC(Y1-(Y2-Y1));
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY2NDC(Y1);
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY1NDC(0.6);
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY2NDC(0.8);
-    
-    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetTextColor(kBlue);
-    #simCscTriggerPrimitiveDigis_MPCSORTED_st.SetTextSize(0.8);
- 
-    csctfDigis = TH1D("csctfDigis","csctfDigis",22,-6,16)
-    #tree.Draw("CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_csctfDigis__RAW2DIGI.obj.data_.second.bx>>csctfDigis")
-    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_csctfDigis__RAW2DIGI"
-    if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second.bx>>csctfDigis")
-    else:
-        tree.Draw(collection + ".obj.data_.second.bx>>csctfDigis",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
-    csctfDigis.SetLineColor(kGreen+2)
-    csctfDigis.Draw()
-    gPad.Update();
-
-    csctfDigis_st = csctfDigis.FindObject("stats");
-    csctfDigis_st.SetX1NDC(X1);
-    csctfDigis_st.SetX2NDC(X2);
-    csctfDigis_st.SetY1NDC(0.4);
-    csctfDigis_st.SetY2NDC(0.6);
-    Y5 = csctfDigis_st.GetY1NDC();
-    Y6 = csctfDigis_st.GetY2NDC();
-    
-    csctfDigis_st.SetTextColor(kGreen+2);
-    #csctfDigis_st.SetTextSize(0.8);
-
-
-    muonCSCDigis = TH1D("muonCSCDigis","muonCSCDigis",22,-6,16)
-    #tree.Draw("CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCCorrelatedLCTDigi_RAW2DIGI.obj.data_.second.bx>>muonCSCDigis")
-    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCCorrelatedLCTDigi_RAW2DIGI"
-    if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second.bx>>muonCSCDigis")
-    else:
-        tree.Draw(collection + ".obj.data_.second.bx>>muonCSCDigis",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
+        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis",
+                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
+                  + " && " + collection + ".obj.data_.second." + extraCut)
     muonCSCDigis.SetLineColor(kBlack)
     muonCSCDigis.Draw()
     gPad.Update();
@@ -341,194 +333,68 @@ def compareLCTs(station, ring):
     muonCSCDigis_st = muonCSCDigis.FindObject("stats");
     muonCSCDigis_st.SetX1NDC(X1);
     muonCSCDigis_st.SetX2NDC(X2);
-    muonCSCDigis_st.SetY1NDC(Y5-(Y6-Y5));
-    muonCSCDigis_st.SetY2NDC(Y5);
+    muonCSCDigis_st.SetY1NDC(Y1-(Y2-Y1));
+    muonCSCDigis_st.SetY2NDC(Y2);
     muonCSCDigis_st.SetY1NDC(0.2);
     muonCSCDigis_st.SetY2NDC(0.4);
-    
     muonCSCDigis_st.SetTextColor(kBlack);
-    #muonCSCDigis_st.SetTextSize(0.8);
-
-
-    simCscTriggerPrimitiveDigis.Draw();
-    simCscTriggerPrimitiveDigis_MPCSORTED.Draw("sames");
-    csctfDigis.Draw("sames");
-    muonCSCDigis.Draw("sames");
-    
-    simCscTriggerPrimitiveDigis_st.Draw("same");
-    simCscTriggerPrimitiveDigis_MPCSORTED.Draw("same");
-    csctfDigis_st.Draw("same");
-    muonCSCDigis_st.Draw("same");
-    
-    """
-    legend=TLegend(0.6,0.6,0.8,0.8)
-    legend.SetTextSize(0.5)
-    legend.AddEntry(g, "Old", "l")
-    legend.AddEntry(h, "SimCscTriggerPrimitiveDigis_MPCSORTED", "l")
-    legend.Draw("same")
-    """
-
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18.png")
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18.C")
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_bxshift2.png")
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_bxshift2.C")
-    #c.SaveAs("comparison_lct_bx_2016B_original.png")
-    #c.SaveAs("comparison_lct_bx_2016B_original.C")
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v2_clctpretrig2_clcthitpersist6.png")
-    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v2_clctpretrig2_clcthitpersist6.C")
-    c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3_st%d_ri%d_noBXShift.png"%(station, ring))
-    c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3_st%d_ri%d_noBXShift.C"%(station, ring))
-    
-
-compareLCTs(0,0)
-compareLCTs(1,1)
-compareLCTs(1,4)
-compareLCTs(1,2)
-compareLCTs(1,3)
-
-compareLCTs(2,1)
-compareLCTs(2,2)
-
-compareLCTs(3,1)
-compareLCTs(3,2)
-
-compareLCTs(4,1)
-compareLCTs(4,2)
-
-
-def compareALCTs(station, ring):
-
-    ## ALCT comparison
-    c = TCanvas("c","c",800,800)
-    c.cd()
-    #histo=TH1F("histo","", 100, -5,5)
-    #tree.Draw("elec_eta>>histo", "")
-    
-    simCscTriggerPrimitiveDigis = TH1D("simCscTriggerPrimitiveDigis","CSCALCTDigi BX " + csclabel[station][ring] + "; BX; Entries",22,-6,16)
-    collection = "CSCDetIdCSCALCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI"
-    tree.Draw(collection + ".obj.data_.second.bx_-5>>simCscTriggerPrimitiveDigis",
-              collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
-    simCscTriggerPrimitiveDigis.SetLineColor(kRed)
-    simCscTriggerPrimitiveDigis.Draw()
-    gPad.Update();
-
-    simCscTriggerPrimitiveDigis_st = simCscTriggerPrimitiveDigis.FindObject("stats");
-    X1 = simCscTriggerPrimitiveDigis_st.GetX1NDC();
-    Y1 = simCscTriggerPrimitiveDigis_st.GetY1NDC();
-    X2 = simCscTriggerPrimitiveDigis_st.GetX2NDC();
-    Y2 = simCscTriggerPrimitiveDigis_st.GetY2NDC();
-
-    simCscTriggerPrimitiveDigis_st.SetTextColor(kRed);
-    #simCscTriggerPrimitiveDigis_st.SetTextSize(0.8);
-
-    muonCSCDigis = TH1D("muonCSCDigis","muonCSCDigis",22,-6,16)
-    collection = "CSCDetIdCSCALCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCALCTDigi_RAW2DIGI"
-    tree.Draw(collection + ".obj.data_.second.bx_>>muonCSCDigis",
-              collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
-    #tree.Draw("CSCDetIdCSCALCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCALCTDigi_RAW2DIGI.obj.data_.second.bx_>>muonCSCDigis")
-           
-    muonCSCDigis.SetLineColor(kBlack)
-    muonCSCDigis.Draw()
-    gPad.Update();
-    
-    muonCSCDigis_st = muonCSCDigis.FindObject("stats");
-    muonCSCDigis_st.SetX1NDC(X1);
-    muonCSCDigis_st.SetX2NDC(X2);
-    muonCSCDigis_st.SetY1NDC(Y1-(Y2-Y1));
-    muonCSCDigis_st.SetY2NDC(Y1);
-    
-    muonCSCDigis_st.SetTextColor(kBlack);
-    #muonCSCDigis_st.SetTextSize(0.8);
-    
 
     simCscTriggerPrimitiveDigis.Draw();
     muonCSCDigis.Draw("sames");
     
     simCscTriggerPrimitiveDigis_st.Draw("same");
     muonCSCDigis_st.Draw("same");
-
-    c.SaveAs("comparison_alct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3_st%d_ri%d.png"%(station, ring))
-    c.SaveAs("comparison_alct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3_st%d_ri%d.C"%(station, ring))
-
-compareALCTs(1,1)
-compareALCTs(1,4)
-compareALCTs(1,2)
-compareALCTs(1,3)
-
-compareALCTs(2,1)
-compareALCTs(2,2)
-
-compareALCTs(3,1)
-compareALCTs(3,2)
-
-compareALCTs(4,1)
-compareALCTs(4,2)
-
-
-def compareCLCTs(station, ring):
-
-    ## CLCT comparison
-    c = TCanvas("c","c",800,800)
-    c.cd()
-    #histo=TH1F("histo","", 100, -5,5)
-    #tree.Draw("elec_eta>>histo", "")
     
-    simCscTriggerPrimitiveDigis = TH1D("simCscTriggerPrimitiveDigis","CSCCLCTDigi BX " + csclabel[station][ring] + "; BX; Entries",22,-6,16)
-    collection = "CSCDetIdCSCCLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI"
-    tree.Draw(collection + ".obj.data_.second.bx_>>simCscTriggerPrimitiveDigis",
-              collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
-    simCscTriggerPrimitiveDigis.SetLineColor(kRed)
-    simCscTriggerPrimitiveDigis.Draw()
-    gPad.Update();
+    c.SaveAs("mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3/comparison_clct_" + 
+             varstr + "_2016B_postFixes_" + csclabel[station][ring] + ".png")
 
-    simCscTriggerPrimitiveDigis_st = simCscTriggerPrimitiveDigis.FindObject("stats");
-    X1 = simCscTriggerPrimitiveDigis_st.GetX1NDC();
-    Y1 = simCscTriggerPrimitiveDigis_st.GetY1NDC();
-    X2 = simCscTriggerPrimitiveDigis_st.GetX2NDC();
-    Y2 = simCscTriggerPrimitiveDigis_st.GetY2NDC();
 
-    simCscTriggerPrimitiveDigis_st.SetTextColor(kRed);
-    #simCscTriggerPrimitiveDigis_st.SetTextSize(0.8);
+for i in range(0,12):
+    compareLCTs(0,0,i)
+    compareLCTs(1,1,i)
+    compareLCTs(1,2,i)
+    compareLCTs(1,3,i)
+    compareLCTs(1,4,i)
 
-    muonCSCDigis = TH1D("muonCSCDigis","muonCSCDigis",22,-6,16)
-    collection = "CSCDetIdCSCCLCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCCLCTDigi_RAW2DIGI"
-    tree.Draw(collection + ".obj.data_.second.bx_>>muonCSCDigis",
-              collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
-    #tree.Draw("CSCDetIdCSCCLCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCCLCTDigi_RAW2DIGI.obj.data_.second.bx_>>muonCSCDigis")
-           
-    muonCSCDigis.SetLineColor(kBlack)
-    muonCSCDigis.Draw()
-    gPad.Update();
-    gPad.SetLogy(1)
-    muonCSCDigis_st = muonCSCDigis.FindObject("stats");
-    muonCSCDigis_st.SetX1NDC(X1);
-    muonCSCDigis_st.SetX2NDC(X2);
-    muonCSCDigis_st.SetY1NDC(Y1-(Y2-Y1));
-    muonCSCDigis_st.SetY2NDC(Y1);
+    compareLCTs(2,1,i)
+    compareLCTs(2,2,i)
     
-    muonCSCDigis_st.SetTextColor(kBlack);
-    #muonCSCDigis_st.SetTextSize(0.8);
+    compareLCTs(3,1,i)
+    compareLCTs(3,2,i)
     
+    compareLCTs(4,1,i)
+    compareLCTs(4,2,i)
 
-    simCscTriggerPrimitiveDigis.Draw();
-    muonCSCDigis.Draw("sames");
+
+for i in range(0,8):
+    compareALCTs(0,0,i)
+    compareALCTs(1,1,i)
+    compareALCTs(1,2,i)
+    compareALCTs(1,3,i)
+    compareALCTs(1,4,i)
+
+    compareALCTs(2,1,i)
+    compareALCTs(2,2,i)
     
-    simCscTriggerPrimitiveDigis_st.Draw("same");
-    muonCSCDigis_st.Draw("same");
+    compareALCTs(3,1,i)
+    compareALCTs(3,2,i)
+    
+    compareALCTs(4,1,i)
+    compareALCTs(4,2,i)
 
-    c.SaveAs("comparison_clct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3_st%d_ri%d.png"%(station, ring))
-    c.SaveAs("comparison_clct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3_st%d_ri%d.C"%(station, ring))
+for i in range(0,11):
+    compareCLCTs(0,0,i)
+    compareCLCTs(1,1,i)
+    compareCLCTs(1,2,i)
+    compareCLCTs(1,3,i)
+    compareCLCTs(1,4,i)
 
-compareCLCTs(1,1)
-compareCLCTs(1,4)
-compareCLCTs(1,2)
-compareCLCTs(1,3)
+    compareCLCTs(2,1,i)
+    compareCLCTs(2,2,i)
+    
+    compareCLCTs(3,1,i)
+    compareCLCTs(3,2,i)
+    
+    compareCLCTs(4,1,i)
+    compareCLCTs(4,2,i)
 
-compareCLCTs(2,1)
-compareCLCTs(2,2)
-
-compareCLCTs(3,1)
-compareCLCTs(3,2)
-
-compareCLCTs(4,1)
-compareCLCTs(4,2)
