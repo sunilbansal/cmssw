@@ -47,12 +47,215 @@ file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v3.r
 
 tree = file.Get("Events")
 
+
+"""
+Variables:
+  uint16_t trknmb;
+  uint16_t valid;
+  uint16_t quality;
+  uint16_t keywire;
+  uint16_t strip;
+  uint16_t pattern;
+  uint16_t bend;
+  uint16_t bx;
+  uint16_t mpclink;
+  uint16_t bx0; 
+  uint16_t syncErr;
+  uint16_t cscID;
+"""
+
+csccorrelatedlctdigi = {
+    0 : ["trknmb", "trknmb",10,0,10],
+    1 : ["valid", "valid",10,0,10],
+    2 : ["quality", "quality",10,0,10],
+    3 : ["keywire", "keywire",150,0,150],
+    4 : ["strip", "strip",150,0,150],
+    5 : ["pattern", "pattern",10,0,10],
+    6 : ["bend", "bend",10,0,10],
+    7 : ["bx", "bx",22,-6,16],
+    8 : ["mpclink", "mpclink",10,0,10],
+    9 : ["bx0", "bx0",22,-6,16],
+    10 : ["syncErr", "syncErr",10,0,10],
+    11 : ["cscID", "cscID",10,0,10],
+    }
+
+alctdigi = {
+    0 : ["valid_", "Valid",10,0,10],
+    1 : ["quality_", "quality",10,0,10],
+    2 : ["accel_", "accelerator",10,0,10],
+    3 : ["patternb_", "patternb",10,0,10],
+    4 : ["keywire_", "keywire",150,0,150],
+    5 : ["bx_", "bx",10,0,10],
+    6 : ["trknmb_", "Track Number",10,0,10],
+    7 : ["fullbx_", "fullbx",10,0,10],
+}
+
+clctdigi = {
+    0 : ["valid_", "Valid",10,0,10],
+    1 : ["quality_", "quality",10,0,10],
+    2 : ["pattern_", "pattern",10,0,10],
+    3 : ["striptype_", "striptype",150,0,150],
+    4 : ["bend", "bend",10,0,10],
+    5 : ["cfeb_", "cfeb",150,0,150],
+    6 : ["strip_", "strip",150,0,150],
+    7 : ["bx_", "bx",10,0,10],
+    8 : ["trknmb", "trknmb",10,0,10],
+    10 : ["fullbx_", "fullbx",10,0,10],
+    }
+
+def compareLCTs(station, ring, variable):
+
+    var = csccorrelatedlctdigi[variable][0]
+    varstr = csccorrelatedlctdigi[variable][1]
+    varnbin = csccorrelatedlctdigi[variable][2]
+    varminbin = csccorrelatedlctdigi[variable][3]
+    varmaxbin = csccorrelatedlctdigi[variable][4]
+    
+    c = TCanvas("c","c",800,800)
+    c.cd()
+
+    simCscTriggerPrimitiveDigis = TH1D("simCscTriggerPrimitiveDigis","CSCCorrelatedLCTDigi " + varstr + " " + 
+                                       csclabel[station][ring] + "; " + varstr + "; Entries",varnbin,varminbin,varmaxbin)
+    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI"
+    if station==0 and ring==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis")
+    else:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis",
+                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
+    
+    simCscTriggerPrimitiveDigis.SetLineColor(kRed)
+    simCscTriggerPrimitiveDigis.Draw()
+    gPad.Update();
+    
+    simCscTriggerPrimitiveDigis_st = simCscTriggerPrimitiveDigis.FindObject("stats");
+    X1 = simCscTriggerPrimitiveDigis_st.GetX1NDC();
+    Y1 = simCscTriggerPrimitiveDigis_st.GetY1NDC();
+    X2 = simCscTriggerPrimitiveDigis_st.GetX2NDC();
+    Y2 = simCscTriggerPrimitiveDigis_st.GetY2NDC();
+    simCscTriggerPrimitiveDigis_st.SetY1NDC(0.8);
+    simCscTriggerPrimitiveDigis_st.SetY2NDC(1.);
+    
+    simCscTriggerPrimitiveDigis_st.SetTextColor(kRed);
+
+    simCscTriggerPrimitiveDigis_MPCSORTED = TH1D("simCscTriggerPrimitiveDigis_MPCSORTED","SimCscTriggerPrimitiveDigis_MPCSORTED",
+                                                 varnbin,varminbin,varmaxbin)
+    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis_MPCSORTED_RAW2DIGI"
+    if station==0 and ring==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis_MPCSORTED")
+    else:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis_MPCSORTED",
+                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
+    simCscTriggerPrimitiveDigis_MPCSORTED.SetLineColor(kBlue)
+    simCscTriggerPrimitiveDigis_MPCSORTED.Draw()
+    gPad.Update();
+    
+    simCscTriggerPrimitiveDigis_MPCSORTED_st = simCscTriggerPrimitiveDigis_MPCSORTED.FindObject("stats");
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetX1NDC(X1);
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetX2NDC(X2);
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY1NDC(Y1-(Y2-Y1));
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY2NDC(Y1);
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY1NDC(0.6);
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetY2NDC(0.8);
+    
+    simCscTriggerPrimitiveDigis_MPCSORTED_st.SetTextColor(kBlue);
+ 
+    csctfDigis = TH1D("csctfDigis","csctfDigis",varnbin,varminbin,varmaxbin)
+    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_csctfDigis__RAW2DIGI"
+    if station==0 and ring==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>csctfDigis")
+    else:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>csctfDigis",
+                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
+    csctfDigis.SetLineColor(kGreen+2)
+    csctfDigis.Draw()
+    gPad.Update();
+
+    csctfDigis_st = csctfDigis.FindObject("stats");
+    csctfDigis_st.SetX1NDC(X1);
+    csctfDigis_st.SetX2NDC(X2);
+    csctfDigis_st.SetY1NDC(0.4);
+    csctfDigis_st.SetY2NDC(0.6);
+    Y5 = csctfDigis_st.GetY1NDC();
+    Y6 = csctfDigis_st.GetY2NDC();
+    
+    csctfDigis_st.SetTextColor(kGreen+2);
+    #csctfDigis_st.SetTextSize(0.8);
+
+
+    muonCSCDigis = TH1D("muonCSCDigis","muonCSCDigis",varnbin,varminbin,varmaxbin)
+    collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCCorrelatedLCTDigi_RAW2DIGI"
+    if station==0 and ring==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis")
+    else:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis",
+                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
+    muonCSCDigis.SetLineColor(kBlack)
+    muonCSCDigis.Draw()
+    gPad.Update();
+
+    muonCSCDigis_st = muonCSCDigis.FindObject("stats");
+    muonCSCDigis_st.SetX1NDC(X1);
+    muonCSCDigis_st.SetX2NDC(X2);
+    muonCSCDigis_st.SetY1NDC(Y5-(Y6-Y5));
+    muonCSCDigis_st.SetY2NDC(Y5);
+    muonCSCDigis_st.SetY1NDC(0.2);
+    muonCSCDigis_st.SetY2NDC(0.4);
+    
+    muonCSCDigis_st.SetTextColor(kBlack);
+    #muonCSCDigis_st.SetTextSize(0.8);
+
+
+    simCscTriggerPrimitiveDigis.Draw();
+    simCscTriggerPrimitiveDigis_MPCSORTED.Draw("sames");
+    csctfDigis.Draw("sames");
+    muonCSCDigis.Draw("sames");
+    
+    simCscTriggerPrimitiveDigis_st.Draw("same");
+    simCscTriggerPrimitiveDigis_MPCSORTED.Draw("same");
+    csctfDigis_st.Draw("same");
+    muonCSCDigis_st.Draw("same");
+    
+    """
+    legend=TLegend(0.6,0.6,0.8,0.8)
+    legend.SetTextSize(0.5)
+    legend.AddEntry(g, "Old", "l")
+    legend.AddEntry(h, "SimCscTriggerPrimitiveDigis_MPCSORTED", "l")
+    legend.Draw("same")
+    """
+
+    #c.SaveAs("comparison_lct_bx_2016B_mpclct18.png")
+    #c.SaveAs("comparison_lct_bx_2016B_mpclct18.C")
+    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_bxshift2.png")
+    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_bxshift2.C")
+    #c.SaveAs("comparison_lct_bx_2016B_original.png")
+    #c.SaveAs("comparison_lct_bx_2016B_original.C")
+    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v2_clctpretrig2_clcthitpersist6.png")
+    #c.SaveAs("comparison_lct_bx_2016B_mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v2_clctpretrig2_clcthitpersist6.C")
+    c.SaveAs("mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3/comparison_lct_" + varstr + "_2016B_postFixes_st%d_ri%d.png"%(station, ring))
+
+for i in range(0,12):
+    compareLCTs(0,0,i)
+
+exit(1)
+
+compareLCTs(1,1)
+compareLCTs(1,4)
+compareLCTs(1,2)
+compareLCTs(1,3)
+
+compareLCTs(2,1)
+compareLCTs(2,2)
+
+compareLCTs(3,1)
+compareLCTs(3,2)
+
+compareLCTs(4,1)
+compareLCTs(4,2)
+
 def compareLCTs(station, ring):
 
     c = TCanvas("c","c",800,800)
     c.cd()
-    #histo=TH1F("histo","", 100, -5,5)
-    #tree.Draw("elec_eta>>histo", "")
 
     simCscTriggerPrimitiveDigis = TH1D("simCscTriggerPrimitiveDigis","CSCCorrelatedLCTDigi BX " + csclabel[station][ring] + "; BX; Entries",22,-6,16)
     collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI"
