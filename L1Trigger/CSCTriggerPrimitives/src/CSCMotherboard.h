@@ -79,7 +79,7 @@ class CSCMotherboard
   std::unique_ptr<CSCAnodeLCTProcessor> alct;
 
   /** Cathode LCT processor. */
-  std::unique_ptr<CSCCathodeLCTProcessorLegacyUnganged> clct;
+  std::unique_ptr<CSCCathodeLCTProcessor> clct;
 
  // VK: change to protected, to allow inheritance
  protected:
