@@ -62,28 +62,29 @@ csccorrelatedlctdigi = {
     11 : ["cscID", "cscID",15,0,15],
     }
 
-alctdigi = {
-    0 : ["valid_", "Valid",10,0,10],
+cscalctdigi = {
+    0 : ["valid_", "valid",10,0,10],
     1 : ["quality_", "quality",20,0,20],
     2 : ["accel_", "accelerator",10,0,10],
     3 : ["patternb_", "patternb",10,0,10],
     4 : ["keywire_", "keywire",150,0,150],
     5 : ["bx_", "bx",10,0,10],
-    6 : ["trknmb_", "Track Number",10,0,10],
+    6 : ["trknmb_", "trknmb",10,0,10],
     7 : ["fullbx_", "fullbx",10,0,10],
 }
 
-clctdigi = {
-    0 : ["valid_", "Valid",10,0,10],
+cscclctdigi = {
+    0 : ["valid_", "valid",10,0,10],
     1 : ["quality_", "quality",20,0,20],
     2 : ["pattern_", "pattern",20,0,20],
     3 : ["striptype_", "striptype",150,0,150],
     4 : ["bend_", "bend",10,0,10],
     5 : ["cfeb_", "cfeb",150,0,150],
-    6 : ["strip_", "strip",150,0,150],
+    6 : ["strip_", "strip",64,0,64],
     7 : ["bx_", "bx",10,0,10],
     8 : ["trknmb_", "trknmb",10,0,10],
-    10 : ["fullbx_", "fullbx",10,0,10],
+    9 : ["fullbx_", "fullbx",10,0,10],
+    10 : ["getKeyStrip()", "keyStrip",224,0,224],
     }
 
 def compareLCTs(station, ring, variable):
@@ -94,16 +95,14 @@ def compareLCTs(station, ring, variable):
     varminbin = csccorrelatedlctdigi[variable][3]
     varmaxbin = csccorrelatedlctdigi[variable][4]
 
-    extraCut = ""
+    extraCut = "strip >=0"
 
     ## case ME1/a
     if station==1 and ring==1:
-        extraCut = "strip <122"
+        extraCut = "strip <64"
     if station==1 and ring==4:
         ring == 1
-        extraCut = "strip >=122"
-    else:
-        extraCut = "strip >=0"
+        extraCut = "strip >=64"
 
     c = TCanvas("c","c",800,800)
     c.cd()
@@ -280,16 +279,15 @@ def compareCLCTs(station, ring, variable):
     varminbin = cscclctdigi[variable][3]
     varmaxbin = cscclctdigi[variable][4]
 
-    extraCut = ""
+    extraCut = "getKeyStrip() >=0"
 
     ## case ME1/a
     if station==1 and ring==1:
-        extraCut = "strip <122"
+        extraCut = "getKeyStrip() <128"
+
     if station==1 and ring==4:
         ring == 1
-        extraCut = "strip >=122"
-    else:
-        extraCut = "strip >=0"
+        extraCut = "getKeyStrip() >=128"
 
     c = TCanvas("c","c",800,800)
     c.cd()
@@ -348,53 +346,57 @@ def compareCLCTs(station, ring, variable):
     c.SaveAs("mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3/comparison_clct_" + 
              varstr + "_2016B_postFixes_" + csclabel[station][ring] + ".png")
 
+def compareLCTsAll():
+    for i in range(0,12):
+        compareLCTs(0,0,i)
+        compareLCTs(1,1,i)
+        compareLCTs(1,2,i)
+        compareLCTs(1,3,i)
+        compareLCTs(1,4,i)
+        
+        compareLCTs(2,1,i)
+        compareLCTs(2,2,i)
+        
+        compareLCTs(3,1,i)
+        compareLCTs(3,2,i)
+        
+        compareLCTs(4,1,i)
+        compareLCTs(4,2,i)
 
-for i in range(0,12):
-    compareLCTs(0,0,i)
-    compareLCTs(1,1,i)
-    compareLCTs(1,2,i)
-    compareLCTs(1,3,i)
-    compareLCTs(1,4,i)
-
-    compareLCTs(2,1,i)
-    compareLCTs(2,2,i)
-    
-    compareLCTs(3,1,i)
-    compareLCTs(3,2,i)
-    
-    compareLCTs(4,1,i)
-    compareLCTs(4,2,i)
-
-
-for i in range(0,8):
-    compareALCTs(0,0,i)
-    compareALCTs(1,1,i)
-    compareALCTs(1,2,i)
-    compareALCTs(1,3,i)
-    compareALCTs(1,4,i)
-
-    compareALCTs(2,1,i)
-    compareALCTs(2,2,i)
-    
-    compareALCTs(3,1,i)
-    compareALCTs(3,2,i)
-    
-    compareALCTs(4,1,i)
-    compareALCTs(4,2,i)
-
-for i in range(0,11):
-    compareCLCTs(0,0,i)
-    compareCLCTs(1,1,i)
-    compareCLCTs(1,2,i)
-    compareCLCTs(1,3,i)
-    compareCLCTs(1,4,i)
-
-    compareCLCTs(2,1,i)
-    compareCLCTs(2,2,i)
-    
-    compareCLCTs(3,1,i)
-    compareCLCTs(3,2,i)
-    
-    compareCLCTs(4,1,i)
-    compareCLCTs(4,2,i)
-
+def compareALCTsAll():
+    for i in range(0,8):
+        compareALCTs(0,0,i)
+        compareALCTs(1,1,i)
+        compareALCTs(1,2,i)
+        compareALCTs(1,3,i)
+        compareALCTs(1,4,i)
+        
+        compareALCTs(2,1,i)
+        compareALCTs(2,2,i)
+        
+        compareALCTs(3,1,i)
+        compareALCTs(3,2,i)
+        
+        compareALCTs(4,1,i)
+        compareALCTs(4,2,i)
+        
+def compareCLCTsAll():
+    for i in range(0,11):
+        compareCLCTs(0,0,i)
+        compareCLCTs(1,1,i)
+        compareCLCTs(1,2,i)
+        compareCLCTs(1,3,i)
+        compareCLCTs(1,4,i)
+        
+        compareCLCTs(2,1,i)
+        compareCLCTs(2,2,i)
+        
+        compareCLCTs(3,1,i)
+        compareCLCTs(3,2,i)
+        
+        compareCLCTs(4,1,i)
+        compareCLCTs(4,2,i)
+        
+compareLCTsAll()
+compareALCTsAll()
+compareCLCTsAll()
