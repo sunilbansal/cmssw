@@ -7,7 +7,7 @@ import commands
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 
-process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(50)
+#process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(50)
 process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(False))
 
 process.source = cms.Source('PoolSource',
@@ -44,11 +44,11 @@ process.simBmtfDigis.Debug = cms.untracked.int32(0)
 process.dumpED = cms.EDAnalyzer("EventContentAnalyzer")
 process.dumpES = cms.EDAnalyzer("PrintEventSetupContent")
 
-process.L1TMuonSeq = cms.Sequence( process.esProd          
-				   + process.simTwinMuxDigis 
-                                   + process.simBmtfDigis 
-                                   + process.dumpED
-                                   + process.dumpES
+process.L1TMuonSeq = cms.Sequence( #process.esProd          
+				   process.simTwinMuxDigis 
+                                   + process.simBmtfDigisSequence
+                                   #process.dumpED
+                                   #process.dumpES
 )
 
 process.L1TMuonPath = cms.Path(process.L1TMuonSeq)

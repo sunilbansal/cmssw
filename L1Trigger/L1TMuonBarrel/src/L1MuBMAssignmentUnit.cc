@@ -110,6 +110,9 @@ void L1MuBMAssignmentUnit::run(const edm::EventSetup& c) {
   // assign pt and charge
   PtAU(c);
 
+  // assign pt and charge for displaced muons
+  PtAUDisplaced(c);
+  
   // assign quality
   QuaAU();
 
@@ -649,3 +652,17 @@ void L1MuBMAssignmentUnit::setPrecision() {
 
 unsigned short int L1MuBMAssignmentUnit::nbit_phi  = 12;
 unsigned short int L1MuBMAssignmentUnit::nbit_phib = 10;
+
+// dphi algorithm for displaced muons
+void L1MuBMAssignmentUnit::PtAUDisplaced(const edm::EventSetup& c) {
+  
+  double phib1 = ( getTSphi(1) != 0 ) ? getTSphi(1)->phibValue() : -999;
+  double phib2 = ( getTSphi(2) != 0 ) ? getTSphi(2)->phibValue() : -999;
+  double phib3 = ( getTSphi(3) != 0 ) ? getTSphi(3)->phibValue() : -999;
+  double phib4 = ( getTSphi(4) != 0 ) ? getTSphi(4)->phibValue() : -999;
+
+  std::cout << "phib1 " << phib1 << std::endl;
+  std::cout << "phib2 " << phib2 << std::endl;
+  std::cout << "phib3 " << phib3 << std::endl;
+  std::cout << "phib4 " << phib4 << std::endl;
+}

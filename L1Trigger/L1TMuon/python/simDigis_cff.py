@@ -79,4 +79,4 @@ if eras.stage2L1Trigger.isChosen():
     from L1Trigger.L1TMuon.simGmtStage2Digis_cfi import *
 #
 #
-    SimL1TMuon = cms.Sequence(SimL1TMuonCommon + simTwinMuxDigis + simBmtfDigis + simEmtfDigis + simOmtfDigis + simGmtCaloSumDigis + simMuonQualityAdjusterDigis + simGmtStage2Digis)
+    SimL1TMuon = cms.Sequence(SimL1TMuonCommon + simTwinMuxDigis + simBmtfDigisSequence + simEmtfDigis + simOmtfDigis + simGmtCaloSumDigis + simMuonQualityAdjusterDigis + simGmtStage2Digis)

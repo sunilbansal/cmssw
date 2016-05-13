@@ -69,6 +69,9 @@ class L1MuBMAssignmentUnit : public L1AbstractProcessor {
     /// assign pt and charge
     void PtAU(const edm::EventSetup& c);
 
+    /// assign pt and charge for displaced muons
+    void PtAUDisplaced(const edm::EventSetup& c);
+
     /// assign quality
     void QuaAU();
     unsigned int Quality();
