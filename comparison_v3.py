@@ -6,31 +6,59 @@ from ROOT import *
 3) CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI. 137.835 92.49
 4) CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_csctfDigis__RAW2DIGI. 135.135 89.72
 """
-
+cscstations = [ [0,0], 
+                [1,1], [1,2], [1,3], [1,4],
+                [2,1], [2,2],
+                [3,1], [3,2],
+                [4,1], [4,2],]
 csclabel = {
-    0 : {
-        0 : "All" 
-        },
     1 : {
-        1 : "ME1b",
-        4 : "ME1a",
-        3 : "ME12",
-        2 : "ME13"
+        0 : {
+            0 : "pAll" 
+            },
+        1 : {
+            1 : "pME1b",
+            3 : "pME12",
+            2 : "pME13",
+            4 : "pME1a",
+            },
+        2 : {
+            1 : "pME21",
+            2 : "pME22"
+            },
+        3 : {
+            1 : "pME31",
+            2 : "pME32"
+            },
+        4 : {
+            1 : "pME41",
+            2 : "pME42"
+            },
         },
     2 : {
-        1 : "ME21",
-        2 : "ME22"
-        },
-    3 : {
-        1 : "ME31",
-        2 : "ME32"
-        },
-    4 : {
-        1 : "ME41",
-        2 : "ME42"
+        0 : {
+            0 : "mAll" 
+            },
+        1 : {
+            1 : "mME1b",
+            3 : "mME12",
+            2 : "mME13",
+            4 : "mME1a",
+            },
+        2 : {
+            1 : "mME21",
+            2 : "mME22"
+            },
+        3 : {
+            1 : "mME31",
+            2 : "mME32"
+            },
+        4 : {
+            1 : "mME41",
+            2 : "mME42"
+            },
         },
     }
-
 gROOT.SetBatch(1)
 gStyle.SetStatStyle(0)
 gStyle.SetOptStat("nemr")
@@ -42,8 +70,13 @@ gStyle.SetOptStat("nemr")
 #file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v2.root")
 #file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v2_clctpretrig2.root")
 #file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v2_clctpretrig2_clcthitpersist6.root")
-file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v3.root")
+#file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v3.root")
+file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v3_lessoutput.root")
 #file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v4_reboot.root")
+file = TFile("output_l1_2016A_mpclct18_nosorting_nosmart_changereadout5to11_v1.root")
+file = TFile("output_l1_2016A_run_271036_mpclct18_nosorting_nosmart_changereadout5to11_v1.root")
+file = TFile("output_l1_Commissioning2016_run_268955_mpclct18_nosorting_nosmart_changereadout5to11_v1.root")
+outputdirectory = "Commissioning2016_run_268955_mpclct18_nosorting_nosmart_changereadout5to11_v1/"
 
 tree = file.Get("Events")
 
@@ -53,10 +86,10 @@ csccorrelatedlctdigi = {
     2 : ["quality", "quality",20,0,20],
     3 : ["keywire", "keywire",150,0,150],
     4 : ["strip", "strip",224,0,224],
-    5 : ["pattern", "pattern",10,0,10],
+    5 : ["pattern", "pattern",16,0,16],
     6 : ["bend", "bend",10,0,10],
-    7 : ["bx", "bx",10,0,10],
-    8 : ["mpclink", "mpclink",100,0,100],
+    7 : ["bx", "bx",16,0,16],
+    8 : ["mpclink", "mpclink",5,0,5],
     9 : ["bx0", "bx0",10,0,10],
     10 : ["syncErr", "syncErr",10,0,10],
     11 : ["cscID", "cscID",15,0,15],
@@ -75,19 +108,19 @@ cscalctdigi = {
 
 cscclctdigi = {
     0 : ["valid_", "valid",10,0,10],
-    1 : ["quality_", "quality",20,0,20],
+    1 : ["quality_", "quality",16,0,16],
     2 : ["pattern_", "pattern",20,0,20],
-    3 : ["striptype_", "striptype",150,0,150],
+    3 : ["striptype_", "striptype",10,0,10],
     4 : ["bend_", "bend",10,0,10],
-    5 : ["cfeb_", "cfeb",150,0,150],
-    6 : ["strip_", "strip",64,0,64],
+    5 : ["cfeb_", "cfeb",10,0,10],
+    6 : ["strip_", "strip",32,0,32],
     7 : ["bx_", "bx",10,0,10],
     8 : ["trknmb_", "trknmb",10,0,10],
     9 : ["fullbx_", "fullbx",10,0,10],
     10 : ["getKeyStrip()", "keyStrip",224,0,224],
     }
 
-def compareLCTs(station, ring, variable):
+def compareLCTs(endcap, station, ring, variable):
 
     var = csccorrelatedlctdigi[variable][0]
     varstr = csccorrelatedlctdigi[variable][1]
@@ -95,27 +128,31 @@ def compareLCTs(station, ring, variable):
     varminbin = csccorrelatedlctdigi[variable][3]
     varmaxbin = csccorrelatedlctdigi[variable][4]
 
-    extraCut = "strip >=0"
-
-    ## case ME1/a
+    extraCut = "strip >= 0"
+    realRing = ring
+    
     if station==1 and ring==1:
-        extraCut = "strip <64"
+        extraCut = "strip < 128"
+
     if station==1 and ring==4:
-        ring == 1
-        extraCut = "strip >=64"
+        extraCut = "strip >= 128"
+        realRing = 1
 
     c = TCanvas("c","c",800,800)
     c.cd()
 
     simCscTriggerPrimitiveDigis = TH1D("simCscTriggerPrimitiveDigis","CSCCorrelatedLCTDigi " + varstr + " " + 
-                                       csclabel[station][ring] + "; " + varstr + "; Entries",varnbin,varminbin,varmaxbin)
+                                       csclabel[endcap][station][ring] + "; " + varstr + "; Entries",varnbin,varminbin,varmaxbin)
     collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI"
-    if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis")
+    if station==0 and realRing==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis",
+                  collection + ".obj.data_.first.endcap() == %d"%(endcap))
     else:
         tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
-                  + " && " + collection + ".obj.data_.second." + extraCut)
+                  collection + ".obj.data_.first.endcap() == %d && "%(endcap) + 
+                  collection + ".obj.data_.first.station() == %d && "%(station) + 
+                  collection + ".obj.data_.first.ring()    == %d && "%(realRing) +
+                  collection + ".obj.data_.second." + extraCut)
     
     simCscTriggerPrimitiveDigis.SetLineColor(kRed)
     simCscTriggerPrimitiveDigis.Draw()
@@ -133,12 +170,15 @@ def compareLCTs(station, ring, variable):
     simCscTriggerPrimitiveDigis_MPCSORTED = TH1D("simCscTriggerPrimitiveDigis_MPCSORTED","SimCscTriggerPrimitiveDigis_MPCSORTED",
                                                  varnbin,varminbin,varmaxbin)
     collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis_MPCSORTED_RAW2DIGI"
-    if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis_MPCSORTED")
+    if station==0 and realRing==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis_MPCSORTED",
+                  collection + ".obj.data_.first.endcap() == %d"%(endcap))
     else:
         tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis_MPCSORTED",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
-                  + " && " + collection + ".obj.data_.second." + extraCut)
+                  collection + ".obj.data_.first.endcap() == %d && "%(endcap) +
+                  collection + ".obj.data_.first.station()==%d && "%(station) + 
+                  collection + ".obj.data_.first.ring()==%d && "%(realRing) + 
+                  collection + ".obj.data_.second." + extraCut)
     simCscTriggerPrimitiveDigis_MPCSORTED.SetLineColor(kBlue)
     simCscTriggerPrimitiveDigis_MPCSORTED.Draw()
     gPad.Update();
@@ -154,12 +194,15 @@ def compareLCTs(station, ring, variable):
  
     csctfDigis = TH1D("csctfDigis","csctfDigis",varnbin,varminbin,varmaxbin)
     collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_csctfDigis__RAW2DIGI"
-    if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>csctfDigis")
+    if station==0 and realRing==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>csctfDigis",
+                  collection + ".obj.data_.first.endcap() == %d"%(endcap))
     else:
         tree.Draw(collection + ".obj.data_.second." + var + ">>csctfDigis",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
-                  + " && " + collection + ".obj.data_.second." + extraCut)
+                  collection + ".obj.data_.first.endcap() == %d && "%(endcap) +
+                  collection + ".obj.data_.first.station()==%d && "%(station) + 
+                  collection + ".obj.data_.first.ring()==%d && "%(realRing) + 
+                  collection + ".obj.data_.second." + extraCut)
     csctfDigis.SetLineColor(kGreen+2)
     csctfDigis.Draw()
     gPad.Update();
@@ -175,12 +218,15 @@ def compareLCTs(station, ring, variable):
 
     muonCSCDigis = TH1D("muonCSCDigis","muonCSCDigis",varnbin,varminbin,varmaxbin)
     collection = "CSCDetIdCSCCorrelatedLCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCCorrelatedLCTDigi_RAW2DIGI"
-    if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis")
+    if station==0 and realRing==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis",
+                  collection + ".obj.data_.first.endcap() == %d"%(endcap))
     else:
         tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
-                  + " && " + collection + ".obj.data_.second." + extraCut)
+                  collection + ".obj.data_.first.endcap() == %d && "%(endcap) +
+                  collection + ".obj.data_.first.station()==%d && "%(station) + 
+                  collection + ".obj.data_.first.ring()==%d && "%(realRing) + 
+                  collection + ".obj.data_.second." + extraCut)
     muonCSCDigis.SetLineColor(kBlack)
     muonCSCDigis.Draw()
     gPad.Update();
@@ -204,10 +250,9 @@ def compareLCTs(station, ring, variable):
     csctfDigis_st.Draw("same");
     muonCSCDigis_st.Draw("same");
     
-    c.SaveAs("mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3/comparison_lct_" + 
-             varstr + "_2016B_postFixes_" + csclabel[station][ring] + ".png")
+    c.SaveAs(outputdirectory  + "comparison_lct_" + varstr + "_" + csclabel[endcap][station][ring] + ".png")
 
-def compareALCTs(station, ring, variable):
+def compareALCTs(endcap, station, ring, variable):
 
     var = cscalctdigi[variable][0]
     varstr = cscalctdigi[variable][1]
@@ -215,17 +260,25 @@ def compareALCTs(station, ring, variable):
     varminbin = cscalctdigi[variable][3]
     varmaxbin = cscalctdigi[variable][4]
 
+    if station==1 and ring==1:
+        realLabel = "ME11"
+    else:
+        realLabel = csclabel[endcap][station][ring]
+
     c = TCanvas("c","c",800,800)
     c.cd()
 
     simCscTriggerPrimitiveDigis = TH1D("simCscTriggerPrimitiveDigis","CSCALCTDigi " + varstr + " " + 
-                                       csclabel[station][ring] + "; " + varstr + "; Entries",varnbin,varminbin,varmaxbin)
+                                       realLabel + "; " + varstr + "; Entries",varnbin,varminbin,varmaxbin)
     collection = "CSCDetIdCSCALCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI"
     if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis")
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis",
+                  collection + ".obj.data_.first.endcap() == %d"%(endcap))
     else:
         tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
+                  collection + ".obj.data_.first.endcap() == %d && "%(endcap) +
+                  collection + ".obj.data_.first.station()==%d && "%(station) + 
+                  collection + ".obj.data_.first.ring()==%d"%(ring))
     
     simCscTriggerPrimitiveDigis.SetLineColor(kRed)
     simCscTriggerPrimitiveDigis.Draw()
@@ -244,10 +297,13 @@ def compareALCTs(station, ring, variable):
     muonCSCDigis = TH1D("muonCSCDigis","muonCSCDigis",varnbin,varminbin,varmaxbin)
     collection = "CSCDetIdCSCALCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCALCTDigi_RAW2DIGI"
     if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis")
+        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis",
+                  collection + ".obj.data_.first.endcap() == %d"%(endcap))
     else:
         tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring))
+                  collection + ".obj.data_.first.endcap() == %d && "%(endcap) +
+                  collection + ".obj.data_.first.station()==%d && "%(station) + 
+                  collection + ".obj.data_.first.ring()==%d"%(ring))
     muonCSCDigis.SetLineColor(kBlack)
     muonCSCDigis.Draw()
     gPad.Update();
@@ -266,12 +322,11 @@ def compareALCTs(station, ring, variable):
     
     simCscTriggerPrimitiveDigis_st.Draw("same");
     muonCSCDigis_st.Draw("same");
-    
-    c.SaveAs("mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3/comparison_alct_" + 
-             varstr + "_2016B_postFixes_" + csclabel[station][ring] + ".png")
+
+    c.SaveAs(outputdirectory  + "comparison_alct_" + varstr + "_" + csclabel[endcap][station][ring] + ".png")
 
 
-def compareCLCTs(station, ring, variable):
+def compareCLCTs(endcap, station, ring, variable):
 
     var = cscclctdigi[variable][0]
     varstr = cscclctdigi[variable][1]
@@ -280,27 +335,30 @@ def compareCLCTs(station, ring, variable):
     varmaxbin = cscclctdigi[variable][4]
 
     extraCut = "getKeyStrip() >=0"
+    realRing = ring
 
-    ## case ME1/a
     if station==1 and ring==1:
         extraCut = "getKeyStrip() <128"
 
     if station==1 and ring==4:
-        ring == 1
+        realRing = 1
         extraCut = "getKeyStrip() >=128"
 
     c = TCanvas("c","c",800,800)
     c.cd()
 
     simCscTriggerPrimitiveDigis = TH1D("simCscTriggerPrimitiveDigis","CSCCLCTDigi " + varstr + " " + 
-                                       csclabel[station][ring] + "; " + varstr + "; Entries",varnbin,varminbin,varmaxbin)
+                                       csclabel[endcap][station][ring] + "; " + varstr + "; Entries",varnbin,varminbin,varmaxbin)
     collection = "CSCDetIdCSCCLCTDigiMuonDigiCollection_simCscTriggerPrimitiveDigis__RAW2DIGI"
-    if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis")
+    if station==0 and realRing==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis",
+                  collection + ".obj.data_.first.endcap() == %d"%(endcap))
     else:
         tree.Draw(collection + ".obj.data_.second." + var + ">>simCscTriggerPrimitiveDigis",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
-                  + " && " + collection + ".obj.data_.second." + extraCut)
+                  collection + ".obj.data_.first.endcap() == %d && "%(endcap) +
+                  collection + ".obj.data_.first.station()==%d && "%(station) + 
+                  collection + ".obj.data_.first.ring()==%d && "%(realRing) +
+                  collection + ".obj.data_.second." + extraCut)
     
     simCscTriggerPrimitiveDigis.SetLineColor(kRed)
     simCscTriggerPrimitiveDigis.Draw()
@@ -318,11 +376,14 @@ def compareCLCTs(station, ring, variable):
 
     muonCSCDigis = TH1D("muonCSCDigis","muonCSCDigis",varnbin,varminbin,varmaxbin)
     collection = "CSCDetIdCSCCLCTDigiMuonDigiCollection_muonCSCDigis_MuonCSCCLCTDigi_RAW2DIGI"
-    if station==0 and ring==0:
-        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis")
+    if station==0 and realRing==0:
+        tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis",
+                  collection + ".obj.data_.first.endcap() == %d"%(endcap))
     else:
         tree.Draw(collection + ".obj.data_.second." + var + ">>muonCSCDigis",
-                  collection + ".obj.data_.first.station()==%d && "%(station) + collection + ".obj.data_.first.ring()==%d"%(ring)
+                  collection + ".obj.data_.first.endcap() == %d && "%(endcap) +
+                  collection + ".obj.data_.first.station()==%d && "%(station) + 
+                  collection + ".obj.data_.first.ring()==%d"%(realRing)
                   + " && " + collection + ".obj.data_.second." + extraCut)
     muonCSCDigis.SetLineColor(kBlack)
     muonCSCDigis.Draw()
@@ -343,59 +404,26 @@ def compareCLCTs(station, ring, variable):
     simCscTriggerPrimitiveDigis_st.Draw("same");
     muonCSCDigis_st.Draw("same");
     
-    c.SaveAs("mpclct18_nosorting_nosmart_bxshift2_changereadout5to11_v3/comparison_clct_" + 
-             varstr + "_2016B_postFixes_" + csclabel[station][ring] + ".png")
+    c.SaveAs(outputdirectory  + "comparison_clct_" + varstr + "_" + csclabel[endcap][station][ring] + ".png")
 
 def compareLCTsAll():
     for i in range(0,12):
-        compareLCTs(0,0,i)
-        compareLCTs(1,1,i)
-        compareLCTs(1,2,i)
-        compareLCTs(1,3,i)
-        compareLCTs(1,4,i)
-        
-        compareLCTs(2,1,i)
-        compareLCTs(2,2,i)
-        
-        compareLCTs(3,1,i)
-        compareLCTs(3,2,i)
-        
-        compareLCTs(4,1,i)
-        compareLCTs(4,2,i)
+        for p in cscstations:
+            compareLCTs(1,p[0],p[1],i)
+            compareLCTs(2,p[0],p[1],i)
 
 def compareALCTsAll():
     for i in range(0,8):
-        compareALCTs(0,0,i)
-        compareALCTs(1,1,i)
-        compareALCTs(1,2,i)
-        compareALCTs(1,3,i)
-        compareALCTs(1,4,i)
-        
-        compareALCTs(2,1,i)
-        compareALCTs(2,2,i)
-        
-        compareALCTs(3,1,i)
-        compareALCTs(3,2,i)
-        
-        compareALCTs(4,1,i)
-        compareALCTs(4,2,i)
+        for p in cscstations:
+            if p[0]==1 and p[1]==4 : continue
+            compareALCTs(1,p[0],p[1],i)
+            compareALCTs(2,p[0],p[1],i)
         
 def compareCLCTsAll():
     for i in range(0,11):
-        compareCLCTs(0,0,i)
-        compareCLCTs(1,1,i)
-        compareCLCTs(1,2,i)
-        compareCLCTs(1,3,i)
-        compareCLCTs(1,4,i)
-        
-        compareCLCTs(2,1,i)
-        compareCLCTs(2,2,i)
-        
-        compareCLCTs(3,1,i)
-        compareCLCTs(3,2,i)
-        
-        compareCLCTs(4,1,i)
-        compareCLCTs(4,2,i)
+        for p in cscstations:
+            compareCLCTs(1,p[0],p[1],i)
+            compareCLCTs(2,p[0],p[1],i)
         
 compareLCTsAll()
 compareALCTsAll()
