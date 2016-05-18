@@ -71,12 +71,14 @@ gStyle.SetOptStat("nemr")
 #file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v2_clctpretrig2.root")
 #file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v2_clctpretrig2_clcthitpersist6.root")
 #file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v3.root")
-file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v3_lessoutput.root")
+#file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v3_lessoutput.root")
 #file = TFile("output_l1_2016B_mpclct18_nosorting_nosmart_changereadout5to11_v4_reboot.root")
-file = TFile("output_l1_2016A_mpclct18_nosorting_nosmart_changereadout5to11_v1.root")
-file = TFile("output_l1_2016A_run_271036_mpclct18_nosorting_nosmart_changereadout5to11_v1.root")
-file = TFile("output_l1_Commissioning2016_run_268955_mpclct18_nosorting_nosmart_changereadout5to11_v1.root")
-outputdirectory = "Commissioning2016_run_268955_mpclct18_nosorting_nosmart_changereadout5to11_v1/"
+#file = TFile("output_l1_2016A_mpclct18_nosorting_nosmart_changereadout5to11_v1.root")
+#file = TFile("output_l1_2016A_run_271036_mpclct18_nosorting_nosmart_changereadout5to11_v1.root")
+#file = TFile("output_l1_Commissioning2016_run_268955_mpclct18_nosorting_nosmart_changereadout5to11_v1.root")
+file = TFile("output_l1_2016A_run_271336_mpclct18_nosorting_nosmart_changereadout5to11_fixStripNumbering.root")
+#outputdirectory = "Commissioning2016_run_268955_mpclct18_nosorting_nosmart_changereadout5to11_v1/"
+outputdirectory = "2016A_run_271336_mpclct18_nosorting_nosmart_changereadout5to11_fixStripNumbering/"
 
 tree = file.Get("Events")
 
@@ -425,6 +427,6 @@ def compareCLCTsAll():
             compareCLCTs(1,p[0],p[1],i)
             compareCLCTs(2,p[0],p[1],i)
         
-compareLCTsAll()
-compareALCTsAll()
+#compareLCTsAll()
+#compareALCTsAll()
 compareCLCTsAll()
