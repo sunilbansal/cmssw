@@ -456,7 +456,7 @@ cscTriggerPrimitiveDigis = cms.EDProducer("CSCTriggerPrimitivesProducer",
         clctPidThreshPretrig  = cms.uint32(2),
         clctMinSeparation     = cms.uint32(10),
         # Debug
-        verbosity = cms.int32(0),
+        verbosity = cms.int32(100),
 
         # BX to start CLCT finding (poor man's dead-time shortening):
         clctStartBxShift  = cms.int32(0)

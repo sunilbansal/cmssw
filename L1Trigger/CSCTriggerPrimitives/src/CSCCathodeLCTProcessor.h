@@ -251,6 +251,9 @@ class CSCCathodeLCTProcessor
   bool ptnFinding(
       const unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
       const int nStrips, const unsigned int bx_time);
+  bool ptnFinding_old(
+      const unsigned int pulse[CSCConstants::NUM_LAYERS][CSCConstants::NUM_HALF_STRIPS_7CFEBS],
+      const int nStrips, const unsigned int bx_time);
   void markBusyKeys(const int best_hstrip, const int best_patid,
 		    int quality[CSCConstants::NUM_HALF_STRIPS_7CFEBS]);
 

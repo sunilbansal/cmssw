@@ -61,12 +61,20 @@ for event in events:
     csctfDigis_begin  = csctfDigis.begin()
     muonCSCDigis_begin  = muonCSCDigis.begin()
 
-    detid = digis_begin.first
+    detid = simCscTriggerPrimitiveDigis_begin.first
+    
+    digis = simCscTriggerPrimitiveDigis_begin.second
+    pdigis = simCscTriggerPrimitiveDigis.get(detid)     
     #digis = digis_begin.second
-    print "detID", detid.rawId(), detid.station()
     #print  (digis_begin).first
     #print *detid
-    print type(detid)
+    print type(detid) 
+    #print "detID", detid.rawId(), detid.station()
+    print type(digis)
+    print (*pdigis).first, pdigis.second 
+    #for p in digis: print p
+    #print digis.isValid()
+    
     #print type(digis)
 
     #print digis.first is not digis.second
